@@ -3,11 +3,11 @@ extends EditorResourcePreviewGenerator
 
 
 func _handles(type: String) -> bool:
-	return type == "ProceduralTexture"
+	return type == "ShaderTexture"
 
 
 func _generate(resource: Resource, size: Vector2i, metadata: Dictionary) -> Texture2D:
-	var tex: ProceduralTexture = resource
+	var tex: ShaderTexture = resource
 	if tex:
 		metadata.dimensions = tex.size
 		var img = await tex._generate_image(size)

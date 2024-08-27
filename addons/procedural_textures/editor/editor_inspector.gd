@@ -3,13 +3,13 @@ extends EditorInspectorPlugin
 
 
 func _can_handle(object: Object) -> bool:
-	if object is ProceduralTexture:
+	if object is ShaderTexture:
 		return true
 	return false
 
 
 func _parse_begin(object: Object) -> void:
-	var tex: ProceduralTexture = object
+	var tex: ShaderTexture = object
 	if tex:
 		var rect: TextureRect = TextureRect.new()
 		rect.custom_minimum_size = Vector2(128, 128) * EditorInterface.get_editor_scale()

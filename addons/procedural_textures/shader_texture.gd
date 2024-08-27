@@ -1,6 +1,6 @@
 @tool
 extends Texture2D
-class_name ProceduralTexture
+class_name ShaderTexture
 
 const pink = Color(1.0, 0.0, 1.0)
 const black = Color(0.0, 0.0, 0.0)

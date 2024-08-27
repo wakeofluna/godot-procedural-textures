@@ -1,6 +1,6 @@
 [gd_resource type="Texture2D" script_class="ProceduralTexture" load_steps=6 format=3 uid="uid://ex5umimlyw5y"]
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="1_snawq"]
+[ext_resource type="Script" path="res://addons/procedural_textures/shader_texture.gd" id="1_snawq"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/filter_emboss.gdshader" id="2_gu2dl"]
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="3_4rlq5"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/pattern_bricks.gdshader" id="4_igdqd"]

@@ -8,9 +8,9 @@ func _handles(type: String) -> bool:
 
 func _make_tooltip_for_path(path: String, metadata: Dictionary, base: Control) -> Control:
 	# Overruling the builtin tooltip generator because we
-	# cannot override "get_image" in our ProceduralTexture
+	# cannot override "get_image" in our ShaderTexture
 	var tex = load(path)
-	if tex is ProceduralTexture:
+	if tex is ShaderTexture:
 		var hbox: HBoxContainer = base
 		var hbox_children = hbox.get_children()
 		var textrect: TextureRect = hbox_children[0]
