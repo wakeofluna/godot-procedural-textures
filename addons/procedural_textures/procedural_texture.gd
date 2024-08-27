@@ -64,6 +64,10 @@ func _shader_changed():
 	_queue_update()
 
 
+func _shader_param_changed():
+	_queue_update()
+
+
 func _get_shader_uniforms():
 	shader_defaults = {}
 	if shader:
@@ -112,12 +116,22 @@ func _set(property: StringName, value: Variant) -> bool:
 	property = property.substr(7)
 	if not shader_defaults.has(property):
 		return false
+
+	var old_value = shader_params.get(property)
+	if old_value == value:
+		return true
+	if old_value is Resource:
+		old_value.changed.disconnect(_shader_param_changed)
+
 	var deflt = shader_defaults.get(property)
 	if value == deflt:
 		if shader_params.has(property):
 			shader_params.erase(property)
 	else:
 		shader_params[property] = value
+		if value is Resource:
+			value.changed.connect(_shader_param_changed)
+
 	_queue_update()
 	return true
 
@@ -153,7 +167,11 @@ func _generate_image(img_size: Vector2i) -> Image:
 
 		RenderingServer.material_set_shader(tmp_material, shader.get_rid())
 		for uniform in shader_params.keys():
-			RenderingServer.material_set_param(tmp_material, uniform, shader_params[uniform])
+			var value = shader_params[uniform]
+			if value is Texture:
+				RenderingServer.material_set_param(tmp_material, uniform, value.get_rid())
+			else:
+				RenderingServer.material_set_param(tmp_material, uniform, value)
 		RenderingServer.canvas_item_set_parent(tmp_canvas_item, tmp_canvas)
 		RenderingServer.canvas_item_set_material(tmp_canvas_item, tmp_material)
 		RenderingServer.canvas_item_add_texture_rect(tmp_canvas_item, Rect2(0, 0, img_size.x, img_size.y), rid)

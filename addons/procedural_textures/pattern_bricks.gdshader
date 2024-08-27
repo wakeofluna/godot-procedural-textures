@@ -45,11 +45,6 @@ float brick_strength(BrickDef def, vec2 uv)
 	return val;
 }
 
-vec4 lerp_color(vec4 from, vec4 to, float weight)
-{
-	return from + (to - from) * weight;
-}
-
 vec2 rotate(vec2 uv, float angle)
 {
 	float cos_phi = cos(angle);
@@ -69,6 +64,6 @@ void fragment() {
 	vec2 uv = rotate(UV, angle);
 
 	float brick_strength = brick_strength(bricks1, uv);
-	vec4 brick_color = lerp_color(color_seams, color_bricks, brick_strength);
+	vec4 brick_color = mix(color_seams, color_bricks, brick_strength);
 	COLOR = brick_color;
 }

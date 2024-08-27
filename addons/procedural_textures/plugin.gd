@@ -56,7 +56,8 @@ func _exit_tree() -> void:
 
 
 func _handles(object: Object) -> bool:
-	return object is ProceduralTexture
+	#return object is ProceduralTexture
+	return false
 
 
 func _make_visible(visible: bool) -> void:

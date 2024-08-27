@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbuqprcbeudap"]
+[gd_scene load_steps=6 format=3 uid="uid://dbuqprcbeudap"]
 
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="1_kebia"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/pattern_bricks.gdshader" id="2_qk5wk"]
+[ext_resource type="Texture2D" uid="uid://ex5umimlyw5y" path="res://bricks_embossed_texture.tres" id="3_2hcij"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2npp7"]
 shader = ExtResource("2_qk5wk")
@@ -19,7 +20,15 @@ shader_parameter/rotation = 0
 
 [node name="MainScene" type="Node2D"]
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="WithPlaceholder" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_2npp7")
+offset_left = 39.0
+offset_top = 36.0
+offset_right = 551.0
+offset_bottom = 548.0
+texture = SubResource("PlaceholderTexture2D_kpkk0")
+
+[node name="PatternBricks" type="TextureRect" parent="."]
 offset_left = 601.0
 offset_top = 38.0
 offset_right = 1113.0
@@ -27,10 +36,10 @@ offset_bottom = 550.0
 texture = ExtResource("1_kebia")
 stretch_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_2npp7")
-offset_left = 39.0
-offset_top = 36.0
-offset_right = 551.0
-offset_bottom = 548.0
-texture = SubResource("PlaceholderTexture2D_kpkk0")
+[node name="FilterEmboss" type="TextureRect" parent="."]
+offset_left = 1164.0
+offset_top = 35.0
+offset_right = 1676.0
+offset_bottom = 547.0
+texture = ExtResource("3_2hcij")
+stretch_mode = 5
