@@ -1,0 +1,72 @@
+[gd_resource type="Shader" script_class="ProceduralShader" load_steps=2 format=3 uid="uid://blkvxf2a25wvb"]
+
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_shader.gd" id="1_xms55"]
+
+[resource]
+code = "shader_type canvas_item;
+
+// uniforms
+uniform int count_x : hint_range(1, 20) = 4;
+uniform int count_y : hint_range(1, 20) = 10;
+uniform float row_shift : hint_range(0.0f, 1.0f) = 0.5f;
+uniform float gap_x : hint_range(0.0f, 1.0f) = 0.0f;
+uniform float gap_y : hint_range(0.0f, 1.0f) = 0.0f;
+uniform float smoothing : hint_range(0.0f, 0.5f) = 0.1f;
+uniform int rotation : hint_range(-180, 180) = 0;
+
+// helper struct to pack uniforms
+struct BrickDef
+{
+	float norm_x;
+	float norm_y;
+	float row_shift;
+	float gap_x;
+	float gap_y;
+	float smoothing;
+	float cos_phi;
+	float sin_phi;
+};
+
+// definition function; must have all arguments in same order as uniforms with samplers at the end
+BrickDef make_brick_def(int p_count_x, int p_count_y, float p_row_shift, float p_gap_x, float p_gap_y, float p_smoothing, int p_rotation) {
+	float rads = radians(float(p_rotation));
+	return BrickDef(
+		float(p_count_x), float(p_count_y), p_row_shift, p_gap_x, p_gap_y, p_smoothing, cos(rads), sin(rads)
+	);
+}
+
+// process function; takes the def struct, the current UV, and all samplers in order
+float process_bricks(BrickDef def, vec2 uv) {
+	vec2 rotated;
+	rotated.x = (uv.x - 0.5f) * def.cos_phi + (uv.y - 0.5f) * def.sin_phi + 0.5f;
+	rotated.y = (uv.y - 0.5f) * def.cos_phi - (uv.x - 0.5f) * def.sin_phi + 0.5f;
+	uv = rotated;
+
+	float uu = uv.x * def.norm_x;
+	float vv = uv.y * def.norm_y;
+	float row = floor(vv);
+	uu = uu - row * def.row_shift;
+
+	float y = vv - row;
+	float x = uu - floor(uu);
+
+	float dist_x = x - def.gap_x;
+	float dist_y = y - def.gap_y;
+
+	float min_dist_x = min(dist_x, 1.0f - x) / def.norm_x;
+	float min_dist_y = min(dist_y, 1.0f - y) / def.norm_y;
+	float min_dist = min(min_dist_x, min_dist_y);
+	float dist = min_dist * min(def.norm_x, def.norm_y);
+	float val = min(1.0f, dist / max(def.smoothing, 0.0001));
+
+	return val;
+}
+
+// fragment function; for demo purposes
+void fragment() {
+	BrickDef def = make_brick_def(count_x, count_y, row_shift, gap_x, gap_y, smoothing, rotation);
+	float val = process_bricks(def, UV);
+	COLOR = vec4(val, val, val, 1.0);
+}"
+script = ExtResource("1_xms55")
+name = "Bricks"

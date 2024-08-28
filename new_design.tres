@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=2 format=3 uid="uid://cos6eusbgb67a"]
+
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="1_nutr6"]
+
+[resource]
+script = ExtResource("1_nutr6")
+editor_position = Vector2i(-5, -36)
+nodes/0/title = ""
+nodes/0/shader_name = "Bricks"
+nodes/0/position = Vector2i(20, 20)
+nodes/1/title = ""
+nodes/1/shader_name = "Emboss"
+nodes/1/position = Vector2i(20, 100)

@@ -160,10 +160,14 @@ func _generate_image(img_size: Vector2i) -> Image:
 	var img: Image
 
 	if shader:
-		tmp_material = RenderingServer.material_create()
-		tmp_canvas = RenderingServer.canvas_create()
-		tmp_canvas_item = RenderingServer.canvas_item_create()
-		tmp_viewport = RenderingServer.viewport_create()
+		if !tmp_material.is_valid():
+			tmp_material = RenderingServer.material_create()
+		if !tmp_canvas.is_valid():
+			tmp_canvas = RenderingServer.canvas_create()
+		if !tmp_canvas_item.is_valid():
+			tmp_canvas_item = RenderingServer.canvas_item_create()
+		if !tmp_viewport.is_valid():
+			tmp_viewport = RenderingServer.viewport_create()
 
 		RenderingServer.material_set_shader(tmp_material, shader.get_rid())
 		for uniform in shader_params.keys():
@@ -182,7 +186,9 @@ func _generate_image(img_size: Vector2i) -> Image:
 		await RenderingServer.frame_post_draw
 
 		# The builtin Godot preview generator aborts here!
-		# So the free_rids will be delayed...
+		# So the free_rid() calls will be delayed
+		# That's why we have to store them as properties
+		# so if anything, they will be freed at some point
 
 		var tex = RenderingServer.viewport_get_texture(tmp_viewport)
 		img = RenderingServer.texture_2d_get(tex)

@@ -1,11 +1,10 @@
 @tool
 extends EditorInspectorPlugin
+class_name ProceduralTexturesInspectorPlugin
 
 
 func _can_handle(object: Object) -> bool:
-	if object is ShaderTexture:
-		return true
-	return false
+	return object is ShaderTexture
 
 
 func _parse_begin(object: Object) -> void:

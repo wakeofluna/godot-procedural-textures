@@ -1,18 +1,16 @@
-[gd_resource type="Texture2D" script_class="ProceduralTexture" load_steps=6 format=3 uid="uid://ex5umimlyw5y"]
+[gd_resource type="Texture2D" script_class="ShaderTexture" load_steps=6 format=3 uid="uid://ex5umimlyw5y"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/shader_texture.gd" id="1_snawq"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/filter_emboss.gdshader" id="2_gu2dl"]
+[ext_resource type="Shader" uid="uid://clhdv6174a7kl" path="res://addons/procedural_textures/shaders/filter_emboss.tres" id="2_rsebl"]
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="3_4rlq5"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/pattern_bricks.gdshader" id="4_igdqd"]
+[ext_resource type="Shader" uid="uid://blkvxf2a25wvb" path="res://addons/procedural_textures/shaders/pattern_bricks.tres" id="4_lgog4"]
 
 [sub_resource type="Texture2D" id="Texture2D_44jia"]
 resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("1_snawq")
 size = Vector2i(512, 512)
-shader = ExtResource("4_igdqd")
-shader/color_seams = Color(0, 0, 0, 1)
-shader/color_bricks = Color(1, 1, 1, 1)
+shader = ExtResource("4_lgog4")
 shader/count_x = 4
 shader/count_y = 10
 shader/row_shift = 0.5
@@ -26,8 +24,8 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("1_snawq")
 size = Vector2i(512, 512)
-shader = ExtResource("2_gu2dl")
+shader = ExtResource("2_rsebl")
 shader/angle = 45
-shader/strength = 6.0
+shader/strength = 8.0
 shader/input = ExtResource("3_4rlq5")
 shader/mask = SubResource("Texture2D_44jia")

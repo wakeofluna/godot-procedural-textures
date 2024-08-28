@@ -1,5 +1,6 @@
 @tool
 extends EditorResourcePreviewGenerator
+class_name ProceduralTexturesPreviewGenerator
 
 
 func _handles(type: String) -> bool:

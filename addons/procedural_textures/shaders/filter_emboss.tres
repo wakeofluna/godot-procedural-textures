@@ -1,0 +1,54 @@
+[gd_resource type="Shader" script_class="ProceduralShader" load_steps=2 format=3 uid="uid://clhdv6174a7kl"]
+
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_shader.gd" id="1_kxbrv"]
+
+[resource]
+code = "shader_type canvas_item;
+
+// uniforms
+uniform int angle : hint_range(0, 360) = 45;
+uniform float strength : hint_range(0.0, 32.0) = 4.0;
+// samplers
+uniform sampler2D input;
+uniform sampler2D mask;
+
+// helper struct to pack uniforms
+struct EmbossDef
+{
+	vec2 uv_angle_offset;
+	float strength;
+};
+
+// definition function; must have all arguments in same order as uniforms with samplers at the end
+EmbossDef make_emboss(int p_angle, float p_strength, sampler2D p_input, sampler2D p_mask) {
+	float rads = radians(float(p_angle));
+	ivec2 mask_size = textureSize(p_mask, 0);
+	return EmbossDef(
+		vec2(cos(rads), sin(rads)) / vec2(mask_size), p_strength
+	);
+}
+
+const vec3 luminance_factor = vec3(0.2126, 0.7152, 0.0722);
+
+float luminance(vec4 color) {
+	vec3 tmp = color.xyz * luminance_factor;
+	return tmp.x + tmp.y + tmp.z;
+}
+
+// process function; takes the def struct, the current UV, and all samplers in order
+vec4 process_emboss(EmbossDef def, vec2 uv, sampler2D p_input, sampler2D p_mask) {
+	vec4 color_in = texture(p_input, uv);
+	vec4 color_mask_1 = texture(p_mask, uv);
+	vec4 color_mask_2 = texture(p_mask, uv + def.uv_angle_offset);
+	float v = (luminance(color_mask_2) - luminance(color_mask_1)) * def.strength;
+	return clamp(color_in + vec4(v, v, v, 0), 0.0, 1.0);
+}
+
+// fragment function; for single applications
+void fragment() {
+	EmbossDef def = make_emboss(angle, strength, input, mask);
+	COLOR = process_emboss(def, UV, input, mask);
+}
+"
+script = ExtResource("1_kxbrv")
+name = "Emboss"
