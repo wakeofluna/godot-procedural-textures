@@ -78,12 +78,13 @@ func _set(property: StringName, value: Variant) -> bool:
 		var index_str = property.get_slice('/', 1)
 		if index_str.is_valid_int():
 			var index = index_str.to_int()
+			if index == nodes.size():
+				nodes.append({})
 			if index >= 0 and index < nodes.size():
 				var node = nodes[index]
 				var element = property.get_slice('/', 2)
-				if node.has(element):
-					node[element] = value
-					return true
+				node[element] = value
+				return true
 	return false
 
 

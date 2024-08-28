@@ -2,48 +2,50 @@
 extends Shader
 class_name ProceduralShader
 
-@export_placeholder("Name (required)") var name: String
+
+@export_placeholder("(required)") var name: String
 
 
 func _init() -> void:
 	if code.is_empty():
-		code = "shader_type canvas_item;
+		code = 'shader_type canvas_item;
 
+// samplers
+uniform sampler2D input;
 // uniforms
 uniform vec4 color : source_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 uniform int angle : hint_range(0, 360) = 45;
 uniform float strength : hint_range(0.0, 32.0) = 4.0;
-// samplers
-uniform sampler2D input;
+
+#include "helper_functions.gdshaderinc"
 
 // helper struct to pack uniforms
 struct XxxxDef {
 	vec4 color;
-	float angle_phi;
-	float angle_cos;
+	vec2 phi;
 	float strength;
 };
 
-// definition function; must have all arguments in same order as uniforms with samplers at the end
-XxxxDef make_xxxx(vec4 p_color, int p_angle, float p_strength, sampler2D p_input) {
-	float rads = radians(float(p_angle));
+// definition function; must have all arguments in same order as uniforms
+XxxxDef make_xxxx_def(vec4 p_color, int p_angle, float p_strength) {
 	return XxxxDef(
-		p_color, cos(rads), sin(rads), p_strength
+		p_color, degrees_to_phi(p_angle), p_strength
 	);
 }
 
-// process function; takes the def struct, the current UV, and all samplers in order
-vec4 process_xxxx(XxxxDef def, vec2 uv, sampler2D p_input) {
-	vec4 color_in = texture(p_input, uv);
+// process function; takes the def struct and the current UV
+vec4 process_xxxx(XxxxDef def, vec2 uv) {
+	uv = rotate_uv_phi(uv, def.phi);
+	vec4 color_in = texture(input, uv);
 	return def.color * color_in;
 }
 
 // fragment function; for demo purposes
 void fragment() {
-	XxxxDef def = make_xxxx(color, angle, strength, input);
-	COLOR = process_xxxx(def, UV, input);
+	XxxxDef def = make_xxxx(color, angle, strength);
+	COLOR = process_xxxx(def, UV);
 }
-"
+'
 
 
 func get_parameter_list(group_name: String = "", group_prefix: String = "shader/") -> Array[Dictionary]:

@@ -18,14 +18,6 @@ var shader_params: Dictionary
 var shader_defaults: Dictionary
 
 
-@export_custom(PROPERTY_HINT_LINK, "") var size : Vector2i = Vector2i(512, 512):
-	set(new_size):
-		if size != new_size:
-			size = new_size
-			size_changed = true
-			_queue_update()
-
-
 @export var design : ProceduralTextureDesign:
 	set(new_design):
 		if design != new_design:
@@ -35,6 +27,13 @@ var shader_defaults: Dictionary
 			if design:
 				design.connect("changed", _design_changed)
 			_design_changed()
+
+@export_custom(PROPERTY_HINT_LINK, "") var size : Vector2i = Vector2i(512, 512):
+	set(new_size):
+		if size != new_size:
+			size = new_size
+			size_changed = true
+			_queue_update()
 
 
 func _init() -> void:
@@ -118,7 +117,7 @@ func _update_texture() -> void:
 
 	var img: Image = await _generate_image(size)
 
-	if !img or img.is_empty():
+	if not img or img.is_empty():
 		img = Image.create_empty(size.x, size.y, false, Image.FORMAT_RGB8)
 		img.fill(pink)
 

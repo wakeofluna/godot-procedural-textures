@@ -1,8 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://dbuqprcbeudap"]
+[gd_scene load_steps=12 format=3 uid="uid://dbuqprcbeudap"]
 
 [ext_resource type="Shader" uid="uid://blkvxf2a25wvb" path="res://addons/procedural_textures/shaders/pattern_bricks.tres" id="1_hr5hu"]
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="1_kebia"]
 [ext_resource type="Texture2D" uid="uid://ex5umimlyw5y" path="res://bricks_embossed_texture.tres" id="3_2hcij"]
+[ext_resource type="Texture2D" uid="uid://ku70osi8vqgm" path="res://bricks_colorized.tres" id="4_56nhm"]
+[ext_resource type="Texture2D" uid="uid://b1x1u7r5c4h4b" path="res://bricks_color_correct.tres" id="4_fftmk"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="4_qpsgp"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="5_5kx2c"]
 
@@ -26,8 +28,8 @@ editor_position = Vector2i(0, 0)
 resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("5_5kx2c")
-size = Vector2i(512, 512)
 design = SubResource("Resource_hotgg")
+size = Vector2i(512, 512)
 
 [node name="MainScene" type="Node2D"]
 
@@ -55,10 +57,26 @@ offset_bottom = 547.0
 texture = ExtResource("3_2hcij")
 stretch_mode = 5
 
+[node name="FilterColorized" type="TextureRect" parent="."]
+offset_left = 1722.0
+offset_top = 35.0
+offset_right = 2234.0
+offset_bottom = 547.0
+texture = ExtResource("4_56nhm")
+stretch_mode = 5
+
+[node name="FilterColorCorrect" type="TextureRect" parent="."]
+offset_left = 2270.0
+offset_top = 36.0
+offset_right = 2782.0
+offset_bottom = 548.0
+texture = ExtResource("4_fftmk")
+stretch_mode = 5
+
 [node name="DesignedTexture" type="TextureRect" parent="."]
-offset_left = 1744.0
-offset_top = 37.0
-offset_right = 2256.0
-offset_bottom = 549.0
+offset_left = 49.0
+offset_top = 599.0
+offset_right = 561.0
+offset_bottom = 1111.0
 texture = SubResource("Texture2D_dktyp")
 stretch_mode = 5

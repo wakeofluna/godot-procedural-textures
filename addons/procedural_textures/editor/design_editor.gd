@@ -3,8 +3,7 @@ extends GraphEdit
 class_name ProceduralTexturesDesigner
 
 
-signal title_changed
-
+static var _shader_resources: Array[ProceduralShader] = []
 
 var design: ProceduralTextureDesign:
 	set(new_design):
@@ -17,8 +16,10 @@ var design: ProceduralTextureDesign:
 			_display_design()
 			title_changed.emit()
 
+signal title_changed
 
-func _iterate_for_files(dir: DirAccess, results: Dictionary) -> void:
+
+static func _search_for_shaders(dir: DirAccess, results: Array[ProceduralShader]) -> void:
 	if dir:
 		var dirname = dir.get_current_dir()
 		if not dirname.ends_with('/'):
@@ -33,22 +34,29 @@ func _iterate_for_files(dir: DirAccess, results: Dictionary) -> void:
 				continue
 			var fullname = dirname + fname
 			if dir.current_is_dir():
-				_iterate_for_files(dir.open(fullname), results)
+				_search_for_shaders(dir.open(fullname), results)
 			elif ResourceLoader.exists(fullname, "Shader"):
 				var item = ResourceLoader.load(fullname, "Shader", ResourceLoader.CACHE_MODE_REUSE)
 				if item is ProceduralShader:
-					results[item.name] = item
+					results.append(item)
+
+
+static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralShader]:
+	if _shader_resources.is_empty() or force_scan:
+		_shader_resources = []
+		_search_for_shaders(DirAccess.open("res://"), _shader_resources)
+		_shader_resources.make_read_only()
+	return _shader_resources
 
 
 func _init() -> void:
 	grid_pattern = GRID_PATTERN_DOTS
 	scroll_offset_changed.connect(_on_scroll_offset_changed)
 
-	var shaders = {}
-	_iterate_for_files(DirAccess.open("res://"), shaders)
+	var shaders = get_shader_resources()
 	print('FOUND SHADERS:')
-	for shader_name in shaders:
-		print('  - {0} at {1}'.format([shader_name, shaders[shader_name].resource_path]))
+	for shader in shaders:
+		print('  - {0} at {1}'.format([shader.name if !shader.name.is_empty() else "(noname)", shader.resource_path]))
 
 
 func _design_changed() -> void:

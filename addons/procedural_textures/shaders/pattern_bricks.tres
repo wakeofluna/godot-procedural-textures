@@ -14,6 +14,8 @@ uniform float gap_y : hint_range(0.0f, 1.0f) = 0.0f;
 uniform float smoothing : hint_range(0.0f, 0.5f) = 0.1f;
 uniform int rotation : hint_range(-180, 180) = 0;
 
+#include \"helper_functions.gdshaderinc\"
+
 // helper struct to pack uniforms
 struct BrickDef
 {
@@ -23,24 +25,19 @@ struct BrickDef
 	float gap_x;
 	float gap_y;
 	float smoothing;
-	float cos_phi;
-	float sin_phi;
+	vec2 phi;
 };
 
-// definition function; must have all arguments in same order as uniforms with samplers at the end
+// definition function; must have all arguments in same order as uniforms
 BrickDef make_brick_def(int p_count_x, int p_count_y, float p_row_shift, float p_gap_x, float p_gap_y, float p_smoothing, int p_rotation) {
-	float rads = radians(float(p_rotation));
 	return BrickDef(
-		float(p_count_x), float(p_count_y), p_row_shift, p_gap_x, p_gap_y, p_smoothing, cos(rads), sin(rads)
+		float(p_count_x), float(p_count_y), p_row_shift, p_gap_x, p_gap_y, p_smoothing, degrees_to_phi(p_rotation)
 	);
 }
 
-// process function; takes the def struct, the current UV, and all samplers in order
+// process function; takes the def struct and the current UV
 float process_bricks(BrickDef def, vec2 uv) {
-	vec2 rotated;
-	rotated.x = (uv.x - 0.5f) * def.cos_phi + (uv.y - 0.5f) * def.sin_phi + 0.5f;
-	rotated.y = (uv.y - 0.5f) * def.cos_phi - (uv.x - 0.5f) * def.sin_phi + 0.5f;
-	uv = rotated;
+	uv = rotate_uv_phi(uv, def.phi);
 
 	float uu = uv.x * def.norm_x;
 	float vv = uv.y * def.norm_y;

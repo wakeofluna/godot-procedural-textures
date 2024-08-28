@@ -5,12 +5,14 @@
 [resource]
 code = "shader_type canvas_item;
 
-// uniforms
-uniform int angle : hint_range(0, 360) = 45;
-uniform float strength : hint_range(0.0, 32.0) = 4.0;
 // samplers
 uniform sampler2D input;
 uniform sampler2D mask;
+// uniforms
+uniform int angle : hint_range(0, 360) = 45;
+uniform float strength : hint_range(0.0, 32.0) = 4.0;
+
+#include \"helper_functions.gdshaderinc\"
 
 // helper struct to pack uniforms
 struct EmbossDef
@@ -19,35 +21,26 @@ struct EmbossDef
 	float strength;
 };
 
-// definition function; must have all arguments in same order as uniforms with samplers at the end
-EmbossDef make_emboss(int p_angle, float p_strength, sampler2D p_input, sampler2D p_mask) {
-	float rads = radians(float(p_angle));
-	ivec2 mask_size = textureSize(p_mask, 0);
+// definition function; must have all arguments in same order as uniforms
+EmbossDef make_emboss_def(int p_angle, float p_strength) {
 	return EmbossDef(
-		vec2(cos(rads), sin(rads)) / vec2(mask_size), p_strength
+		degrees_to_phi(p_angle) * uv_per_pixel, p_strength
 	);
 }
 
-const vec3 luminance_factor = vec3(0.2126, 0.7152, 0.0722);
-
-float luminance(vec4 color) {
-	vec3 tmp = color.xyz * luminance_factor;
-	return tmp.x + tmp.y + tmp.z;
-}
-
-// process function; takes the def struct, the current UV, and all samplers in order
-vec4 process_emboss(EmbossDef def, vec2 uv, sampler2D p_input, sampler2D p_mask) {
-	vec4 color_in = texture(p_input, uv);
-	vec4 color_mask_1 = texture(p_mask, uv);
-	vec4 color_mask_2 = texture(p_mask, uv + def.uv_angle_offset);
-	float v = (luminance(color_mask_2) - luminance(color_mask_1)) * def.strength;
+// process function; takes the def struct and the current UV
+vec4 process_emboss(EmbossDef def, vec2 uv) {
+	vec4 color_in = texture(input, uv);
+	float val_mask_1 = texture(mask, uv).x;
+	float val_mask_2 = texture(mask, uv + def.uv_angle_offset).x;
+	float v = (val_mask_2 - val_mask_1) * def.strength;
 	return clamp(color_in + vec4(v, v, v, 0), 0.0, 1.0);
 }
 
 // fragment function; for single applications
 void fragment() {
-	EmbossDef def = make_emboss(angle, strength, input, mask);
-	COLOR = process_emboss(def, UV, input, mask);
+	EmbossDef def = make_emboss_def(angle, strength);
+	COLOR = process_emboss(def, UV);
 }
 "
 script = ExtResource("1_kxbrv")

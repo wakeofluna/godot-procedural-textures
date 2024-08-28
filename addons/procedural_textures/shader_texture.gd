@@ -25,7 +25,6 @@ var shader_defaults: Dictionary
 			size_changed = true
 			_queue_update()
 
-
 @export var shader : Shader:
 	set(new_shader):
 		if shader != new_shader:
@@ -35,6 +34,12 @@ var shader_defaults: Dictionary
 			if shader:
 				shader.connect("changed", _shader_changed)
 			_shader_changed()
+
+@export var generate_mipmaps: bool = false:
+	set(new_gmm):
+		if generate_mipmaps != new_gmm:
+			generate_mipmaps = new_gmm
+			_queue_update()
 
 
 func _init() -> void:
@@ -187,7 +192,8 @@ func _generate_image(img_size: Vector2i) -> Image:
 
 		# The builtin Godot preview generator aborts here!
 		# So the free_rid() calls will be delayed
-		# That's why we have to store them as properties
+		# We can't do it with call_deferred because of race conditions,
+		# that's why we have to store them as properties
 		# so if anything, they will be freed at some point
 
 		var tex = RenderingServer.viewport_get_texture(tmp_viewport)
@@ -217,6 +223,9 @@ func _update_texture() -> void:
 	if !img or img.is_empty():
 		img = Image.create_empty(size.x, size.y, false, Image.FORMAT_RGB8)
 		img.fill(pink)
+
+	if generate_mipmaps:
+		img.generate_mipmaps()
 
 	if local_size_changed:
 		var new_tex = RenderingServer.texture_2d_create(img)
