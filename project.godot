@@ -17,4 +17,4 @@ config/icon="res://icon.svg"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/procedural_textures/plugin.cfg")
+enabled=PackedStringArray("res://addons/procedural_textures/plugin.cfg", "res://addons/ridiculous_coding/plugin.cfg")
