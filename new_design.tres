@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_nutr6")
-editor_position = Vector2i(-29, -43)
+editor_position = Vector2i(0, 0)
 nodes/0/title = ""
 nodes/0/shader_name = "Bricks"
 nodes/0/position = Vector2i(20, 20)

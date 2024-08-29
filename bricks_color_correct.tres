@@ -1,8 +1,8 @@
 [gd_resource type="Texture2D" script_class="ShaderTexture" load_steps=4 format=3 uid="uid://b1x1u7r5c4h4b"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/shader_texture.gd" id="1_2tvhk"]
-[ext_resource type="Shader" uid="uid://d3bsw0kdnx44j" path="res://addons/procedural_textures/shaders/filter_color_correct.tres" id="2_nmwiy"]
-[ext_resource type="Texture2D" uid="uid://ku70osi8vqgm" path="res://bricks_colorized.tres" id="3_pk8t5"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_color_correct.gdshader" id="2_nmwiy"]
+[ext_resource type="Texture2D" uid="uid://ku70osi8vqgm" path="res://bricks_colorized.tres" id="3_w3xec"]
 
 [resource]
 resource_local_to_scene = false
@@ -11,9 +11,9 @@ script = ExtResource("1_2tvhk")
 size = Vector2i(512, 512)
 shader = ExtResource("2_nmwiy")
 generate_mipmaps = false
-shader/brightness = 0.0
+shader/brightness = -0.27
 shader/contrast = 1.0
-shader/hue_shift = 18.7
-shader/desaturate = 0.27
+shader/hue_shift = 27.2
+shader/desaturate = 0.0
 shader/gamma = 1.0
-shader/input = ExtResource("3_pk8t5")
+shader/input = ExtResource("3_w3xec")

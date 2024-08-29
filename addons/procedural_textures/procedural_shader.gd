@@ -1,14 +1,34 @@
 @tool
-extends Shader
+extends RefCounted
 class_name ProceduralShader
 
 
-@export_placeholder("(required)") var name: String
+signal changed
 
 
-func _init() -> void:
-	if code.is_empty():
-		code = 'shader_type canvas_item;
+var name: String = ""
+var includes: Array = []
+var structs: Array = []
+var functions: Array = []
+
+var shader: Shader = null:
+	set(new_shader):
+		if shader != new_shader:
+			if shader:
+				shader.changed.disconnect(_on_shader_updated)
+			shader = new_shader
+			if shader:
+				shader.changed.connect(_on_shader_updated)
+			_on_shader_updated()
+
+var resource_path: String:
+	get():
+		return shader.resource_path if shader else ""
+
+
+const template: String = 'shader_type canvas_item;
+
+// NAME:xxxx
 
 // samplers
 uniform sampler2D input;
@@ -26,15 +46,15 @@ struct XxxxDef {
 	float strength;
 };
 
-// definition function; must have all arguments in same order as uniforms
-XxxxDef make_xxxx_def(vec4 p_color, int p_angle, float p_strength) {
+// make_def function; must have all arguments in same order as uniforms
+XxxxDef make_def(vec4 p_color, int p_angle, float p_strength) {
 	return XxxxDef(
 		p_color, degrees_to_phi(p_angle), p_strength
 	);
 }
 
 // process function; takes the def struct and the current UV
-vec4 process_xxxx(XxxxDef def, vec2 uv) {
+vec4 process(XxxxDef def, vec2 uv) {
 	uv = rotate_uv_phi(uv, def.phi);
 	vec4 color_in = texture(input, uv);
 	return def.color * color_in;
@@ -42,33 +62,50 @@ vec4 process_xxxx(XxxxDef def, vec2 uv) {
 
 // fragment function; for demo purposes
 void fragment() {
-	XxxxDef def = make_xxxx(color, angle, strength);
-	COLOR = process_xxxx(def, UV);
+	XxxxDef def = make_def(color, angle, strength);
+	COLOR = process(def, UV);
 }
 '
 
 
-func get_parameter_list(group_name: String = "", group_prefix: String = "shader/") -> Array[Dictionary]:
-	var props: Array[Dictionary] = []
+func _on_shader_updated():
+	var shader_data = ShaderParser.parse_shader(shader)
 
-	var uniforms: Array = get_shader_uniform_list(false)
-	if !uniforms.is_empty():
-		if !group_name.is_empty() and !group_prefix.is_empty():
-			var group = {}
-			group.name = group_name
-			group.class_name = ''
-			group.type = TYPE_STRING
-			group.hint = PROPERTY_HINT_NONE
-			group.hint_string = group_prefix
-			group.usage = PROPERTY_USAGE_GROUP
-			props.append(group)
-		else:
-			group_prefix = ''
+	name = shader_data.get("name", "")
+	includes = shader_data.get("includes", [])
+	structs = shader_data.get("structs", [])
+	functions = shader_data.get("functions", [])
+	includes.make_read_only()
+	structs.make_read_only()
+	functions.make_read_only()
 
-		for uniform in uniforms:
-			uniform.parameter_name = uniform.name
-			uniform.default = RenderingServer.shader_get_parameter_default(get_rid(), uniform.name)
-			uniform.name = group_prefix + uniform.name
-			props.append(uniform)
+	if shader:
+		print('==========================================================')
+		print('SHADER: {0}'.format([shader.resource_path]))
+		print('shader_type canvas_item;')
+		print('// NAME:{0}'.format([name]))
+		for x: String in includes:
+			if !x.is_absolute_path():
+				x = shader.resource_path.get_base_dir().path_join(x)
+			x = x.simplify_path()
+			print('#include "{0}"'.format([x]))
+		for x in structs:
+			print('struct {0} {1};'.format([x.name, x.definition]))
+		for x in functions:
+			print('{0} {1}{2} {{3}}'.format([x.return_type, x.name, x.parameters, ShaderParser._reconstruct_scope(x.definition, 1, '')]))
 
-	return props
+	changed.emit()
+
+
+static func create_from_object(object: Object) -> ProceduralShader:
+	if object is Shader:
+		return create_from_shader(object as Shader)
+	return null
+
+
+static func create_from_shader(shader: Shader) -> ProceduralShader:
+	assert(shader)
+
+	var proc_shader = ProceduralShader.new()
+	proc_shader.shader = shader
+	return proc_shader

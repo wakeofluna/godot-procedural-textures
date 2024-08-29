@@ -37,8 +37,9 @@ static func _search_for_shaders(dir: DirAccess, results: Array[ProceduralShader]
 				_search_for_shaders(dir.open(fullname), results)
 			elif ResourceLoader.exists(fullname, "Shader"):
 				var item = ResourceLoader.load(fullname, "Shader", ResourceLoader.CACHE_MODE_REUSE)
-				if item is ProceduralShader:
-					results.append(item)
+				var ps: ProceduralShader = ProceduralShader.create_from_object(item)
+				if ps:
+					results.append(ps)
 
 
 static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralShader]:

@@ -1,17 +1,17 @@
 [gd_resource type="Texture2D" script_class="ShaderTexture" load_steps=6 format=3 uid="uid://ex5umimlyw5y"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/shader_texture.gd" id="1_snawq"]
-[ext_resource type="Shader" uid="uid://clhdv6174a7kl" path="res://addons/procedural_textures/shaders/filter_emboss.tres" id="2_rsebl"]
-[ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="3_4rlq5"]
-[ext_resource type="Shader" uid="uid://blkvxf2a25wvb" path="res://addons/procedural_textures/shaders/pattern_bricks.tres" id="4_lgog4"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="2_rsebl"]
+[ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="3_12t0w"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="4_nodr2"]
 
-[sub_resource type="Texture2D" id="Texture2D_44jia"]
+[sub_resource type="Texture2D" id="Texture2D_4mbrh"]
 resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("1_snawq")
 size = Vector2i(512, 512)
-shader = ExtResource("4_lgog4")
-generate_mipmaps = null
+shader = ExtResource("4_nodr2")
+generate_mipmaps = false
 shader/count_x = 4
 shader/count_y = 10
 shader/row_shift = 0.5
@@ -29,5 +29,5 @@ shader = ExtResource("2_rsebl")
 generate_mipmaps = false
 shader/angle = 45
 shader/strength = 12.0
-shader/input = ExtResource("3_4rlq5")
-shader/mask = SubResource("Texture2D_44jia")
+shader/input = ExtResource("3_12t0w")
+shader/mask = SubResource("Texture2D_4mbrh")

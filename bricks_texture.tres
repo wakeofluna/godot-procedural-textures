@@ -1,7 +1,7 @@
 [gd_resource type="Texture2D" script_class="ShaderTexture" load_steps=3 format=3 uid="uid://d882egauvhkc"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/shader_texture.gd" id="1_4heq6"]
-[ext_resource type="Shader" uid="uid://blkvxf2a25wvb" path="res://addons/procedural_textures/shaders/pattern_bricks.tres" id="2_tpasq"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_tpasq"]
 
 [resource]
 resource_local_to_scene = false

@@ -1,9 +1,6 @@
-[gd_resource type="Shader" script_class="ProceduralShader" load_steps=2 format=3 uid="uid://blkvxf2a25wvb"]
+shader_type canvas_item;
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_shader.gd" id="1_xms55"]
-
-[resource]
-code = "shader_type canvas_item;
+// NAME:Bricks
 
 // uniforms
 uniform int count_x : hint_range(1, 20) = 4;
@@ -14,7 +11,7 @@ uniform float gap_y : hint_range(0.0f, 1.0f) = 0.0f;
 uniform float smoothing : hint_range(0.0f, 0.5f) = 0.1f;
 uniform int rotation : hint_range(-180, 180) = 0;
 
-#include \"helper_functions.gdshaderinc\"
+#include "helper_functions.gdshaderinc"
 
 // helper struct to pack uniforms
 struct BrickDef
@@ -28,15 +25,15 @@ struct BrickDef
 	vec2 phi;
 };
 
-// definition function; must have all arguments in same order as uniforms
-BrickDef make_brick_def(int p_count_x, int p_count_y, float p_row_shift, float p_gap_x, float p_gap_y, float p_smoothing, int p_rotation) {
+// make_def function; must have all arguments in same order as uniforms
+BrickDef make_def(int p_count_x, int p_count_y, float p_row_shift, float p_gap_x, float p_gap_y, float p_smoothing, int p_rotation) {
 	return BrickDef(
 		float(p_count_x), float(p_count_y), p_row_shift, p_gap_x, p_gap_y, p_smoothing, degrees_to_phi(p_rotation)
 	);
 }
 
 // process function; takes the def struct and the current UV
-float process_bricks(BrickDef def, vec2 uv) {
+float process(BrickDef def, vec2 uv) {
 	uv = rotate_uv_phi(uv, def.phi);
 
 	float uu = uv.x * def.norm_x;
@@ -61,9 +58,7 @@ float process_bricks(BrickDef def, vec2 uv) {
 
 // fragment function; for demo purposes
 void fragment() {
-	BrickDef def = make_brick_def(count_x, count_y, row_shift, gap_x, gap_y, smoothing, rotation);
-	float val = process_bricks(def, UV);
+	BrickDef def = make_def(count_x, count_y, row_shift, gap_x, gap_y, smoothing, rotation);
+	float val = process(def, UV);
 	COLOR = vec4(val, val, val, 1.0);
-}"
-script = ExtResource("1_xms55")
-name = "Bricks"
+}

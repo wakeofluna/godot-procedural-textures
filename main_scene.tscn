@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://dbuqprcbeudap"]
 
-[ext_resource type="Shader" uid="uid://blkvxf2a25wvb" path="res://addons/procedural_textures/shaders/pattern_bricks.tres" id="1_hr5hu"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="1_hr5hu"]
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="1_kebia"]
 [ext_resource type="Texture2D" uid="uid://ex5umimlyw5y" path="res://bricks_embossed_texture.tres" id="3_2hcij"]
 [ext_resource type="Texture2D" uid="uid://ku70osi8vqgm" path="res://bricks_colorized.tres" id="4_56nhm"]
@@ -22,7 +22,7 @@ shader_parameter/rotation = 0
 
 [sub_resource type="Resource" id="Resource_hotgg"]
 script = ExtResource("4_qpsgp")
-editor_position = Vector2i(0, 0)
+editor_position = Vector2i(-142, -99)
 
 [sub_resource type="Texture2D" id="Texture2D_dktyp"]
 resource_local_to_scene = false
@@ -33,50 +33,52 @@ size = Vector2i(512, 512)
 
 [node name="MainScene" type="Node2D"]
 
-[node name="WithPlaceholder" type="TextureRect" parent="."]
+[node name="GridContainer" type="GridContainer" parent="."]
+offset_right = 1153.0
+offset_bottom = 647.0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 5
+
+[node name="WithPlaceholder" type="TextureRect" parent="GridContainer"]
 material = SubResource("ShaderMaterial_2npp7")
-offset_left = 45.0
-offset_top = 42.0
-offset_right = 557.0
-offset_bottom = 554.0
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_kpkk0")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
-[node name="PatternBricks" type="TextureRect" parent="."]
-offset_left = 601.0
-offset_top = 38.0
-offset_right = 1113.0
-offset_bottom = 550.0
+[node name="PatternBricks" type="TextureRect" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
 texture = ExtResource("1_kebia")
-stretch_mode = 5
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
-[node name="FilterEmboss" type="TextureRect" parent="."]
-offset_left = 1164.0
-offset_top = 35.0
-offset_right = 1676.0
-offset_bottom = 547.0
+[node name="FilterEmboss" type="TextureRect" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
 texture = ExtResource("3_2hcij")
-stretch_mode = 5
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
-[node name="FilterColorized" type="TextureRect" parent="."]
-offset_left = 1722.0
-offset_top = 35.0
-offset_right = 2234.0
-offset_bottom = 547.0
+[node name="FilterColorized" type="TextureRect" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
 texture = ExtResource("4_56nhm")
-stretch_mode = 5
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
-[node name="FilterColorCorrect" type="TextureRect" parent="."]
-offset_left = 2270.0
-offset_top = 36.0
-offset_right = 2782.0
-offset_bottom = 548.0
+[node name="FilterColorCorrect" type="TextureRect" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
 texture = ExtResource("4_fftmk")
-stretch_mode = 5
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
-[node name="DesignedTexture" type="TextureRect" parent="."]
-offset_left = 49.0
-offset_top = 599.0
-offset_right = 561.0
-offset_bottom = 1111.0
+[node name="DesignedTexture" type="TextureRect" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
 texture = SubResource("Texture2D_dktyp")
-stretch_mode = 5
+expand_mode = 1
+metadata/_edit_use_anchors_ = true

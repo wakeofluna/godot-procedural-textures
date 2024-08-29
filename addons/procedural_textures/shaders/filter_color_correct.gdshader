@@ -1,9 +1,6 @@
-[gd_resource type="Shader" script_class="ProceduralShader" load_steps=2 format=3 uid="uid://d3bsw0kdnx44j"]
+shader_type canvas_item;
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_shader.gd" id="1_2fvby"]
-
-[resource]
-code = "shader_type canvas_item;
+// NAME:ColorCorrect
 
 // samplers
 uniform sampler2D input;
@@ -14,7 +11,7 @@ uniform float hue_shift : hint_range(0.0, 360.0, 0.1) = 0.0;
 uniform float desaturate : hint_range(0.0, 1.0, 0.01) = 0.0;
 uniform float gamma : hint_range(0.1, 3.0, 0.01) = 1.0;
 
-#include \"helper_functions.gdshaderinc\"
+#include "helper_functions.gdshaderinc"
 
 // helper struct to pack uniforms
 struct ColorCorrectDef {
@@ -26,14 +23,14 @@ struct ColorCorrectDef {
 };
 
 // definition function; must have all arguments in same order as uniforms
-ColorCorrectDef make_color_correct_def(float p_brightness, float p_contrast, float p_hue_shift, float p_desaturate, float p_gamma) {
+ColorCorrectDef make_def(float p_brightness, float p_contrast, float p_hue_shift, float p_desaturate, float p_gamma) {
 	return ColorCorrectDef(
 		p_brightness + 0.5, p_contrast, p_hue_shift, p_desaturate, p_gamma
 	);
 }
 
 // process function; takes the def struct and the current UV
-vec4 process_color_correct(ColorCorrectDef def, vec2 uv) {
+vec4 process(ColorCorrectDef def, vec2 uv) {
 	vec4 v_color = texture(input, uv);
 	v_color.rgb -= 0.5f;
 	v_color.rgb = fma(v_color.rgb, vec3(def.contrast, def.contrast, def.contrast), vec3(def.brightness, def.brightness, def.brightness));
@@ -51,9 +48,6 @@ vec4 process_color_correct(ColorCorrectDef def, vec2 uv) {
 
 // fragment function; for demo purposes
 void fragment() {
-	ColorCorrectDef def = make_color_correct_def(brightness, contrast, hue_shift, desaturate, gamma);
-	COLOR = process_color_correct(def, UV);
+	ColorCorrectDef def = make_def(brightness, contrast, hue_shift, desaturate, gamma);
+	COLOR = process(def, UV);
 }
-"
-script = ExtResource("1_2fvby")
-name = "Color Correct"
