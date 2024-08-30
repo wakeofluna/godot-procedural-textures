@@ -55,15 +55,17 @@ static func _tokenize_shader_code(code: String, callback: Callable) -> void:
 
 	var cursor: int = 0
 	var cursor_end = code.length()
+	var seen_whitespace = false
 
 	while cursor < cursor_end:
 		var char = code.unicode_at(cursor)
 		if char == ORD_NEWLINE:
-			callback.call(TOKEN_NEWLINE, cursor, cursor+1, "")
+			callback.call(TOKEN_NEWLINE, "", false)
+			seen_whitespace = false
 			cursor += 1
 		elif char <= 32:
+			seen_whitespace = true
 			cursor += 1
-			pass
 		elif _is_valid_number_character(char, false):
 			var len: int = 1
 			while cursor + len < cursor_end:
@@ -72,7 +74,8 @@ static func _tokenize_shader_code(code: String, callback: Callable) -> void:
 					break
 				len += 1
 			var token = code.substr(cursor, len)
-			callback.call(TOKEN_NUMBER, cursor, cursor + len, token)
+			callback.call(TOKEN_NUMBER, token, seen_whitespace)
+			seen_whitespace = false
 			cursor += len
 		elif _is_valid_string_character(char, false):
 			var len: int = 1
@@ -82,28 +85,32 @@ static func _tokenize_shader_code(code: String, callback: Callable) -> void:
 					break
 				len += 1
 			var token = code.substr(cursor, len)
-			callback.call(TOKEN_STRING, cursor, cursor + len, token)
+			callback.call(TOKEN_STRING, token, seen_whitespace)
+			seen_whitespace = false
 			cursor += len
 		elif _is_brace_open(char):
-			callback.call(TOKEN_BRACE_OPEN, cursor, cursor+1, code[cursor])
+			callback.call(TOKEN_BRACE_OPEN, code[cursor], seen_whitespace)
+			seen_whitespace = false
 			cursor += 1
 		elif _is_brace_close(char):
 			var open_brace = String.chr(_is_brace_close(char))
-			callback.call(TOKEN_BRACE_CLOSE, cursor, cursor+1, open_brace)
+			callback.call(TOKEN_BRACE_CLOSE, open_brace, seen_whitespace)
+			seen_whitespace = false
 			cursor += 1
 		else:
-			callback.call(TOKEN_OPERATOR, cursor, cursor+1, code[cursor])
+			callback.call(TOKEN_OPERATOR, code[cursor], seen_whitespace)
+			seen_whitespace = false
 			cursor += 1
 
-	callback.call(TOKEN_EOF, cursor, cursor, "")
+	callback.call(TOKEN_EOF, "", false)
 
 
 static func tokenize_shader_code(code: String) -> Array:
 	var scopes: Array = []
-	scopes.append({ type = TOKEN_TOPLEVEL, start = 0, end = 0, token = "", contents = []})
+	scopes.append({ "type" = TOKEN_TOPLEVEL, "token" = "", "seen_whitespace" = false, "contents" = []})
 
-	var cb = func(type: StringName, start: int, end: int, token: String):
-		var value = {type = type, start = start, end = end, token = token}
+	var cb = func(type: StringName, token: String, seen_whitespace: bool):
+		var value = {"type" = type, "token" = token, "seen_whitespace" = seen_whitespace}
 
 		if type == TOKEN_BRACE_OPEN:
 			value.contents = []
@@ -112,26 +119,22 @@ static func tokenize_shader_code(code: String) -> Array:
 
 		elif type == TOKEN_BRACE_CLOSE:
 			if scopes.back().token == token:
-				scopes.back().end = end
 				scopes.pop_back()
 			else:
 				value.type = TOKEN_OPERATOR
 				scopes.back().contents.append(value)
 
 		elif type == TOKEN_EOF:
-			for scope in scopes:
-				scope.end = end
-				scope.contents.append(value)
+			pass
 
 		elif type == TOKEN_OPERATOR:
 			var added: bool = false
-			if !scopes.back().contents.is_empty():
+			if not seen_whitespace and not scopes.back().contents.is_empty():
 				var last_token = scopes.back().contents.back()
-				if last_token.type == TOKEN_OPERATOR and last_token.end == start:
+				if last_token.type == TOKEN_OPERATOR:
 					var combined_token = last_token.token + token
 					if combined_token in ['//', '/*', '*/', '==', '!=', '<=', '>=', '<<', '>>', '&&', '||', '-=', '+=', '/=', '*=']:
 						last_token.token = combined_token
-						last_token.end = end
 						added = true
 			if not added:
 				scopes.back().contents.append(value)
@@ -155,66 +158,60 @@ static func parse_shader(shader: Shader) -> Dictionary:
 
 	var code: String = shader.code
 	var toplevel: Array = tokenize_shader_code(code)
-	var cursor: int = 0
-	var cursor_end = toplevel.size()
+	var element_idx: int = 0
+	var element_idx_end = toplevel.size()
 	var stack: Array = []
 
-	var find_next_token = func(start: int, type: StringName, token: String) -> int:
-		var next_cursor: int = start + 1
-		while next_cursor < cursor_end:
-			var element = toplevel[next_cursor]
-			if element.type == type and element.token == token:
-				return next_cursor
-			next_cursor += 1
-		return start
-
-	var merge_string = func(from: int, to: int) -> String:
-		if to - from > 1:
-			var start = toplevel[from+1].start
-			var end = toplevel[to-1].end
-			return code.substr(start, end - start)
-		return ""
+	var find_next_token = func(start_element: int, type: StringName, token: String) -> int:
+		var next_element: int = start_element + 1
+		while next_element < element_idx_end:
+			var element = toplevel[next_element]
+			if (element.type == type and element.token == token) or element.type == TOKEN_EOF:
+				return next_element
+			next_element += 1
+		return start_element
 
 	var had_newline: bool = true
-
-	while cursor < cursor_end:
+	while element_idx < element_idx_end:
 		var first_token_on_line: bool = had_newline
 		had_newline = false
 
-		var element: Dictionary = toplevel[cursor]
+		var element: Dictionary = toplevel[element_idx]
 		if element.type == TOKEN_OPERATOR:
 			if element.token == '//' or element.token == '/*':
 				var end: int
 				if element.token == '//':
-					end = find_next_token.call(cursor, TOKEN_NEWLINE, "")
+					end = find_next_token.call(element_idx, TOKEN_NEWLINE, "")
 					had_newline = true
 				else:
-					end = find_next_token.call(cursor, TOKEN_OPERATOR, "*/")
+					end = find_next_token.call(element_idx, TOKEN_OPERATOR, "*/")
 
-				var comment: String = merge_string.call(cursor, end)
-				#print("COMMENT: {0}".format([comment]))
+				if end > element_idx + 1:
+					var comment: String = reconstruct_string(toplevel.slice(element_idx + 1, end)).strip_edges()
+					#print("COMMENT: {0}".format([comment]))
+					if comment.begins_with("NAME:"):
+						result.name = comment.substr(5).strip_edges()
 
-				if comment.begins_with("NAME:"):
-					result.name = comment.substr(5).strip_edges()
-
-				cursor = end + 1
+				element_idx = end + 1
 				continue
 
 			elif element.token == '#' and first_token_on_line:
-				var end: int = find_next_token.call(cursor, TOKEN_NEWLINE, "")
+				var end: int = find_next_token.call(element_idx, TOKEN_NEWLINE, "")
 
-				var next_token = toplevel[cursor+1]
-				if next_token.type == TOKEN_STRING and next_token.token == "include":
-					var inc: String = merge_string.call(cursor + 1, end)
-					if inc.length() >= 2:
-						if inc[0] == '"' and inc[-1] == '"':
-							inc = inc.substr(1, inc.length() - 2)
-						result.includes.append(inc)
+				if end > element_idx + 2:
+					var next_token = toplevel[element_idx + 1]
+					if next_token.type == TOKEN_STRING and next_token.token == "include":
+						var inc: String = reconstruct_string(toplevel.slice(element_idx + 2, end)).strip_edges()
+						if inc.length() >= 2:
+							if inc[0] == '"' and inc[-1] == '"':
+								inc = inc.substr(1, inc.length() - 2)
+							result.includes.append(inc)
 
-				#var value: String = merge_string.call(cursor - 1, end)
-				#print("PREPROCESSOR: {0}".format([value]))
+				#if end > element_idx + 1:
+				#	var value: String = reconstruct_string(toplevel.slice(element_idx + 1, end)).strip_edges()
+				#	print("PREPROCESSOR: {0}".format([value]))
 
-				cursor = end + 1
+				element_idx = end + 1
 				had_newline = true
 				continue
 
@@ -232,12 +229,12 @@ static func parse_shader(shader: Shader) -> Dictionary:
 			if element.token == '{':
 				if stack.size() >= 2 and stack[-2].type == TOKEN_STRING and stack[-2].token == 'struct':
 					var struct_name = stack[-1].token
-					var struct_def = code.substr(element.start, element.end - element.start).strip_edges()
+					var struct_def = element.contents
 					result.structs.append({ name = struct_name, definition = struct_def })
 				elif stack.size() >= 3 and stack[-1].type == TOKEN_BRACE_OPEN and stack[-1].token == '(':
-					var ret_type: String = code.substr(stack[0].start, stack[-3].end - stack[0].start).strip_edges()
+					var ret_type = stack.slice(0, -2)
 					var func_name = stack[-2].token
-					var func_param: String = code.substr(stack[-1].start, stack[-1].end - stack[-1].start)
+					var func_param = stack[-1].contents
 					var func_def = element.contents
 					result.functions.append({ return_type = ret_type, name = func_name, parameters = func_param, definition = func_def })
 				stack = []
@@ -261,7 +258,7 @@ static func parse_shader(shader: Shader) -> Dictionary:
 		else:
 			assert(false, "Addon internal error: Unhandled TOKEN_TYPE {0} in ShaderParser parser".format([element.type]))
 
-		cursor += 1
+		element_idx += 1
 
 	return result
 
@@ -274,13 +271,14 @@ static func _reconstruct_scope(scope: Array, indent: int, result: String) -> Str
 			break
 		elif x.type == TOKEN_NEWLINE:
 			result += '\n'
+			last_type = x.type
 			continue
 
-		if !result.is_empty() and result[-1] == '\n':
+		if not result.is_empty() and result[-1] == '\n':
 			result += '\t\t\t\t\t\t\t\t'.substr(0, indent)
 
 		if x.type == TOKEN_BRACE_OPEN:
-			if x.token == '{':
+			if x.seen_whitespace and last_type != TOKEN_NEWLINE:
 				result += ' '
 			result += x.token
 
@@ -294,22 +292,18 @@ static func _reconstruct_scope(scope: Array, indent: int, result: String) -> Str
 				result += ')'
 			elif x.token == '[':
 				result += ']'
-		elif x.type == TOKEN_STRING or x.type == TOKEN_NUMBER:
-			if last_type == TOKEN_STRING or last_type == TOKEN_NUMBER:
-				result += ' '
-			result += x.token
-		elif x.type == TOKEN_OPERATOR:
-			if x.token not in '.,;':
-				result += ' '
-			result += x.token
-			if x.token not in '.;':
-				result += ' '
 		else:
-			assert(false, "Addon internal error: Unhandled TOKEN_TYPE {0} in ShaderParser reconstructor".format([x.type]))
+			if x.seen_whitespace and last_type != TOKEN_NEWLINE:
+				result += ' '
+			result += x.token
 
 		last_type = x.type
 
 	return result
+
+
+static func reconstruct_string(scope: Array, indent: int = 1) -> String:
+	return _reconstruct_scope(scope, indent, '')
 
 
 static func get_parameter_list(shader: Shader, group_name: String = "", group_prefix: String = "shader/") -> Array[Dictionary]:

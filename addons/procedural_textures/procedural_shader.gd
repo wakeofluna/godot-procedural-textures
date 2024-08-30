@@ -37,7 +37,7 @@ func _on_shader_updated():
 	structs.make_read_only()
 	functions.make_read_only()
 
-	if shader:
+	if false and shader:
 		print('==========================================================')
 		print('SHADER: {0}'.format([shader.resource_path]))
 		print('shader_type canvas_item;')
@@ -48,9 +48,9 @@ func _on_shader_updated():
 			x = x.simplify_path()
 			print('#include "{0}"'.format([x]))
 		for x in structs:
-			print('struct {0} {1};'.format([x.name, x.definition]))
+			print('struct {0} {{1}};'.format([x.name, ShaderParser.reconstruct_string(x.definition)]))
 		for x in functions:
-			print('{0} {1}{2} {{3}}'.format([x.return_type, x.name, x.parameters, ShaderParser._reconstruct_scope(x.definition, 1, '')]))
+			print('{0} {1}({2}) {{3}}'.format([ShaderParser.reconstruct_string(x.return_type), x.name, ShaderParser.reconstruct_string(x.parameters), ShaderParser.reconstruct_string(x.definition)]))
 
 	changed.emit()
 

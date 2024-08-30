@@ -96,7 +96,8 @@ func _edit(object: Object) -> void:
 
 func _apply_changes() -> void:
 	print("APPLY CHANGES REQUEST")
-	print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
+	if EditorInterface.get_edited_scene_root():
+		print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
 
 
 func _build() -> bool:
@@ -119,7 +120,8 @@ func _get_state() -> Dictionary:
 
 func _get_unsaved_status(for_scene: String) -> String:
 	print('GET UNSAVED STATUS REQUEST FOR {0}'.format([for_scene]))
-	print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
+	if EditorInterface.get_edited_scene_root():
+		print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
 	designs_to_be_saved = []
 	for editor in active_editors:
 		if not editor.design.dirty:

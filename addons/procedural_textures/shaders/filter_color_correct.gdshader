@@ -33,16 +33,16 @@ ColorCorrectDef make_def(float p_brightness, float p_contrast, float p_hue_shift
 vec4 process(ColorCorrectDef def, vec2 uv) {
 	vec4 v_color = texture(input, uv);
 	v_color.rgb -= 0.5f;
-	v_color.rgb = fma(v_color.rgb, vec3(def.contrast, def.contrast, def.contrast), vec3(def.brightness, def.brightness, def.brightness));
+	v_color.rgb = fma(v_color.rgb, vec3(def.contrast), vec3(def.brightness));
 	v_color.rgb = clamp(v_color.rgb, 0.0, 1.0);
-	
+
 	vec3 hsv = rgb_to_hsv(v_color.rgb);
 	hsv.x = fract(hsv.x + def.hue_shift / 360.0);
 	hsv.y *= 1.0 - def.desaturate;
 	v_color.rgb = hsv_to_rgb(hsv);
 
-	v_color.rgb = pow(v_color.rgb, vec3(def.gamma, def.gamma, def.gamma));
-	
+	v_color.rgb = pow(v_color.rgb, vec3(def.gamma));
+
 	return v_color;
 }
 

@@ -87,7 +87,8 @@ func _get_shader_uniforms():
 func _get_property_list() -> Array[Dictionary]:
 	var props: Array[Dictionary] = []
 
-	if shader:
+	var uniforms: Array = shader.get_shader_uniform_list(true) if shader else []
+	if !uniforms.is_empty():
 		var group = {}
 		group.name = 'Shader Parameters'
 		group.class_name = ''
@@ -97,7 +98,6 @@ func _get_property_list() -> Array[Dictionary]:
 		group.usage = PROPERTY_USAGE_GROUP
 		props.append(group)
 
-		var uniforms = shader.get_shader_uniform_list(true)
 		for uniform in uniforms:
 			uniform.name = 'shader/' + uniform.name
 			props.append(uniform)
