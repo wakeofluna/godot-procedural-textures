@@ -1,0 +1,15 @@
+[gd_resource type="Texture2D" script_class="ShaderTexture" load_steps=4 format=3 uid="uid://ddw3aa46y3i3y"]
+
+[ext_resource type="Script" path="res://addons/procedural_textures/shader_texture.gd" id="1_sgjjg"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="2_yo4j5"]
+[ext_resource type="Texture2D" uid="uid://ex5umimlyw5y" path="res://bricks_embossed_texture.tres" id="3_rcpsd"]
+
+[resource]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("1_sgjjg")
+size = Vector2i(512, 512)
+shader = ExtResource("2_yo4j5")
+generate_mipmaps = false
+shader/bump_strength = 8.0
+shader/input = ExtResource("3_rcpsd")

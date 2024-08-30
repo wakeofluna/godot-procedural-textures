@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dbuqprcbeudap"]
+[gd_scene load_steps=13 format=3 uid="uid://dbuqprcbeudap"]
 
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="1_hr5hu"]
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="1_kebia"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b1x1u7r5c4h4b" path="res://bricks_color_correct.tres" id="4_fftmk"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="4_qpsgp"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="5_5kx2c"]
+[ext_resource type="Texture2D" uid="uid://ddw3aa46y3i3y" path="res://bricks_normal.tres" id="6_2cvm8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2npp7"]
 shader = ExtResource("1_hr5hu")
@@ -75,6 +76,24 @@ layout_mode = 2
 texture = ExtResource("4_fftmk")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="FilterNormalMap" type="TextureRect" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+texture = ExtResource("6_2cvm8")
+expand_mode = 1
+
+[node name="Control2" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Control3" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Control4" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Control5" type="Control" parent="GridContainer"]
+layout_mode = 2
 
 [node name="DesignedTexture" type="TextureRect" parent="GridContainer"]
 custom_minimum_size = Vector2(200, 200)
