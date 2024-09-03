@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dbuqprcbeudap"]
+[gd_scene load_steps=17 format=3 uid="uid://dbuqprcbeudap"]
 
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="1_hr5hu"]
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="1_kebia"]
@@ -23,7 +23,13 @@ shader_parameter/rotation = 0
 
 [sub_resource type="Resource" id="Resource_hotgg"]
 script = ExtResource("4_qpsgp")
-editor_position = Vector2i(-142, -99)
+editor_position = Vector2i(0, 0)
+nodes/0/title = ""
+nodes/0/shader_name = "Bricks"
+nodes/0/position = Vector2i(20, 20)
+nodes/1/title = ""
+nodes/1/shader_name = "Emboss"
+nodes/1/position = Vector2i(20, 100)
 
 [sub_resource type="Texture2D" id="Texture2D_dktyp"]
 resource_local_to_scene = false
@@ -31,6 +37,25 @@ resource_name = ""
 script = ExtResource("5_5kx2c")
 design = SubResource("Resource_hotgg")
 size = Vector2i(512, 512)
+
+[sub_resource type="VisualShader" id="VisualShader_ivqax"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+"
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(340, 100)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vtnfe"]
+shader = SubResource("VisualShader_ivqax")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8gnsm"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ni8w3"]
+noise = SubResource("FastNoiseLite_8gnsm")
 
 [node name="MainScene" type="Node2D"]
 
@@ -101,3 +126,9 @@ layout_mode = 2
 texture = SubResource("Texture2D_dktyp")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="GridContainer"]
+material = SubResource("ShaderMaterial_vtnfe")
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_ni8w3")
+expand_mode = 1

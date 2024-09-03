@@ -2,19 +2,14 @@
 extends EditorPlugin
 
 
-const FILE_NEW = 1
-const FILE_CLOSE = 2
-
-
 var proc_text_editor_inspector: EditorInspectorPlugin
 var proc_text_preview_gen: EditorResourcePreviewGenerator
 var proc_text_tooltip_gen: EditorResourceTooltipPlugin
+
 var designer_button: Button
 var designer_manager: Control
 var designs_list: ItemList
 var designs_tabs: TabContainer
-var active_editors: Array[ProceduralTexturesDesigner] = []
-var designs_to_be_saved: Array[ProceduralTextureDesign] = []
 
 
 func _get_plugin_name() -> String:
@@ -63,6 +58,75 @@ func _exit_tree() -> void:
 		designer_manager = null
 
 
+func _apply_changes() -> void:
+	print("APPLY CHANGES REQUEST")
+	if EditorInterface.get_edited_scene_root():
+		print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
+
+
+func _edit(object: Object) -> void:
+	if not designer_manager:
+		return
+
+	var design: ProceduralTextureDesign = object
+	if design:
+		for idx in designs_tabs.get_tab_count():
+			if designs_tabs.get_child(idx).design == design:
+				designs_list.select(idx)
+				switch_to_selected_design()
+				return
+		var new_editor = _build_new_editor(design)
+		designs_list.select(designs_list.item_count - 1)
+		switch_to_selected_design()
+
+
+func _get_window_layout(configuration: ConfigFile) -> void:
+	#print('GET WINDOW LAYOUT REQUEST')
+
+	configuration.set_value('main', 'visible', designer_manager.is_visible_in_tree())
+
+	# Rebuild all settings for all open scenes
+	var active_designs: Dictionary = {}
+	for editor: ProceduralTexturesEditor in designs_tabs.get_children():
+		var section: String
+		var key: String
+
+		if editor.is_sub_resource:
+			section = editor.resource_owner
+			key = editor.resource_sub_path
+		else:
+			section = 'root'
+			key = editor.resource_path
+
+		if not active_designs.has(section):
+			active_designs[section] = PackedStringArray()
+		active_designs[section].append(key)
+
+	if not active_designs.has('root') and configuration.has_section_key('editors', 'root'):
+		configuration.erase_section_key('editors', 'root')
+	for section in active_designs:
+		configuration.set_value('editors', section, active_designs[section])
+
+	# Restore edited resources here since _set_state does not behave
+	var scenes = EditorInterface.get_open_scenes()
+
+	# Close editors from scenes that are closed
+	for idx in range(designs_tabs.get_tab_count() - 1, -1, -1):
+		var editor: ProceduralTexturesEditor = designs_tabs.get_child(idx)
+		if editor.is_sub_resource and scenes.find(editor.resource_owner) == -1:
+			unlist_editor_idx(idx)
+
+	# Open editors for scenes that are open
+	for scene in scenes:
+		if configuration.has_section_key('editors', scene):
+			var sub_paths = configuration.get_value('editors', scene)
+			for sub_path in sub_paths:
+				var full_path = '{0}::{1}'.format([scene, sub_path])
+				var design = ResourceLoader.load(full_path, "ProceduralTextureDesign", ResourceLoader.CACHE_MODE_REUSE)
+				if design and not find_editor_for_design(design):
+					_build_new_editor(design)
+
+
 func _handles(object: Object) -> bool:
 	return object is ProceduralTextureDesign
 
@@ -73,111 +137,64 @@ func _make_visible(visible: bool) -> void:
 		make_bottom_panel_item_visible(designer_manager)
 
 
-func _edit(object: Object) -> void:
-	if not designer_manager:
+func _set_window_layout(configuration: ConfigFile) -> void:
+	#print('SET WINDOW LAYOUT REQUEST')
+	if configuration.has_section_key('editors', 'root'):
+		var paths = configuration.get_value('editors', 'root')
+		for path in paths:
+			var design = ResourceLoader.load(path, "ProceduralTextureDesign", ResourceLoader.CACHE_MODE_REUSE)
+			if design and not find_editor_for_design(design):
+				_build_new_editor(design)
+
+	var is_visible = configuration.get_value('main', 'visible', false)
+	if is_visible and designs_list.item_count > 0:
+		make_bottom_panel_item_visible(designer_manager)
+
+
+func find_editor_for_design(design: ProceduralTextureDesign) -> ProceduralTexturesEditor:
+	for editor: ProceduralTexturesEditor in designs_tabs.get_children():
+		if editor and editor.design == design:
+			return editor
+	return null
+
+
+func switch_to_selected_design() -> void:
+	var selected_items = designs_list.get_selected_items()
+	if selected_items.is_empty():
+		designs_tabs.current_tab = -1
 		return
 
-	var design: ProceduralTextureDesign = object
-	if design:
-		for idx in active_editors.size():
-			if active_editors[idx].design == design:
-				designs_list.select(idx)
-				_switch_to_selected_design()
-				return
-		var new_editor = preload("editor/design_editor.gd").new()
-		new_editor.design = design
-		new_editor.title_changed.connect(_editor_title_changed.bind(new_editor))
-		active_editors.append(new_editor)
-		designs_tabs.add_child(new_editor)
-		designs_list.add_item(new_editor.get_title())
-		designs_list.select(active_editors.size() - 1)
-		_switch_to_selected_design()
+	var selected = selected_items[0]
+	designs_tabs.current_tab = selected
 
 
-func _apply_changes() -> void:
-	print("APPLY CHANGES REQUEST")
-	if EditorInterface.get_edited_scene_root():
-		print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
+func unlist_editor_idx(index: int) -> void:
+	if designs_list.is_selected(index):
+		designs_list.deselect_all()
+		switch_to_selected_design()
 
+	var editor = designs_tabs.get_child(index)
+	designs_tabs.remove_child(editor)
+	editor.queue_free()
 
-func _build() -> bool:
-	print("BUILD REQUEST")
-	return true
+	designs_list.remove_item(index)
 
-
-func _clear() -> void:
-	print('CLEAR REQUEST')
-	for idx in range(active_editors.size() - 1, -1, -1):
-		if active_editors[idx].design.resource_path.contains('::'):
-			_unlist_designer(idx)
-
-
-func _get_state() -> Dictionary:
-	print('GET STATE REQUEST')
-	print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
-	return {}
-
-
-func _get_unsaved_status(for_scene: String) -> String:
-	print('GET UNSAVED STATUS REQUEST FOR {0}'.format([for_scene]))
-	if EditorInterface.get_edited_scene_root():
-		print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
-	designs_to_be_saved = []
-	for editor in active_editors:
-		if not editor.design.dirty:
-			continue
-		var res_path: String = editor.design.resource_path
-		var res_slice = res_path.get_slice("::", 0)
-		if for_scene == res_slice or for_scene.is_empty():
-			designs_to_be_saved.append(editor.design)
-
-	var num_dirty = designs_to_be_saved.size()
-	if num_dirty == 0:
-		return ""
-	else:
-		return "ProceduralTexture: save {0} modified resources?".format([num_dirty])
-
-
-func _get_window_layout(configuration: ConfigFile) -> void:
-	print('GET WINDOW LAYOUT REQUEST')
-
-
-func _save_external_data() -> void:
-	print('SAVE EXTERNAL DATA REQUEST')
-
-
-func _set_state(state: Dictionary) -> void:
-	print('SET STATE REQUEST')
-	print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
-
-
-func _set_window_layout(configuration: ConfigFile) -> void:
-	print('SET WINDOW LAYOUT REQUEST')
-
+	if designs_list.item_count == 0:
+		designer_button.visible = false
+		if designer_manager.is_visible_in_tree():
+			hide_bottom_panel()
 
 
 func _build_designer_manager() -> Control:
 	var main_split = HSplitContainer.new()
 
-	var vbox_left = VBoxContainer.new()
-	vbox_left.custom_minimum_size = Vector2(200, 300) * EditorInterface.get_editor_scale()
-	main_split.add_child(vbox_left)
-
-	var menu_bar = HBoxContainer.new()
-	vbox_left.add_child(menu_bar)
-
-	var menu = MenuButton.new()
-	menu.text = "File"
-	menu.get_popup().add_item("New Texture ...", FILE_NEW)
-	menu.get_popup().add_item("Close File", FILE_CLOSE)
-	menu_bar.add_child(menu)
-
 	designs_list = ItemList.new()
 	designs_list.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	designs_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	designs_list.item_clicked.connect(_designs_list_clicked)
-	designs_list.item_selected.connect(_designs_list_selected)
-	vbox_left.add_child(designs_list)
+	designs_list.item_clicked.connect(_on_designs_list_clicked)
+	designs_list.item_selected.connect(_on_designs_list_selected)
+	designs_list.custom_minimum_size = Vector2(200, 300) * EditorInterface.get_editor_scale()
+	main_split.add_child(designs_list)
 
 	designs_tabs = TabContainer.new()
 	designs_tabs.tabs_visible = false
@@ -191,42 +208,30 @@ func _build_designer_manager() -> Control:
 	return main_split
 
 
-func _designs_list_clicked(index: int, at_position: Vector2, mouse_button_index: int) -> void:
+func _build_new_editor(design: ProceduralTextureDesign) -> ProceduralTexturesEditor:
+	var new_editor: ProceduralTexturesEditor = preload("editor/design_editor.gd").new()
+	new_editor.design = design
+	new_editor.title_changed.connect(_on_editor_title_changed.bind(new_editor))
+	designs_tabs.add_child(new_editor)
+	designs_list.add_item(new_editor.get_title())
+	if designs_list.item_count == 1:
+		designs_list.select(0)
+	designer_button.visible = true
+	return new_editor
+
+
+func _on_designs_list_clicked(index: int, at_position: Vector2, mouse_button_index: int) -> void:
 	if mouse_button_index == 3:
-		_unlist_designer(index)
-		if active_editors.is_empty():
-			hide_bottom_panel()
-			designer_button.visible = false
+		unlist_editor_idx(index)
 
 
-func _unlist_designer(index: int) -> void:
-	if designs_list.is_selected(index):
-		designs_list.deselect_all()
-		_switch_to_selected_design()
-	designs_list.remove_item(index)
-	designs_tabs.remove_child(designs_tabs.get_child(index))
-	active_editors[index].queue_free()
-	active_editors.remove_at(index)
+func _on_designs_list_selected(index: int) -> void:
+	EditorInterface.edit_resource(designs_tabs.get_child(index).design)
 
 
-
-func _designs_list_selected(index: int) -> void:
-	EditorInterface.edit_resource(active_editors[index].design)
-
-
-func _switch_to_selected_design() -> void:
-	var selected_items = designs_list.get_selected_items()
-	if selected_items.is_empty():
-		designs_tabs.current_tab = -1
-		return
-
-	var selected = selected_items[0]
-	designs_tabs.current_tab = selected
-
-
-func _editor_title_changed(editor) -> void:
-	for idx in active_editors.size():
-		if editor == active_editors[idx]:
+func _on_editor_title_changed(editor) -> void:
+	for idx in designs_tabs.get_child_count():
+		if editor == designs_tabs.get_child(idx):
 			var title = editor.get_title()
 			designs_list.set_item_text(idx, title)
-			return
+			break

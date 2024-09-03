@@ -1,6 +1,6 @@
 @tool
 extends GraphEdit
-class_name ProceduralTexturesDesigner
+class_name ProceduralTexturesEditor
 
 
 static var _shader_resources: Array[ProceduralShader] = []
@@ -15,6 +15,26 @@ var design: ProceduralTextureDesign:
 				design.changed.connect(_design_changed)
 			_display_design()
 			title_changed.emit()
+
+@export_custom(PROPERTY_HINT_NONE, '', PROPERTY_USAGE_READ_ONLY) var resource_path: String:
+	get():
+		return design.resource_path if design else ''
+
+@export_custom(PROPERTY_HINT_NONE, '', PROPERTY_USAGE_READ_ONLY) var resource_owner: String:
+	get():
+		var path = design.resource_path if design else ''
+		return path.get_slice('::', 0)
+
+@export_custom(PROPERTY_HINT_NONE, '', PROPERTY_USAGE_READ_ONLY) var resource_sub_path: String:
+	get():
+		var path = design.resource_path if design else ''
+		return path.get_slice('::', 1) if path.contains('::') else ''
+
+@export_custom(PROPERTY_HINT_NONE, '', PROPERTY_USAGE_READ_ONLY) var is_sub_resource: bool:
+	get():
+		var path = design.resource_path if design else ''
+		return path.contains('::')
+
 
 signal title_changed
 
