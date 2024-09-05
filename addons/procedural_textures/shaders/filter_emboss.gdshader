@@ -9,7 +9,8 @@ uniform sampler2D mask;
 uniform int angle : hint_range(0, 360) = 45;
 uniform float strength : hint_range(0.0, 32.0) = 4.0;
 
-#include "helper_functions.gdshaderinc"
+// special const
+const vec2 uv_per_pixel = vec2(1.0 / 1023.0, 1.0 / 1023.0);
 
 // helper struct to pack uniforms
 struct EmbossDef
@@ -20,8 +21,9 @@ struct EmbossDef
 
 // make_def function; must have all arguments in same order as uniforms
 EmbossDef make_def(int p_angle, float p_strength) {
+	float phi = radians(float(p_angle));
 	return EmbossDef(
-		degrees_to_phi(p_angle) * uv_per_pixel, p_strength
+		vec2(cos(phi), sin(phi)) * uv_per_pixel, p_strength
 	);
 }
 

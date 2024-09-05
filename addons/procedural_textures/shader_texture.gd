@@ -29,10 +29,10 @@ var shader_defaults: Dictionary
 	set(new_shader):
 		if shader != new_shader:
 			if shader:
-				shader.disconnect("changed", _shader_changed)
+				shader.changed.disconnect(_shader_changed)
 			shader = new_shader
 			if shader:
-				shader.connect("changed", _shader_changed)
+				shader.changed.connect(_shader_changed)
 			_shader_changed()
 
 @export var generate_mipmaps: bool = false:

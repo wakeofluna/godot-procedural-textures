@@ -22,10 +22,10 @@ var shader_defaults: Dictionary
 	set(new_design):
 		if design != new_design:
 			if design:
-				design.disconnect("changed", _design_changed)
+				design.changed.disconnect(_design_changed)
 			design = new_design
 			if design:
-				design.connect("changed", _design_changed)
+				design.changed.connect(_design_changed)
 			_design_changed()
 
 @export_custom(PROPERTY_HINT_LINK, "") var size : Vector2i = Vector2i(512, 512):

@@ -58,12 +58,6 @@ func _exit_tree() -> void:
 		designer_manager = null
 
 
-func _apply_changes() -> void:
-	print("APPLY CHANGES REQUEST")
-	if EditorInterface.get_edited_scene_root():
-		print('   SCENE ROOT={0}'.format([EditorInterface.get_edited_scene_root().scene_file_path]))
-
-
 func _edit(object: Object) -> void:
 	if not designer_manager:
 		return
@@ -87,7 +81,7 @@ func _get_window_layout(configuration: ConfigFile) -> void:
 
 	# Rebuild all settings for all open scenes
 	var active_designs: Dictionary = {}
-	for editor: ProceduralTexturesEditor in designs_tabs.get_children():
+	for editor: ProceduralTextureDesignEditor in designs_tabs.get_children():
 		var section: String
 		var key: String
 
@@ -112,7 +106,7 @@ func _get_window_layout(configuration: ConfigFile) -> void:
 
 	# Close editors from scenes that are closed
 	for idx in range(designs_tabs.get_tab_count() - 1, -1, -1):
-		var editor: ProceduralTexturesEditor = designs_tabs.get_child(idx)
+		var editor: ProceduralTextureDesignEditor = designs_tabs.get_child(idx)
 		if editor.is_sub_resource and scenes.find(editor.resource_owner) == -1:
 			unlist_editor_idx(idx)
 
@@ -137,6 +131,11 @@ func _make_visible(visible: bool) -> void:
 		make_bottom_panel_item_visible(designer_manager)
 
 
+func _apply_changes() -> void:
+	for editor: ProceduralTextureDesignEditor in designs_tabs.get_children():
+		editor._apply_changes()
+
+
 func _set_window_layout(configuration: ConfigFile) -> void:
 	#print('SET WINDOW LAYOUT REQUEST')
 	if configuration.has_section_key('editors', 'root'):
@@ -151,8 +150,8 @@ func _set_window_layout(configuration: ConfigFile) -> void:
 		make_bottom_panel_item_visible(designer_manager)
 
 
-func find_editor_for_design(design: ProceduralTextureDesign) -> ProceduralTexturesEditor:
-	for editor: ProceduralTexturesEditor in designs_tabs.get_children():
+func find_editor_for_design(design: ProceduralTextureDesign) -> ProceduralTextureDesignEditor:
+	for editor: ProceduralTextureDesignEditor in designs_tabs.get_children():
 		if editor and editor.design == design:
 			return editor
 	return null
@@ -208,10 +207,9 @@ func _build_designer_manager() -> Control:
 	return main_split
 
 
-func _build_new_editor(design: ProceduralTextureDesign) -> ProceduralTexturesEditor:
-	var new_editor: ProceduralTexturesEditor = preload("editor/design_editor.gd").new()
-	new_editor.design = design
-	new_editor.title_changed.connect(_on_editor_title_changed.bind(new_editor))
+func _build_new_editor(design: ProceduralTextureDesign) -> ProceduralTextureDesignEditor:
+	var new_editor: ProceduralTextureDesignEditor = preload("editor/design_editor.gd").new(get_undo_redo())
+	new_editor.setup_design(design)
 	designs_tabs.add_child(new_editor)
 	designs_list.add_item(new_editor.get_title())
 	if designs_list.item_count == 1:

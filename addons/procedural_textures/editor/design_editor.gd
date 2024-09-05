@@ -1,42 +1,32 @@
 @tool
 extends GraphEdit
-class_name ProceduralTexturesEditor
+class_name ProceduralTextureDesignEditor
 
 
 static var _shader_resources: Array[ProceduralShader] = []
 
-var design: ProceduralTextureDesign:
-	set(new_design):
-		if design != new_design:
-			if design:
-				design.changed.disconnect(_design_changed)
-			design = new_design
-			if design:
-				design.changed.connect(_design_changed)
-			_display_design()
-			title_changed.emit()
+var design: ProceduralTextureDesign
+var undo_redo: EditorUndoRedoManager
+var scroll_offset_applied: bool = false
 
-@export_custom(PROPERTY_HINT_NONE, '', PROPERTY_USAGE_READ_ONLY) var resource_path: String:
+var resource_path: String:
 	get():
 		return design.resource_path if design else ''
 
-@export_custom(PROPERTY_HINT_NONE, '', PROPERTY_USAGE_READ_ONLY) var resource_owner: String:
+var resource_owner: String:
 	get():
 		var path = design.resource_path if design else ''
 		return path.get_slice('::', 0)
 
-@export_custom(PROPERTY_HINT_NONE, '', PROPERTY_USAGE_READ_ONLY) var resource_sub_path: String:
+var resource_sub_path: String:
 	get():
 		var path = design.resource_path if design else ''
 		return path.get_slice('::', 1) if path.contains('::') else ''
 
-@export_custom(PROPERTY_HINT_NONE, '', PROPERTY_USAGE_READ_ONLY) var is_sub_resource: bool:
+var is_sub_resource: bool:
 	get():
 		var path = design.resource_path if design else ''
 		return path.contains('::')
-
-
-signal title_changed
 
 
 static func _search_for_shaders(dir: DirAccess, results: Array[ProceduralShader]) -> void:
@@ -57,9 +47,8 @@ static func _search_for_shaders(dir: DirAccess, results: Array[ProceduralShader]
 				_search_for_shaders(dir.open(fullname), results)
 			elif ResourceLoader.exists(fullname, "Shader"):
 				var item = ResourceLoader.load(fullname, "Shader", ResourceLoader.CACHE_MODE_REUSE)
-				var ps: ProceduralShader = ProceduralShader.create_from_object(item)
-				if ps:
-					results.append(ps)
+				if item is Shader:
+					results.append(ProceduralShader.new(item as Shader))
 
 
 static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralShader]:
@@ -70,44 +59,80 @@ static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralSh
 	return _shader_resources
 
 
-func _init() -> void:
-	grid_pattern = GRID_PATTERN_DOTS
-	scroll_offset_changed.connect(_on_scroll_offset_changed)
+func dump_children(obj: Object, indent: int = 0) -> void:
+	if obj:
+		var ind = '                '.substr(0, indent)
+		if obj is ScrollBar:
+			print('{0}{1} # {2}'.format([ind, obj.get_class(), obj.get_instance_id()]))
+			print('{0}  min={1} max={2} page={3} value={4}'.format([ind, obj.min_value, obj.max_value, obj.page, obj.value]))
+		for child in obj.get_children(true):
+			dump_children(child, indent + 2)
+
+func print_scrollbars() -> void:
+	dump_children(self)
+
+
+func _init(undo_redo: EditorUndoRedoManager) -> void:
+	assert(undo_redo)
+	self.undo_redo = undo_redo
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		if not scroll_offset_applied:
+			scroll_offset_applied = true
+			scroll_offset = design.editor_position
+
+
+func setup_design(design: ProceduralTextureDesign) -> void:
+	assert(design)
+	self.design = design
 
 	var shaders = get_shader_resources()
 	print('FOUND SHADERS:')
 	for shader in shaders:
 		print('  - {0} at {1}'.format([shader.name if !shader.name.is_empty() else "(noname)", shader.resource_path]))
 
+	var nodes: Array[ProceduralTextureDesignNode] = design.get_graph_nodes()
+	for node in nodes:
+		var element = create_graphelement_from_data(node)
+		add_child(element)
 
-func _design_changed() -> void:
-	title_changed.emit()
-
-
-func _display_design() -> void:
-	for child in get_children():
-		if !child.name.begins_with("_"):
-			remove_child(child)
-
-	if design:
-		var nodes_data: Array[Dictionary] = design.get_graph_nodes()
-		for node_data in nodes_data:
-			var node = design.create_graphelement_from_data(node_data)
-			if node:
-				add_child(node)
+	grid_pattern = GRID_PATTERN_DOTS
+	panning_scheme = PanningScheme.SCROLL_PANS
+	minimap_enabled = design.editor_minimap
+	zoom = design.editor_zoom
 
 
-func _on_scroll_offset_changed(new_offset: Vector2) -> void:
-	if design:
-		design.editor_position = new_offset
+func _apply_changes() -> void:
+	design.editor_position = scroll_offset
+	design.editor_minimap = minimap_enabled
+	design.editor_zoom = zoom
+
+
+func _on_node_position_changed(graph_node: GraphElement, design_node: ProceduralTextureDesignNode):
+	if design_node.graph_position != graph_node.position_offset:
+		var name = 'Move Node ' + String.num_uint64(graph_node.get_instance_id())
+		undo_redo.create_action(name, UndoRedo.MERGE_ENDS)
+		undo_redo.add_do_property(design_node, 'graph_position', graph_node.position_offset)
+		undo_redo.add_undo_property(design_node, 'graph_position', design_node.graph_position)
+		undo_redo.add_undo_property(graph_node, 'position_offset', design_node.graph_position)
+		undo_redo.commit_action()
+
+
+func create_graphelement_from_data(design_node: ProceduralTextureDesignNode) -> GraphElement:
+	var graph_node = GraphNode.new()
+	if design_node.title.is_empty():
+		graph_node.title = design_node.proc_shader.name
+	else:
+		graph_node.title = '{0} ({1})'.format([design_node.title, design_node.proc_shader.name])
+	graph_node.position_offset = design_node.graph_position
+	graph_node.position_offset_changed.connect(_on_node_position_changed.bind(graph_node, design_node))
+	return graph_node
 
 
 func get_title() -> String:
 	if not design or design.resource_path.is_empty():
 		return '[unsaved]'
 
-	var title = design.resource_path.get_file()
-	if design.dirty:
-		return '{0} (*)'.format([title])
-	else:
-		return title
+	return design.resource_path.get_file()

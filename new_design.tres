@@ -1,13 +1,33 @@
-[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=2 format=3 uid="uid://cos6eusbgb67a"]
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=7 format=3 uid="uid://cos6eusbgb67a"]
 
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_0vpoj"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="1_nutr6"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_8n12b"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_5mco5"]
+
+[sub_resource type="Resource" id="Resource_vq57l"]
+script = ExtResource("1_0vpoj")
+title = ""
+shader = ExtResource("2_8n12b")
+graph_position = Vector2(260, 180)
+shader_count_x = 4
+shader_count_y = 10
+shader_row_shift = 0.5
+shader_gap_x = 0.0
+shader_gap_y = 0.0
+shader_smoothing = 0.1
+
+[sub_resource type="Resource" id="Resource_3n2ob"]
+script = ExtResource("1_0vpoj")
+title = ""
+shader = ExtResource("3_5mco5")
+graph_position = Vector2(260, 320)
+shader_angle = 45
+shader_strength = 4.0
 
 [resource]
 script = ExtResource("1_nutr6")
-editor_position = Vector2i(0, -34)
-nodes/0/title = ""
-nodes/0/shader_name = "Bricks"
-nodes/0/position = Vector2i(20, 20)
-nodes/1/title = ""
-nodes/1/shader_name = "Emboss"
-nodes/1/position = Vector2(180, 100)
+nodes = Array[ExtResource("1_0vpoj")]([SubResource("Resource_vq57l"), SubResource("Resource_3n2ob")])
+editor_position = Vector2(-212.861, 117.72)
+editor_zoom = 1.0
+editor_minimap = false

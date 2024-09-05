@@ -8,8 +8,6 @@ uniform sampler2D input;
 uniform vec4 color_0 : source_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 uniform vec4 color_1 : source_color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-#include "helper_functions.gdshaderinc"
-
 // helper struct to pack uniforms
 struct ColorizeDef {
 	vec4 color_0;

@@ -7,7 +7,8 @@ uniform sampler2D input;
 // uniforms
 uniform float bump_strength : hint_range(0.0, 32.0, 0.1) = 8.0f;
 
-#include "helper_functions.gdshaderinc"
+// special const
+const vec2 uv_per_pixel = vec2(1.0 / 1023.0, 1.0 / 1023.0);
 
 // helper struct to pack uniforms
 struct NormalDef {

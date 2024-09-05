@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dbuqprcbeudap"]
+[gd_scene load_steps=21 format=3 uid="uid://dbuqprcbeudap"]
 
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="1_hr5hu"]
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="1_kebia"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="4_qpsgp"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="5_5kx2c"]
 [ext_resource type="Texture2D" uid="uid://ddw3aa46y3i3y" path="res://bricks_normal.tres" id="6_2cvm8"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="7_lox0d"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="8_lj3mo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2npp7"]
 shader = ExtResource("1_hr5hu")
@@ -17,19 +19,35 @@ shader_parameter/row_shift = 0.5
 shader_parameter/gap_x = 0.0
 shader_parameter/gap_y = 0.0
 shader_parameter/smoothing = 0.1
-shader_parameter/rotation = 0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kpkk0"]
 
+[sub_resource type="Resource" id="Resource_xip0g"]
+script = ExtResource("7_lox0d")
+title = ""
+shader = ExtResource("1_hr5hu")
+graph_position = Vector2(420, -20)
+shader_count_x = 4
+shader_count_y = 10
+shader_row_shift = 0.5
+shader_gap_x = 0.0
+shader_gap_y = 0.0
+shader_smoothing = 0.1
+
+[sub_resource type="Resource" id="Resource_6ft3o"]
+script = ExtResource("7_lox0d")
+title = ""
+shader = ExtResource("8_lj3mo")
+graph_position = Vector2(420, 120)
+shader_angle = 45
+shader_strength = 4.0
+
 [sub_resource type="Resource" id="Resource_hotgg"]
 script = ExtResource("4_qpsgp")
-editor_position = Vector2i(0, 0)
-nodes/0/title = ""
-nodes/0/shader_name = "Bricks"
-nodes/0/position = Vector2i(20, 20)
-nodes/1/title = ""
-nodes/1/shader_name = "Emboss"
-nodes/1/position = Vector2i(20, 100)
+nodes = Array[ExtResource("7_lox0d")]([SubResource("Resource_xip0g"), SubResource("Resource_6ft3o")])
+editor_position = Vector2(69.7342, -82.5312)
+editor_zoom = 1.0
+editor_minimap = false
 
 [sub_resource type="Texture2D" id="Texture2D_dktyp"]
 resource_local_to_scene = false
@@ -47,7 +65,7 @@ render_mode blend_mix;
 "
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2(340, 100)
+nodes/fragment/0/position = Vector2(320, 100)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vtnfe"]
 shader = SubResource("VisualShader_ivqax")
