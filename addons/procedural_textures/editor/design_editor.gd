@@ -1,7 +1,7 @@
 @tool
+@static_unload
 extends GraphEdit
 class_name ProceduralTextureDesignEditor
-
 
 static var _shader_resources: Array[ProceduralShader] = []
 
@@ -48,7 +48,7 @@ static func _search_for_shaders(dir: DirAccess, results: Array[ProceduralShader]
 			elif ResourceLoader.exists(fullname, "Shader"):
 				var item = ResourceLoader.load(fullname, "Shader", ResourceLoader.CACHE_MODE_REUSE)
 				if item is Shader:
-					results.append(ProceduralShader.new(item as Shader))
+					results.append(ProceduralShader.from_shader(item as Shader))
 
 
 static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralShader]:
@@ -59,22 +59,14 @@ static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralSh
 	return _shader_resources
 
 
-func dump_children(obj: Object, indent: int = 0) -> void:
-	if obj:
-		var ind = '                '.substr(0, indent)
-		if obj is ScrollBar:
-			print('{0}{1} # {2}'.format([ind, obj.get_class(), obj.get_instance_id()]))
-			print('{0}  min={1} max={2} page={3} value={4}'.format([ind, obj.min_value, obj.max_value, obj.page, obj.value]))
-		for child in obj.get_children(true):
-			dump_children(child, indent + 2)
-
-func print_scrollbars() -> void:
-	dump_children(self)
-
-
 func _init(undo_redo: EditorUndoRedoManager) -> void:
 	assert(undo_redo)
 	self.undo_redo = undo_redo
+
+	# Allow connecting float outputs to vector inputs
+	add_valid_connection_type(TYPE_FLOAT + 1000, TYPE_VECTOR2 + 1000)
+	add_valid_connection_type(TYPE_FLOAT + 1000, TYPE_VECTOR3 + 1000)
+	add_valid_connection_type(TYPE_FLOAT + 1000, TYPE_VECTOR4 + 1000)
 
 
 func _notification(what: int) -> void:
@@ -88,10 +80,10 @@ func setup_design(design: ProceduralTextureDesign) -> void:
 	assert(design)
 	self.design = design
 
-	var shaders = get_shader_resources()
-	print('FOUND SHADERS:')
-	for shader in shaders:
-		print('  - {0} at {1}'.format([shader.name if !shader.name.is_empty() else "(noname)", shader.resource_path]))
+	#var shaders = get_shader_resources()
+	#print('FOUND SHADERS:')
+	#for shader in shaders:
+	#	print('  - {0} at {1}'.format([shader.name if !shader.name.is_empty() else "(noname)", shader.resource_path]))
 
 	var nodes: Array[ProceduralTextureDesignNode] = design.get_graph_nodes()
 	for node in nodes:
@@ -103,6 +95,17 @@ func setup_design(design: ProceduralTextureDesign) -> void:
 	minimap_enabled = design.editor_minimap
 	zoom = design.editor_zoom
 
+	connection_from_empty.connect(_on_connection_from_empty)
+	connection_to_empty.connect(_on_connection_to_empty)
+	connection_request.connect(_on_connection_request)
+	disconnection_request.connect(_on_disconnection_request)
+	copy_nodes_request.connect(_on_copy_nodes_request)
+	delete_nodes_request.connect(_on_delete_nodes_request)
+	duplicate_nodes_request.connect(_on_duplicate_nodes_request)
+	node_selected.connect(_on_node_selected)
+	paste_nodes_request.connect(_on_paste_nodes_request)
+	popup_request.connect(_on_popup_request)
+
 
 func _apply_changes() -> void:
 	design.editor_position = scroll_offset
@@ -110,24 +113,50 @@ func _apply_changes() -> void:
 	design.editor_zoom = zoom
 
 
-func _on_node_position_changed(graph_node: GraphElement, design_node: ProceduralTextureDesignNode):
-	if design_node.graph_position != graph_node.position_offset:
-		var name = 'Move Node ' + String.num_uint64(graph_node.get_instance_id())
-		undo_redo.create_action(name, UndoRedo.MERGE_ENDS)
-		undo_redo.add_do_property(design_node, 'graph_position', graph_node.position_offset)
-		undo_redo.add_undo_property(design_node, 'graph_position', design_node.graph_position)
-		undo_redo.add_undo_property(graph_node, 'position_offset', design_node.graph_position)
-		undo_redo.commit_action()
+func _on_connection_from_empty(to_node: StringName, to_port: int, release_position: Vector2) -> void:
+	print_rich('CONNECTION FROM EMPTY TO ', to_node, ':', to_port, " AT LOCATION ", release_position)
+
+
+func _on_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
+	print_rich('CONNECTION TO EMPTY FROM ', from_node, ':', from_port, " AT LOCATION ", release_position)
+
+
+func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	print('CONNECTION REQUEST FROM ', from_node, ':', from_port, " TO ", to_node, ':', to_port)
+
+
+func _on_copy_nodes_request() -> void:
+	print('COPY NODES REQUEST')
+
+
+func _on_delete_nodes_request(nodes: Array[StringName]) -> void:
+	print('DELETE NODES REQUEST FOR ', ','.join(nodes))
+
+
+func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	print('DISCONNECT REQUEST FROM ', from_node, ':', from_port, " TO ", to_node, ':', to_port)
+
+
+func _on_duplicate_nodes_request() -> void:
+	print('DUPLICATE NODES REQUEST')
+
+
+func _on_node_selected(node: Node) -> void:
+	if node is ProceduralTextureDesignEditorNode:
+		EditorInterface.edit_resource(node.design_node)
+
+
+func _on_paste_nodes_request() -> void:
+	print('PASTE NODES REQUEST')
+
+
+func _on_popup_request(at_position: Vector2) -> void:
+	print_rich('POPUP REQUEST AT ', at_position)
 
 
 func create_graphelement_from_data(design_node: ProceduralTextureDesignNode) -> GraphElement:
-	var graph_node = GraphNode.new()
-	if design_node.title.is_empty():
-		graph_node.title = design_node.proc_shader.name
-	else:
-		graph_node.title = '{0} ({1})'.format([design_node.title, design_node.proc_shader.name])
-	graph_node.position_offset = design_node.graph_position
-	graph_node.position_offset_changed.connect(_on_node_position_changed.bind(graph_node, design_node))
+	var graph_node = preload("res://addons/procedural_textures/editor/design_editor_node.gd").new()
+	graph_node.setup_design_node(undo_redo, design_node)
 	return graph_node
 
 

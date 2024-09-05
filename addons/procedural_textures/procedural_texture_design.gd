@@ -3,8 +3,7 @@ extends Resource
 class_name ProceduralTextureDesign
 
 
-@export var nodes : Array[ProceduralTextureDesignNode] = []
-
+@export_storage var nodes : Array[ProceduralTextureDesignNode] = []
 @export_storage var editor_position: Vector2
 @export_storage var editor_zoom: float = 1.0
 @export_storage var editor_minimap: bool = false

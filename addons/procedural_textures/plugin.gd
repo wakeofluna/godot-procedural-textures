@@ -190,6 +190,7 @@ func _build_designer_manager() -> Control:
 	designs_list = ItemList.new()
 	designs_list.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	designs_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	designs_list.allow_reselect = true
 	designs_list.item_clicked.connect(_on_designs_list_clicked)
 	designs_list.item_selected.connect(_on_designs_list_selected)
 	designs_list.custom_minimum_size = Vector2(200, 300) * EditorInterface.get_editor_scale()

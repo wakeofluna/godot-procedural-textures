@@ -24,28 +24,26 @@ shader_parameter/smoothing = 0.1
 
 [sub_resource type="Resource" id="Resource_xip0g"]
 script = ExtResource("7_lox0d")
-title = ""
 shader = ExtResource("1_hr5hu")
-graph_position = Vector2(420, -20)
-shader_count_x = 4
-shader_count_y = 10
-shader_row_shift = 0.5
-shader_gap_x = 0.0
-shader_gap_y = 0.0
-shader_smoothing = 0.1
+graph_position = Vector2(200, 80)
+count_x = 4
+count_y = 10
+row_shift = 0.5
+gap_x = 0.0
+gap_y = 0.0
+smoothing = 0.1
 
 [sub_resource type="Resource" id="Resource_6ft3o"]
 script = ExtResource("7_lox0d")
-title = ""
 shader = ExtResource("8_lj3mo")
-graph_position = Vector2(420, 120)
-shader_angle = 45
-shader_strength = 4.0
+graph_position = Vector2(460, 80)
+angle = 45
+strength = 4.0
 
 [sub_resource type="Resource" id="Resource_hotgg"]
 script = ExtResource("4_qpsgp")
 nodes = Array[ExtResource("7_lox0d")]([SubResource("Resource_xip0g"), SubResource("Resource_6ft3o")])
-editor_position = Vector2(69.7342, -82.5312)
+editor_position = Vector2(0, 32)
 editor_zoom = 1.0
 editor_minimap = false
 
