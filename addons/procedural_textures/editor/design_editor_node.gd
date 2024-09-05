@@ -2,6 +2,7 @@
 extends GraphNode
 class_name ProceduralTextureDesignEditorNode
 
+
 var design_node: ProceduralTextureDesignNode
 var undo_redo: EditorUndoRedoManager
 
@@ -32,6 +33,38 @@ static func get_config_color_for_type(type: int) -> Color:
 		color = color.lightened(0.5)
 
 	return color
+
+
+func add_connection_to(to_port: int, from_node: ProceduralTextureDesignNode, from_port: int) -> void:
+	assert(not design_node.connections.has(to_port), "cannot add connection to port without removing the connection first")
+	assert(not detect_circular_reference(from_node), "attempted to create a circular reference")
+	design_node.connections[to_port] = { "from_node": from_node, "from_port": from_port }
+
+
+func detect_circular_reference(to_node: ProceduralTextureDesignNode) -> bool:
+	return _detect_circular_reference(to_node, design_node)
+
+
+static func _detect_circular_reference(current: ProceduralTextureDesignNode, target: ProceduralTextureDesignNode) -> bool:
+	if current == target:
+		return true
+	for x in current.connections:
+		if _detect_circular_reference(current.connections[x].from_node, target):
+			return true
+	return false
+
+
+func get_connection_to(to_port: int) -> Dictionary:
+	var conn = design_node.connections.get(to_port, {})
+	if conn.has("from_node") and not conn["from_node"]:
+		printerr("Invalid ProceduralTextureDesign connection, likely due to a load error or circular reference")
+		design_node.connections.erase(to_port)
+		return {}
+	return conn
+
+
+func remove_connection_to(to_port: int) -> void:
+	design_node.connections.erase(to_port)
 
 
 func setup_design_node(undo_redo: EditorUndoRedoManager, design_node: ProceduralTextureDesignNode) -> void:

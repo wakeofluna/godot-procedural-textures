@@ -3,9 +3,6 @@ extends Resource
 class_name ProceduralTextureDesignNode
 
 
-signal description_changed
-
-
 @export_storage var shader: Shader:
 	set(new_shader):
 		if shader != new_shader:
@@ -20,6 +17,7 @@ signal description_changed
 			emit_changed()
 
 @export_storage var graph_position: Vector2 = Vector2(0,0)
+@export_storage var connections: Dictionary = {}
 
 var proc_shader: ProceduralShader
 var shader_params: Dictionary

@@ -27,6 +27,11 @@ func get_graph_nodes() -> Array[ProceduralTextureDesignNode]:
 		node.graph_position = Vector2i(20, 100)
 		nodes.append(node)
 
+		node = ProceduralTextureDesignNode.new()
+		node.shader = preload("res://addons/procedural_textures/shaders/filter_luminance.gdshader")
+		node.graph_position = Vector2i(220, 100)
+		nodes.append(node)
+
 		notify_property_list_changed()
 
 	return nodes
