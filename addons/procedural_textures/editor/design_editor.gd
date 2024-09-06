@@ -3,6 +3,10 @@
 extends GraphEdit
 class_name ProceduralTextureDesignEditor
 
+
+signal _popup_result(Variant)
+
+
 static var _shader_resources: Array[ProceduralShader] = []
 
 var design: ProceduralTextureDesign
@@ -55,6 +59,7 @@ static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralSh
 	if _shader_resources.is_empty() or force_scan:
 		_shader_resources = []
 		_search_for_shaders(DirAccess.open("res://"), _shader_resources)
+		_shader_resources.sort_custom(func(a,b): return a.name > b.name)
 		_shader_resources.make_read_only()
 	return _shader_resources
 
@@ -65,6 +70,11 @@ func _init(undo_redo: EditorUndoRedoManager) -> void:
 
 	# Allow disconnecting things
 	right_disconnects = true
+
+	# Allow converting between scalars (usable for constants)
+	add_valid_connection_type(TYPE_FLOAT, TYPE_INT)
+	add_valid_connection_type(TYPE_INT, TYPE_FLOAT)
+
 	# Allow connecting float outputs to vector inputs
 	# vec2 = (float, 1.0)
 	add_valid_connection_type(TYPE_FLOAT + 1000, TYPE_VECTOR2 + 1000)
@@ -84,6 +94,9 @@ func _init(undo_redo: EditorUndoRedoManager) -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
+		# Workaround: the GraphEdit scrollbars min/max are not set until
+		# the window resizes the first time. Setting offets are rejected
+		# before then since the min/max are not in range.
 		if not scroll_offset_applied:
 			scroll_offset_applied = true
 			scroll_offset = design.editor_position
@@ -104,7 +117,7 @@ func setup_design(design: ProceduralTextureDesign) -> void:
 		if child:
 			remove_child(child)
 
-	var nodes: Array[ProceduralTextureDesignNode] = design.get_graph_nodes()
+	var nodes: Array[ProceduralTextureDesignNode] = design.get_nodes()
 	for node in nodes:
 		var element = create_graphnode_from_data(node)
 		add_child(element)
@@ -180,11 +193,43 @@ func _on_connection_request(from_node: StringName, from_port: int, to_node: Stri
 
 
 func _on_copy_nodes_request() -> void:
-	print('COPY NODES REQUEST')
+	#print('COPY NODES REQUEST')
+	pass
 
 
 func _on_delete_nodes_request(nodes: Array[StringName]) -> void:
-	print('DELETE NODES REQUEST FOR ', ','.join(nodes))
+	#print('DELETE NODES REQUEST FOR ', ','.join(nodes))
+
+	var targets: Array[ProceduralTextureDesignEditorNode] = []
+	for child in get_children():
+		if child.name in nodes:
+			targets.append(child)
+
+	undo_redo.create_action("Delete Nodes", UndoRedo.MERGE_DISABLE, design, true)
+	for node: ProceduralTextureDesignEditorNode in targets:
+		# Remove all incoming connections
+		for to_port in node.design_node.connections:
+			var conn: Dictionary = node.design_node.connections[to_port]
+			var from_node := find_graphnode_for(conn.from_node)
+			#undo_redo.add_do_method(node, "remove_connection_to", to_port)
+			#undo_redo.add_undo_method(node, "add_connection_to", to_port, conn.from_node, conn.from_port)
+			undo_redo.add_do_method(self, "disconnect_node", from_node.name, conn.from_port, node.name, to_port)
+			undo_redo.add_undo_method(self, "connect_node", from_node.name, conn.from_port, node.name, to_port)
+		# Remove all outgoing connections
+		for conn in design.get_outgoing_connections_for(node.design_node):
+			var to_node := find_graphnode_for(conn.to_node)
+			undo_redo.add_do_method(to_node, "remove_connection_to", conn.to_port)
+			undo_redo.add_undo_method(to_node, "add_connection_to", conn.to_port, node.design_node, conn.from_port)
+			undo_redo.add_do_method(self, "disconnect_node", node.name, conn.from_port, to_node.name, conn.to_port)
+			undo_redo.add_undo_method(self, "connect_node", node.name, conn.from_port, to_node.name, conn.to_port)
+		# Remove the node
+		undo_redo.add_do_method(design, "remove_design_node", node.design_node)
+		undo_redo.add_do_method(self, "remove_child", node)
+		undo_redo.add_undo_reference(node)
+		undo_redo.add_undo_method(self, "add_child", node)
+		undo_redo.add_undo_method(design, "add_new_design_node", node.design_node)
+
+	undo_redo.commit_action()
 
 
 func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
@@ -207,7 +252,8 @@ func _on_disconnection_request(from_node: StringName, from_port: int, to_node: S
 
 
 func _on_duplicate_nodes_request() -> void:
-	print('DUPLICATE NODES REQUEST')
+	#print('DUPLICATE NODES REQUEST')
+	pass
 
 
 func _on_node_selected(node: Node) -> void:
@@ -216,14 +262,31 @@ func _on_node_selected(node: Node) -> void:
 
 
 func _on_paste_nodes_request() -> void:
-	print('PASTE NODES REQUEST')
+	#print('PASTE NODES REQUEST')
+	pass
 
 
 func _on_popup_request(at_position: Vector2) -> void:
 	print_rich('POPUP REQUEST AT ', at_position)
 
+	var result = await show_popup(at_position, -1, -1)
+	if result is ProceduralShader:
+		var design_node := ProceduralTextureDesignNode.new()
+		design_node.shader = result.shader
+		design_node.graph_position = at_position + scroll_offset
 
-func create_graphnode_from_data(design_node: ProceduralTextureDesignNode) -> GraphElement:
+		var graph_node = create_graphnode_from_data(design_node)
+
+		undo_redo.create_action("Add Design Node", UndoRedo.MERGE_DISABLE, design)
+		undo_redo.add_do_reference(graph_node)
+		undo_redo.add_do_method(design, "add_new_design_node", design_node)
+		undo_redo.add_do_method(self, "add_child", graph_node)
+		undo_redo.add_undo_method(self, "remove_child", graph_node)
+		undo_redo.add_undo_method(design, "remove_design_node", design_node)
+		undo_redo.commit_action()
+
+
+func create_graphnode_from_data(design_node: ProceduralTextureDesignNode) -> ProceduralTextureDesignEditorNode:
 	var graph_node = ProceduralTextureDesignEditorNode.new()
 	graph_node.setup_design_node(undo_redo, design_node)
 	return graph_node
@@ -242,3 +305,58 @@ func get_title() -> String:
 		return '[unsaved]'
 
 	return design.resource_path.get_file()
+
+
+func show_popup(position: Vector2, filter_input_type: int, filter_output_type: int) -> Variant:
+	var popup := Popup.new()
+
+	var label := Label.new()
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.text = "Add Node"
+
+	var editor_scale = EditorInterface.get_editor_scale()
+	var tree := Tree.new()
+	tree.hide_root = true
+	tree.custom_minimum_size = Vector2(200, 200) * editor_scale
+	tree.item_activated.connect(func():
+		var selected := tree.get_selected()
+		if selected.get_child_count() > 0:
+			selected.collapsed = not selected.collapsed
+		else:
+			_popup_result.emit(selected.get_metadata(0))
+		)
+
+	var root := tree.create_item()
+
+	var filters := root.create_child()
+	filters.set_text(0, "Filters")
+	filters.collapsed = true
+
+	var patterns := root.create_child()
+	patterns.set_text(0, "Patterns")
+	patterns.collapsed = true
+
+	for shader in get_shader_resources():
+		var item := patterns.create_child() if shader.inputs.is_empty() else filters.create_child()
+		item.set_text(0, shader.name)
+		item.set_metadata(0, shader)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_child(label)
+	vbox.add_child(HSeparator.new())
+	vbox.add_child(tree)
+	var panel := PanelContainer.new()
+	panel.add_child(vbox)
+	popup.add_child(panel)
+	popup.exclusive = true
+	popup.visibility_changed.connect(func(): if not popup.visible: _popup_result.emit(null))
+	popup.close_requested.connect(func(): _popup_result.emit(null))
+	var rect := Rect2i(position, Vector2i())
+	rect.position += Vector2i(get_screen_position())
+	rect.position.x -= 100 * editor_scale
+	rect.position.y -= 40 * editor_scale
+	popup.popup_exclusive_on_parent(self, rect)
+
+	var result = await _popup_result
+	popup.queue_free()
+	return result

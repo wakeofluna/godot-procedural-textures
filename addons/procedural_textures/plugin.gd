@@ -75,8 +75,6 @@ func _edit(object: Object) -> void:
 
 
 func _get_window_layout(configuration: ConfigFile) -> void:
-	#print('GET WINDOW LAYOUT REQUEST')
-
 	configuration.set_value('main', 'visible', designer_manager.is_visible_in_tree())
 
 	# Rebuild all settings for all open scenes
@@ -137,7 +135,6 @@ func _apply_changes() -> void:
 
 
 func _set_window_layout(configuration: ConfigFile) -> void:
-	#print('SET WINDOW LAYOUT REQUEST')
 	if configuration.has_section_key('editors', 'root'):
 		var paths = configuration.get_value('editors', 'root')
 		for path in paths:
@@ -209,7 +206,7 @@ func _build_designer_manager() -> Control:
 
 
 func _build_new_editor(design: ProceduralTextureDesign) -> ProceduralTextureDesignEditor:
-	var new_editor: ProceduralTextureDesignEditor = preload("editor/design_editor.gd").new(get_undo_redo())
+	var new_editor := ProceduralTextureDesignEditor.new(get_undo_redo())
 	new_editor.setup_design(design)
 	designs_tabs.add_child(new_editor)
 	designs_list.add_item(new_editor.get_title())

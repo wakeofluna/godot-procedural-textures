@@ -38,12 +38,8 @@ smoothing = 0.1
 [sub_resource type="Resource" id="Resource_dvv76"]
 script = ExtResource("7_bsoc8")
 shader = ExtResource("8_sb2h3")
-graph_position = Vector2(200, 20)
+graph_position = Vector2(140, 80)
 connections = {
-0: {
-"from_node": SubResource("Resource_b6r42"),
-"from_port": 0
-},
 1: {
 "from_node": SubResource("Resource_b6r42"),
 "from_port": 0
@@ -55,7 +51,7 @@ strength = 4.0
 [sub_resource type="Resource" id="Resource_0mam6"]
 script = ExtResource("7_bsoc8")
 shader = ExtResource("9_hjvtn")
-graph_position = Vector2(400, 20)
+graph_position = Vector2(360, 20)
 connections = {
 0: {
 "from_node": SubResource("Resource_dvv76"),
@@ -65,10 +61,10 @@ connections = {
 
 [sub_resource type="Resource" id="Resource_eja71"]
 script = ExtResource("10_0n15o")
-nodes = Array[ExtResource("7_bsoc8")]([SubResource("Resource_b6r42"), SubResource("Resource_dvv76"), SubResource("Resource_0mam6")])
-editor_position = Vector2(-271.443, -38.4492)
+nodes = Array[ExtResource("7_bsoc8")]([SubResource("Resource_b6r42"), SubResource("Resource_0mam6"), SubResource("Resource_dvv76")])
+editor_position = Vector2(0, 0)
 editor_zoom = 1.0
-editor_minimap = false
+editor_minimap = true
 
 [sub_resource type="Texture2D" id="Texture2D_dktyp"]
 resource_local_to_scene = false
