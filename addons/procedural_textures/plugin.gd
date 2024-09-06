@@ -114,9 +114,10 @@ func _get_window_layout(configuration: ConfigFile) -> void:
 			var sub_paths = configuration.get_value('editors', scene)
 			for sub_path in sub_paths:
 				var full_path = '{0}::{1}'.format([scene, sub_path])
-				var design = ResourceLoader.load(full_path, "ProceduralTextureDesign", ResourceLoader.CACHE_MODE_REUSE)
-				if design and not find_editor_for_design(design):
-					_build_new_editor(design)
+				if ResourceLoader.exists(full_path):
+					var design = ResourceLoader.load(full_path, "ProceduralTextureDesign", ResourceLoader.CACHE_MODE_REUSE)
+					if design and not find_editor_for_design(design):
+						_build_new_editor(design)
 
 
 func _handles(object: Object) -> bool:
@@ -138,9 +139,10 @@ func _set_window_layout(configuration: ConfigFile) -> void:
 	if configuration.has_section_key('editors', 'root'):
 		var paths = configuration.get_value('editors', 'root')
 		for path in paths:
-			var design = ResourceLoader.load(path, "ProceduralTextureDesign", ResourceLoader.CACHE_MODE_REUSE)
-			if design and not find_editor_for_design(design):
-				_build_new_editor(design)
+			if ResourceLoader.exists(path):
+				var design = ResourceLoader.load(path, "ProceduralTextureDesign", ResourceLoader.CACHE_MODE_REUSE)
+				if design and not find_editor_for_design(design):
+					_build_new_editor(design)
 
 	var is_visible = configuration.get_value('main', 'visible', false)
 	if is_visible and designs_list.item_count > 0:

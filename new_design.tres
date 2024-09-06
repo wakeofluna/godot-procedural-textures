@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=5 format=3 uid="uid://bqx7li8bc0gm8"]
+
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_ctxuh"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_a16ub"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="2_uh5td"]
+
+[sub_resource type="Resource" id="Resource_6gkd1"]
+script = ExtResource("1_ctxuh")
+shader = ExtResource("2_a16ub")
+graph_position = Vector2(160, 80)
+connections = {}
+count_x = 4
+count_y = 10
+row_shift = 0.5
+gap_x = 0.0
+gap_y = 0.0
+smoothing = 0.1
+
+[resource]
+script = ExtResource("2_uh5td")
+nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1")])
+editor_position = Vector2(-53, 0)
+editor_zoom = 1.0
+editor_minimap = false

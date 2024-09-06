@@ -1,16 +1,13 @@
-[gd_scene load_steps=23 format=3 uid="uid://dbuqprcbeudap"]
+[gd_scene load_steps=16 format=3 uid="uid://dbuqprcbeudap"]
 
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="1_hr5hu"]
 [ext_resource type="Texture2D" uid="uid://d882egauvhkc" path="res://bricks_texture.tres" id="1_kebia"]
 [ext_resource type="Texture2D" uid="uid://ex5umimlyw5y" path="res://bricks_embossed_texture.tres" id="3_2hcij"]
 [ext_resource type="Texture2D" uid="uid://ku70osi8vqgm" path="res://bricks_colorized.tres" id="4_56nhm"]
 [ext_resource type="Texture2D" uid="uid://b1x1u7r5c4h4b" path="res://bricks_color_correct.tres" id="4_fftmk"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="5_5kx2c"]
 [ext_resource type="Texture2D" uid="uid://ddw3aa46y3i3y" path="res://bricks_normal.tres" id="6_2cvm8"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="7_bsoc8"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="8_sb2h3"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_luminance.gdshader" id="9_hjvtn"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="10_0n15o"]
+[ext_resource type="Resource" uid="uid://bqx7li8bc0gm8" path="res://new_design.tres" id="7_bh53w"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="8_aew83"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2npp7"]
 shader = ExtResource("1_hr5hu")
@@ -23,54 +20,11 @@ shader_parameter/smoothing = 0.1
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kpkk0"]
 
-[sub_resource type="Resource" id="Resource_b6r42"]
-script = ExtResource("7_bsoc8")
-shader = ExtResource("1_hr5hu")
-graph_position = Vector2(-120, 20)
-connections = {}
-count_x = 4
-count_y = 10
-row_shift = 0.5
-gap_x = 0.0
-gap_y = 0.0
-smoothing = 0.1
-
-[sub_resource type="Resource" id="Resource_dvv76"]
-script = ExtResource("7_bsoc8")
-shader = ExtResource("8_sb2h3")
-graph_position = Vector2(140, 80)
-connections = {
-1: {
-"from_node": SubResource("Resource_b6r42"),
-"from_port": 0
-}
-}
-angle = 45
-strength = 4.0
-
-[sub_resource type="Resource" id="Resource_0mam6"]
-script = ExtResource("7_bsoc8")
-shader = ExtResource("9_hjvtn")
-graph_position = Vector2(360, 20)
-connections = {
-0: {
-"from_node": SubResource("Resource_dvv76"),
-"from_port": 0
-}
-}
-
-[sub_resource type="Resource" id="Resource_eja71"]
-script = ExtResource("10_0n15o")
-nodes = Array[ExtResource("7_bsoc8")]([SubResource("Resource_b6r42"), SubResource("Resource_0mam6"), SubResource("Resource_dvv76")])
-editor_position = Vector2(0, 0)
-editor_zoom = 1.0
-editor_minimap = true
-
-[sub_resource type="Texture2D" id="Texture2D_dktyp"]
+[sub_resource type="Texture2D" id="Texture2D_i6k6x"]
 resource_local_to_scene = false
 resource_name = ""
-script = ExtResource("5_5kx2c")
-design = SubResource("Resource_eja71")
+script = ExtResource("8_aew83")
+design = ExtResource("7_bh53w")
 size = Vector2i(512, 512)
 
 [sub_resource type="VisualShader" id="VisualShader_ivqax"]
@@ -158,7 +112,7 @@ layout_mode = 2
 [node name="DesignedTexture" type="TextureRect" parent="GridContainer"]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-texture = SubResource("Texture2D_dktyp")
+texture = SubResource("Texture2D_i6k6x")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 

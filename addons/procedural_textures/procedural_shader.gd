@@ -28,12 +28,12 @@ static func from_shader(shader: Shader) -> ProceduralShader:
 	assert(shader, "invalid shader for ProceduralShader")
 
 	if shader.has_meta(meta_key):
-		var proc_shader = shader.get_meta(meta_key)
-		assert(proc_shader is ProceduralShader, "stop stealing my meta key!")
-		return proc_shader
+		var proc_shader = shader.get_meta(meta_key).get_ref()
+		if proc_shader:
+			return proc_shader
 
 	var proc_shader = ProceduralShader.new(shader)
-	shader.set_meta(meta_key, proc_shader)
+	shader.set_meta(meta_key, weakref(proc_shader))
 	return proc_shader
 
 
