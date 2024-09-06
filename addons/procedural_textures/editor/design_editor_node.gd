@@ -84,7 +84,7 @@ func setup_design_node(undo_redo: EditorUndoRedoManager, design_node: Procedural
 func _on_design_property_list_changed() -> void:
 	var shader: ProceduralShader = design_node.proc_shader
 	var slot_index: int
-	var control: Label
+	var label: Label
 
 	clear_all_slots()
 	for idx in range(get_child_count() -1, -1, -1):
@@ -92,17 +92,18 @@ func _on_design_property_list_changed() -> void:
 
 	for inp in shader.inputs:
 		slot_index = get_child_count()
-		control = Label.new()
-		control.text = inp.name.capitalize()
-		add_child(control)
+		label = Label.new()
+		label.text = inp.name.capitalize()
+		add_child(label)
 		set_slot_enabled_left(slot_index, true)
 		set_slot_color_left(slot_index, get_config_color_for_type(inp.type + 1000))
 		set_slot_type_left(slot_index, inp.type + 1000)
 
 	slot_index = get_child_count()
-	control = Label.new()
-	control.text = 'Output'
-	add_child(control)
+	label = Label.new()
+	label.text = 'Output'
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add_child(label)
 	set_slot_enabled_right(slot_index, true)
 	set_slot_color_right(slot_index, get_config_color_for_type(shader.output_type + 1000))
 	set_slot_type_right(slot_index, shader.output_type + 1000)
@@ -111,9 +112,30 @@ func _on_design_property_list_changed() -> void:
 
 	for uniform in shader.uniforms:
 		slot_index = get_child_count()
-		control = Label.new()
-		control.text = uniform.name.capitalize()
-		add_child(control)
+		label = Label.new()
+		label.text = uniform.name.capitalize()
+
+		var cur_value: Variant = design_node._get(uniform.name)
+		if uniform.type == TYPE_INT or uniform.type == TYPE_FLOAT:
+			var btn = Button.new()
+			btn.text = String.num(cur_value, 3)
+			design_node.changed.connect(func(): btn.text = String.num(design_node._get(uniform.name), 3))
+			var hbox = HBoxContainer.new()
+			hbox.add_child(btn)
+			hbox.add_child(label)
+			add_child(hbox)
+		elif uniform.type == TYPE_BOOL:
+			var btn = CheckBox.new()
+			btn.set_pressed_no_signal(cur_value or false)
+			btn.toggled.connect(func(is_on): design_node._set(uniform.name, is_on))
+			design_node.changed.connect(func(): btn.set_pressed_no_signal(design_node._get(uniform.name) or false))
+			var hbox = HBoxContainer.new()
+			hbox.add_child(btn)
+			hbox.add_child(label)
+			add_child(hbox)
+		else:
+			add_child(label)
+
 		set_slot_enabled_left(slot_index, true)
 		set_slot_color_left(slot_index, get_config_color_for_type(uniform.type))
 		set_slot_type_left(slot_index, uniform.type)
