@@ -40,6 +40,7 @@ func add_connection_to(to_port: int, from_node: ProceduralTextureDesignNode, fro
 	assert(not design_node.connections.has(to_port), "cannot add connection to port without removing the connection first")
 	assert(not detect_circular_reference(from_node), "attempted to create a circular reference")
 	design_node.connections[to_port] = { "from_node": from_node, "from_port": from_port }
+	design_node.emit_changed()
 
 
 func detect_circular_reference(to_node: ProceduralTextureDesignNode) -> bool:
@@ -66,6 +67,7 @@ func get_connection_to(to_port: int) -> Dictionary:
 
 func remove_connection_to(to_port: int) -> void:
 	design_node.connections.erase(to_port)
+	design_node.emit_changed()
 
 
 func setup_design_node(undo_redo: EditorUndoRedoManager, design_node: ProceduralTextureDesignNode) -> void:

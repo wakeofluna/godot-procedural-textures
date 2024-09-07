@@ -37,7 +37,7 @@ func _on_design_changed() -> void:
 
 func _validate_property(property: Dictionary) -> void:
 	if property.name == 'shader':
-		property.usage = PROPERTY_USAGE_STORAGE
+		property.usage = PROPERTY_USAGE_NONE
 	elif property.name == 'output':
 		var outputs: Array = design.get_output_names() if design else []
 		if outputs.is_empty():

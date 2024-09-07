@@ -50,11 +50,18 @@ func _on_shader_updated():
 	var shader_data = ShaderParser.parse_shader(shader)
 
 	name = shader_data.get("name", "")
-	includes = shader_data.get("includes", [])
-	structs = shader_data.get("structs", [])
-	functions = shader_data.get("functions", [])
+
+	includes = []
+	for x: String in shader_data.get("includes", []):
+		if !x.is_absolute_path():
+			x = shader.resource_path.get_base_dir().path_join(x)
+		includes.append(x.simplify_path())
 	includes.make_read_only()
+
+	structs = shader_data.get("structs", [])
 	structs.make_read_only()
+
+	functions = shader_data.get("functions", [])
 	functions.make_read_only()
 
 	var shader_rid = shader.get_rid()
@@ -85,10 +92,7 @@ func _on_shader_updated():
 		print('SHADER: {0}'.format([shader.resource_path]))
 		print('shader_type canvas_item;')
 		print('// NAME:{0}'.format([name]))
-		for x: String in includes:
-			if !x.is_absolute_path():
-				x = shader.resource_path.get_base_dir().path_join(x)
-			x = x.simplify_path()
+		for x in includes:
 			print('#include "{0}"'.format([x]))
 		for x in structs:
 			print('struct {0} {{1}};'.format([x.name, ShaderParser.reconstruct_string(x.definition)]))

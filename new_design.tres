@@ -1,14 +1,42 @@
-[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=9 format=3 uid="uid://bqx7li8bc0gm8"]
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=11 format=3 uid="uid://bqx7li8bc0gm8"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_ctxuh"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_a16ub"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="2_uh5td"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_ry8d2"]
 
+[sub_resource type="Resource" id="Resource_6tfvo"]
+script = ExtResource("1_ctxuh")
+graph_position = Vector2(-100, 160)
+connections = {}
+output_value = 4
+output_name = "XBricks"
+is_variable = true
+variable_name = "XBricks"
+default_value = 4
+
+[sub_resource type="Resource" id="Resource_7nmly"]
+script = ExtResource("1_ctxuh")
+graph_position = Vector2(-100, 260)
+connections = {}
+output_value = 0.23
+output_name = "Float"
+is_variable = false
+constant_value = 0.23
+
 [sub_resource type="Resource" id="Resource_6gkd1"]
 script = ExtResource("1_ctxuh")
 graph_position = Vector2(160, 80)
-connections = {}
+connections = {
+0: {
+"from_node": SubResource("Resource_6tfvo"),
+"from_port": 0
+},
+3: {
+"from_node": SubResource("Resource_7nmly"),
+"from_port": 0
+}
+}
 output_value = null
 output_name = ""
 is_variable = false
@@ -70,7 +98,7 @@ output_name = "Bricks"
 
 [resource]
 script = ExtResource("2_uh5td")
-nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_ed03g"), SubResource("Resource_6gkd1"), SubResource("Resource_22g32"), SubResource("Resource_dwah7")])
-editor_position = Vector2(-153.705, -17.8353)
-editor_zoom = 0.683013
+nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_ed03g"), SubResource("Resource_6gkd1"), SubResource("Resource_22g32"), SubResource("Resource_dwah7"), SubResource("Resource_6tfvo"), SubResource("Resource_7nmly")])
+editor_position = Vector2(-162.438, 74.2773)
+editor_zoom = 0.999999
 editor_minimap = false
