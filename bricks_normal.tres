@@ -12,4 +12,4 @@ size = Vector2i(512, 512)
 shader = ExtResource("2_yo4j5")
 generate_mipmaps = false
 shader/bump_strength = 8.0
-shader/input = ExtResource("3_wogoe")
+shader/bump_map = ExtResource("3_wogoe")

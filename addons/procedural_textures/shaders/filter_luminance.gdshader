@@ -6,7 +6,7 @@ render_mode unshaded;
 // samplers
 uniform sampler2D input;
 
-// process function; takes the def struct and the current UV
+// process function; takes the current UV followed by all uniforms in order
 vec2 process(vec2 uv) {
 	const vec3 luminance_factor = vec3(0.2126, 0.7152, 0.0722);
 	vec4 color = texture(input, uv);

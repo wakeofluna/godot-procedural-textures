@@ -2,20 +2,15 @@
 
 [ext_resource type="Resource" uid="uid://bqx7li8bc0gm8" path="res://new_design.tres" id="1_15dgc"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="2_dc3ls"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="3_huvfo"]
+
+[sub_resource type="Shader" id="Shader_p7j34"]
 
 [resource]
 resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("2_dc3ls")
 design = ExtResource("1_15dgc")
-output = "Albedo"
+output = "Bricks"
 size = Vector2i(512, 512)
-shader = ExtResource("3_huvfo")
+shader = SubResource("Shader_p7j34")
 generate_mipmaps = false
-shader/count_x = 4
-shader/count_y = 10
-shader/row_shift = 0.5
-shader/gap_x = 0.0
-shader/gap_y = 0.0
-shader/smoothing = 0.1
