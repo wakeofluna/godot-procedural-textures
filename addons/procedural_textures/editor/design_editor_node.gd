@@ -5,6 +5,7 @@ class_name ProceduralTextureDesignEditorNode
 
 var design_node: ProceduralTextureDesignNode
 var undo_redo: EditorUndoRedoManager
+var property_controls: Dictionary = {}
 
 
 static func get_config_color_for_type(type: int) -> Color:
@@ -79,24 +80,63 @@ func setup_design_node(undo_redo: EditorUndoRedoManager, design_node: Procedural
 
 	design_node.property_list_changed.connect(_on_design_property_list_changed)
 	_on_design_property_list_changed()
+	design_node.changed.connect(_on_design_changed)
+	_on_design_changed()
 
 
 func _on_design_property_list_changed() -> void:
-	var label: Label
-
 	clear_all_slots()
 	for idx in range(get_child_count() -1, -1, -1):
 		remove_child(get_child(idx))
+
+	property_controls = {}
 
 	match design_node.get_mode():
 		ProceduralTextureDesignNode.Mode.SHADER:
 			_build_slots_for_shader(design_node.proc_shader)
 		ProceduralTextureDesignNode.Mode.VARIABLE:
-			_build_slot_for_value(design_node.output_name, design_node.output_value)
+			_build_slot_for_value(true)
 		ProceduralTextureDesignNode.Mode.CONSTANT:
-			_build_slot_for_value('Value', design_node.output_value)
+			_build_slot_for_value(false)
 		ProceduralTextureDesignNode.Mode.OUTPUT:
-			_build_slot_for_output(design_node.output_name)
+			_build_slot_for_output()
+
+
+func _on_design_changed() -> void:
+	title = design_node.get_description()
+
+	for uniform_name in property_controls:
+		var value = design_node._get(uniform_name)
+
+		var value_str: String
+		if value is String or value is StringName:
+			value_str = value
+		elif value is int or value is float:
+			value_str = String.num(value, 3)
+		elif value is Vector2:
+			value_str = '({0},{1})'.format([value.x, value.y])
+		elif value is Vector3:
+			value_str = '({0},{1},{2})'.format([value.x, value.y, value.z])
+		elif value is Vector4:
+			value_str = '({0},{1},{2},{3})'.format([value.x, value.y, value.z, value.w])
+		else:
+			value_str = '{0}'.format([value])
+
+		var control = property_controls[uniform_name]
+		if control is CheckBox:
+			control.set_pressed_no_signal(value as bool)
+		elif control is Button:
+			control.text = value_str
+		elif control is Label:
+			control.text = value_str
+
+
+func _create_control_for_type(type: int) -> Control:
+	if type == TYPE_BOOL:
+		var control := CheckBox.new()
+		control.disabled = true
+		return control
+	return Button.new()
 
 
 func _build_slots_for_shader(shader: ProceduralShader) -> void:
@@ -129,49 +169,46 @@ func _build_slots_for_shader(shader: ProceduralShader) -> void:
 		label = Label.new()
 		label.text = uniform.name.capitalize()
 
-		var cur_value: Variant = design_node._get(uniform.name)
-		if uniform.type == TYPE_INT or uniform.type == TYPE_FLOAT:
-			var btn = Button.new()
-			btn.text = String.num(cur_value, 3)
-			design_node.changed.connect(func(): btn.text = String.num(design_node._get(uniform.name), 3))
-			var hbox = HBoxContainer.new()
-			hbox.add_child(btn)
-			hbox.add_child(label)
-			add_child(hbox)
-		elif uniform.type == TYPE_BOOL:
-			var btn = CheckBox.new()
-			btn.set_pressed_no_signal(cur_value or false)
-			btn.toggled.connect(func(is_on): design_node._set(uniform.name, is_on))
-			design_node.changed.connect(func(): btn.set_pressed_no_signal(design_node._get(uniform.name) or false))
-			var hbox = HBoxContainer.new()
-			hbox.add_child(btn)
-			hbox.add_child(label)
-			add_child(hbox)
-		else:
-			add_child(label)
+		var control := _create_control_for_type(uniform.type)
+		var hbox = HBoxContainer.new()
+		hbox.add_child(control)
+		hbox.add_child(label)
+		add_child(hbox)
+		property_controls[uniform.name] = control
 
 		set_slot_enabled_left(slot_index, true)
 		set_slot_color_left(slot_index, get_config_color_for_type(uniform.type))
 		set_slot_type_left(slot_index, uniform.type)
 
 
-func _build_slot_for_value(slot_name: String, slot_value: Variant) -> void:
+func _build_slot_for_value(is_variable: bool) -> void:
+	var hbox = HBoxContainer.new()
+	hbox.alignment = BoxContainer.ALIGNMENT_END
 	var label := Label.new()
-	label.text = slot_name
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	add_child(label)
+
+	var control := _create_control_for_type(typeof(design_node.output_value))
+	hbox.add_child(label)
+	hbox.add_child(control)
+	add_child(hbox)
 	set_slot_enabled_right(0, true)
-	set_slot_color_right(0, get_config_color_for_type(typeof(slot_value)))
-	set_slot_type_right(0, typeof(slot_value))
+	set_slot_color_right(0, get_config_color_for_type(typeof(design_node.output_value)))
+	set_slot_type_right(0, typeof(design_node.output_value))
+	if is_variable:
+		property_controls[ProceduralTextureDesignNode.property_name_variable_name] = label
+		property_controls[ProceduralTextureDesignNode.property_name_default_value] = control
+	else:
+		label.text = design_node.output_name
+		property_controls[ProceduralTextureDesignNode.property_name_constant_value] = control
 
 
-func _build_slot_for_output(slot_name: String) -> void:
+func _build_slot_for_output() -> void:
 	var label := Label.new()
-	label.text = slot_name.capitalize()
 	add_child(label)
 	set_slot_enabled_left(0, true)
 	set_slot_color_left(0, get_config_color_for_type(TYPE_VECTOR4 + 1000))
 	set_slot_type_left(0, TYPE_VECTOR4 + 1000)
+	property_controls[ProceduralTextureDesignNode.property_name_output_name] = label
 
 
 func _on_position_offset_changed() -> void:

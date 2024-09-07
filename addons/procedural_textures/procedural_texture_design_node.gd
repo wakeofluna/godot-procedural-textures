@@ -59,10 +59,8 @@ var shader_params: Dictionary
 func get_mode() -> Mode:
 	if proc_shader:
 		return Mode.SHADER
-	elif is_variable:
-		return Mode.VARIABLE
 	elif typeof(output_value) != TYPE_NIL:
-		return Mode.CONSTANT
+		return Mode.VARIABLE if is_variable else Mode.CONSTANT
 	elif not output_name.is_empty():
 		return Mode.OUTPUT
 	return Mode.NONE
@@ -75,7 +73,7 @@ func get_description() -> String:
 		Mode.VARIABLE:
 			return 'Variable'
 		Mode.CONSTANT:
-			return output_name if not output_name.is_empty() else 'Constant'
+			return 'Constant'
 		Mode.OUTPUT:
 			return 'Output'
 		Mode.NONE:
