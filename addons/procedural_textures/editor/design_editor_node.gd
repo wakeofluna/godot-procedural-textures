@@ -82,13 +82,26 @@ func setup_design_node(undo_redo: EditorUndoRedoManager, design_node: Procedural
 
 
 func _on_design_property_list_changed() -> void:
-	var shader: ProceduralShader = design_node.proc_shader
-	var slot_index: int
 	var label: Label
 
 	clear_all_slots()
 	for idx in range(get_child_count() -1, -1, -1):
 		remove_child(get_child(idx))
+
+	match design_node.get_mode():
+		ProceduralTextureDesignNode.Mode.SHADER:
+			_build_slots_for_shader(design_node.proc_shader)
+		ProceduralTextureDesignNode.Mode.VARIABLE:
+			_build_slot_for_value(design_node.output_name, design_node.output_value)
+		ProceduralTextureDesignNode.Mode.CONSTANT:
+			_build_slot_for_value('Value', design_node.output_value)
+		ProceduralTextureDesignNode.Mode.OUTPUT:
+			_build_slot_for_output(design_node.output_name)
+
+
+func _build_slots_for_shader(shader: ProceduralShader) -> void:
+	var slot_index: int
+	var label: Label
 
 	for inp in shader.inputs:
 		slot_index = get_child_count()
@@ -108,7 +121,8 @@ func _on_design_property_list_changed() -> void:
 	set_slot_color_right(slot_index, get_config_color_for_type(shader.output_type + 1000))
 	set_slot_type_right(slot_index, shader.output_type + 1000)
 
-	add_child(HSeparator.new())
+	if not shader.uniforms.is_empty():
+		add_child(HSeparator.new())
 
 	for uniform in shader.uniforms:
 		slot_index = get_child_count()
@@ -139,6 +153,25 @@ func _on_design_property_list_changed() -> void:
 		set_slot_enabled_left(slot_index, true)
 		set_slot_color_left(slot_index, get_config_color_for_type(uniform.type))
 		set_slot_type_left(slot_index, uniform.type)
+
+
+func _build_slot_for_value(slot_name: String, slot_value: Variant) -> void:
+	var label := Label.new()
+	label.text = slot_name
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add_child(label)
+	set_slot_enabled_right(0, true)
+	set_slot_color_right(0, get_config_color_for_type(typeof(slot_value)))
+	set_slot_type_right(0, typeof(slot_value))
+
+
+func _build_slot_for_output(slot_name: String) -> void:
+	var label := Label.new()
+	label.text = slot_name.capitalize()
+	add_child(label)
+	set_slot_enabled_left(0, true)
+	set_slot_color_left(0, get_config_color_for_type(TYPE_VECTOR4 + 1000))
+	set_slot_type_left(0, TYPE_VECTOR4 + 1000)
 
 
 func _on_position_offset_changed() -> void:

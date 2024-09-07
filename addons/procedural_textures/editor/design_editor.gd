@@ -1,5 +1,4 @@
 @tool
-@static_unload
 extends GraphEdit
 class_name ProceduralTextureDesignEditor
 
@@ -8,10 +7,28 @@ signal _popup_result(Variant)
 
 
 static var _shader_resources: Array[ProceduralShader] = []
-
 var design: ProceduralTextureDesign
 var undo_redo: EditorUndoRedoManager
 var scroll_offset_applied: bool = false
+
+const valid_types: Dictionary = {
+	TYPE_BOOL: 'Boolean',
+	TYPE_INT: 'Int',
+	TYPE_FLOAT:  'Float',
+	TYPE_VECTOR2: 'Vector2',
+	TYPE_VECTOR3: 'Vector3',
+	TYPE_VECTOR4: 'Vector4',
+	TYPE_COLOR: 'Color',
+}
+const valid_defaults: Dictionary = {
+	TYPE_BOOL: false,
+	TYPE_INT: 0,
+	TYPE_FLOAT: 0.0,
+	TYPE_VECTOR2: Vector2(0,1),
+	TYPE_VECTOR3: Vector3(0,0,0),
+	TYPE_VECTOR4: Vector4(0,0,0,1),
+	TYPE_COLOR: Color.BLACK,
+}
 
 var resource_path: String:
 	get():
@@ -155,22 +172,54 @@ func _apply_changes() -> void:
 
 
 func _on_connection_from_empty(to_node: StringName, to_port: int, release_position: Vector2) -> void:
-	print_rich('CONNECTION FROM EMPTY TO ', to_node, ':', to_port, " AT LOCATION ", release_position)
+	#print_rich('CONNECTION FROM EMPTY TO ', to_node, ':', to_port, " AT LOCATION ", release_position)
+	var to := find_graphnode_by_name(to_node)
+	if not to:
+		return
+
+	var to_type := to.get_input_port_type(to_port)
+	var result = await show_popup(release_position, -1, to_type)
+
+	var graph_node := create_graphnode_action_from_popup(result, release_position - Vector2(80, 40))
+	if graph_node:
+		# Make automatic connection to a valid port if possible
+		for from_port in graph_node.get_output_port_count():
+			var out_type := graph_node.get_output_port_type(from_port)
+			if out_type == to_type or is_valid_connection_type(out_type, to_type):
+				undo_redo.add_do_method(to, "add_connection_to", to_port, graph_node.design_node, from_port)
+				undo_redo.add_undo_method(to, "remove_connection_to", to_port)
+				undo_redo.add_do_method(self, "connect_node", graph_node.name, from_port, to_node, to_port)
+				undo_redo.add_undo_method(self, "disconnect_node", graph_node.name, from_port, to_node, to_port)
+				break
+		undo_redo.commit_action()
 
 
 func _on_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
-	print_rich('CONNECTION TO EMPTY FROM ', from_node, ':', from_port, " AT LOCATION ", release_position)
+	#print_rich('CONNECTION TO EMPTY FROM ', from_node, ':', from_port, " AT LOCATION ", release_position)
+	var from := find_graphnode_by_name(from_node)
+	if not from:
+		return
+
+	var from_type := from.get_output_port_type(from_port)
+	var result = await show_popup(release_position, from_type, -1)
+	var graph_node :=  create_graphnode_action_from_popup(result, release_position - Vector2(0, 40))
+	if graph_node:
+		# Make automatic connection to a valid port if possible
+		for to_port in graph_node.get_input_port_count():
+			var in_type := graph_node.get_input_port_type(to_port)
+			if in_type == from_type or is_valid_connection_type(from_type, in_type):
+				undo_redo.add_do_method(graph_node, "add_connection_to", to_port, from.design_node, from_port)
+				undo_redo.add_undo_method(graph_node, "remove_connection_to", to_port)
+				undo_redo.add_do_method(self, "connect_node", from_node, from_port, graph_node.name, to_port)
+				undo_redo.add_undo_method(self, "disconnect_node", from_node, from_port, graph_node.name, to_port)
+				break
+		undo_redo.commit_action()
 
 
 func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	#print('CONNECTION REQUEST FROM ', from_node, ':', from_port, " TO ", to_node, ':', to_port)
-	var from: ProceduralTextureDesignEditorNode
-	var to: ProceduralTextureDesignEditorNode
-	for child in get_children():
-		if child.name == from_node:
-			from = child
-		if child.name == to_node:
-			to = child
+	var from := find_graphnode_by_name(from_node)
+	var to := find_graphnode_by_name(to_node)
 	if not from or not to:
 		return
 	if to.detect_circular_reference(from.design_node):
@@ -267,29 +316,80 @@ func _on_paste_nodes_request() -> void:
 
 
 func _on_popup_request(at_position: Vector2) -> void:
-	print_rich('POPUP REQUEST AT ', at_position)
-
+	#print_rich('POPUP REQUEST AT ', at_position)
 	var result = await show_popup(at_position, -1, -1)
-	if result is ProceduralShader:
-		var design_node := ProceduralTextureDesignNode.new()
-		design_node.shader = result.shader
-		design_node.graph_position = at_position + scroll_offset
-
-		var graph_node = create_graphnode_from_data(design_node)
-
-		undo_redo.create_action("Add Design Node", UndoRedo.MERGE_DISABLE, design)
-		undo_redo.add_do_reference(graph_node)
-		undo_redo.add_do_method(design, "add_new_design_node", design_node)
-		undo_redo.add_do_method(self, "add_child", graph_node)
-		undo_redo.add_undo_method(self, "remove_child", graph_node)
-		undo_redo.add_undo_method(design, "remove_design_node", design_node)
+	var graph_node := create_graphnode_action_from_popup(result, at_position - Vector2(50, 20))
+	if graph_node:
 		undo_redo.commit_action()
 
 
 func create_graphnode_from_data(design_node: ProceduralTextureDesignNode) -> ProceduralTextureDesignEditorNode:
 	var graph_node = ProceduralTextureDesignEditorNode.new()
 	graph_node.setup_design_node(undo_redo, design_node)
+
+	var name_prefix = design_node.get_description().validate_node_name()
+	var idx: int = 0
+	while true:
+		idx = idx + 1
+		var maybe_name = name_prefix + String.num(idx)
+		if not find_graphnode_by_name(maybe_name):
+			graph_node.name = maybe_name
+			break
+
 	return graph_node
+
+
+func create_graphnode_action_from_popup(popup_result: Variant, at_position: Vector2) -> ProceduralTextureDesignEditorNode:
+	if typeof(popup_result) != TYPE_DICTIONARY:
+		return null
+	var data: Dictionary = popup_result
+	if data.is_empty():
+		return null
+
+	var design_node: ProceduralTextureDesignNode = null
+
+	match data.mode:
+		ProceduralTextureDesignNode.Mode.SHADER:
+			undo_redo.create_action("Add Shader Node", UndoRedo.MERGE_DISABLE, design, true)
+			design_node = ProceduralTextureDesignNode.new()
+			design_node.shader = data.shader
+		ProceduralTextureDesignNode.Mode.VARIABLE:
+			undo_redo.create_action("Add Variable Node", UndoRedo.MERGE_DISABLE, design, true)
+			design_node = ProceduralTextureDesignNode.new()
+			design_node.output_name = valid_types[data.type]
+			design_node.output_value = valid_defaults[data.type]
+			design_node.is_variable = true
+		ProceduralTextureDesignNode.Mode.CONSTANT:
+			undo_redo.create_action("Add Constant Node", UndoRedo.MERGE_DISABLE, design, true)
+			design_node = ProceduralTextureDesignNode.new()
+			design_node.output_name = valid_types[data.type]
+			design_node.output_value = valid_defaults[data.type]
+			design_node.is_variable = false
+		ProceduralTextureDesignNode.Mode.OUTPUT:
+			undo_redo.create_action("Add Output Node", UndoRedo.MERGE_DISABLE, design, true)
+			design_node = ProceduralTextureDesignNode.new()
+			design_node.output_name = '(unnamed)'
+
+	if design_node == null:
+		return null
+
+	design_node.graph_position = snap_grid_coordinate(at_position + scroll_offset)
+
+	var graph_node = create_graphnode_from_data(design_node)
+	undo_redo.add_do_reference(graph_node)
+	undo_redo.add_do_method(design, "add_new_design_node", design_node)
+	undo_redo.add_undo_method(design, "remove_design_node", design_node)
+	undo_redo.add_do_method(self, "add_child", graph_node)
+	undo_redo.add_undo_method(self, "remove_child", graph_node)
+
+	return graph_node
+
+
+func find_graphnode_by_name(node_name: StringName) -> ProceduralTextureDesignEditorNode:
+	for child in get_children():
+		if child.name == node_name:
+			return child
+	return null
 
 
 func find_graphnode_for(design_node: ProceduralTextureDesignNode) -> ProceduralTextureDesignEditorNode:
@@ -337,9 +437,54 @@ func show_popup(position: Vector2, filter_input_type: int, filter_output_type: i
 	patterns.collapsed = true
 
 	for shader in get_shader_resources():
-		var item := patterns.create_child() if shader.inputs.is_empty() else filters.create_child()
-		item.set_text(0, shader.name)
-		item.set_metadata(0, shader)
+		var ok := true
+
+		if filter_input_type != -1:
+			ok = false
+			for u in shader.uniforms:
+				if filter_input_type == u.type or is_valid_connection_type(filter_input_type, u.type):
+					ok = true
+			for i in shader.inputs:
+				if filter_input_type == (i.type + 1000) or is_valid_connection_type(filter_input_type, i.type + 1000):
+					ok = true
+
+		if filter_output_type != -1:
+			ok = shader.output_type + 1000 == filter_output_type or is_valid_connection_type(shader.output_type + 1000, filter_output_type)
+
+		if ok:
+			var item := patterns.create_child() if shader.inputs.is_empty() else filters.create_child()
+			item.set_text(0, shader.name)
+			item.set_metadata(0, { "mode": ProceduralTextureDesignNode.Mode.SHADER, "shader": shader.shader })
+
+	if filters.get_child_count() == 0:
+		filters.free()
+	if patterns.get_child_count() == 0:
+		patterns.free()
+
+	if filter_input_type == -1 and filter_output_type < 1000:
+		var constants := root.create_child()
+		constants.set_text(0, "Constants")
+		constants.collapsed = true
+
+		var variables := root.create_child()
+		variables.set_text(0, "Variables")
+		variables.collapsed = true
+
+		for typ in valid_types:
+			var ok: bool = filter_output_type == -1 or typ == filter_output_type or is_valid_connection_type(typ, filter_output_type)
+			if ok:
+				var item := constants.create_child()
+				item.set_text(0, valid_types[typ])
+				item.set_metadata(0, { "mode": ProceduralTextureDesignNode.Mode.CONSTANT, "type": typ })
+				item = variables.create_child()
+				item.set_text(0, valid_types[typ])
+				item.set_metadata(0, { "mode": ProceduralTextureDesignNode.Mode.VARIABLE, "type": typ })
+
+	if (filter_input_type == -1 and filter_output_type == -1) or filter_input_type == TYPE_VECTOR4 + 1000 or is_valid_connection_type(filter_input_type, TYPE_VECTOR4 + 1000):
+		var item := root.create_child()
+		item.set_text(0, 'Texture Output')
+		item.set_metadata(0, { "mode": ProceduralTextureDesignNode.Mode.OUTPUT })
+
 
 	var vbox := VBoxContainer.new()
 	vbox.add_child(label)
@@ -360,3 +505,13 @@ func show_popup(position: Vector2, filter_input_type: int, filter_output_type: i
 	var result = await _popup_result
 	popup.queue_free()
 	return result
+
+
+func snap_grid_coordinate(coord: Vector2) -> Vector2:
+	if snapping_enabled:
+		var result: Vector2
+		result.x = roundf(coord.x / snapping_distance) * snapping_distance
+		result.y = roundf(coord.y / snapping_distance) * snapping_distance
+		return result
+	else:
+		return coord
