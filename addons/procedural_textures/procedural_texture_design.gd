@@ -36,9 +36,32 @@ func get_outgoing_connections_for(node: ProceduralTextureDesignNode) -> Array[Di
 	return result
 
 
-func get_nr_outputs() -> int:
-	return 0
-
-
 func get_nodes() -> Array[ProceduralTextureDesignNode]:
 	return nodes
+
+
+func get_output(name: String) -> ProceduralTextureDesignNode:
+	for node in nodes:
+		if node.get_mode() == ProceduralTextureDesignNode.Mode.OUTPUT and node.output_name == name:
+			return node
+	return null
+
+
+func get_outputs() -> Array[ProceduralTextureDesignNode]:
+	var result: Array[ProceduralTextureDesignNode] = []
+	for node in nodes:
+		if node.get_mode() == ProceduralTextureDesignNode.Mode.OUTPUT:
+			result.append(node)
+	return result
+
+
+func get_output_names() -> Array[String]:
+	var result: Array[String]
+	for node in nodes:
+		if node.get_mode() == ProceduralTextureDesignNode.Mode.OUTPUT:
+			result.append(node.output_name)
+	return result
+
+
+func get_shader_for_node(node: ProceduralTextureDesignNode) -> Shader:
+	return preload("res://addons/procedural_textures/shaders/pattern_bricks.gdshader")
