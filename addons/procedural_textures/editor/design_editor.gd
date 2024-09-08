@@ -89,8 +89,8 @@ func _init(undo_redo: EditorUndoRedoManager) -> void:
 	right_disconnects = true
 
 	# Allow converting between scalars (usable for constants)
-	#add_valid_connection_type(TYPE_FLOAT, TYPE_INT)
-	#add_valid_connection_type(TYPE_INT, TYPE_FLOAT)
+	add_valid_connection_type(TYPE_FLOAT, TYPE_INT)
+	add_valid_connection_type(TYPE_INT, TYPE_FLOAT)
 
 	# Allow connecting float outputs to vector inputs
 	# vec2 = (float, 1.0)

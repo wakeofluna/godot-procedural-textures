@@ -82,6 +82,10 @@ func get_description() -> String:
 	return 'INTERNAL ERROR'
 
 
+func get_output_type() -> int:
+	return proc_shader.output_type if proc_shader else typeof(output_value)
+
+
 func _get_property_list() -> Array[Dictionary]:
 	var props: Array[Dictionary] = []
 	var prop: Dictionary

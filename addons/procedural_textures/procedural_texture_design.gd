@@ -136,13 +136,14 @@ func _gather_shader_data_for_node(node: ProceduralTextureDesignNode, data: Dicti
 			var node_func_name: String = 'node_{0}{1}'.format([shader.name, postfix])
 			var param_list: Array[String] = ['uv']
 			for idx in shader.uniforms.size():
-				var to_port := shader.inputs.size() + idx
-				var connection := node.connections.get(to_port, {})
+				var uniform := shader.uniforms[idx]
+				var to_port: int = shader.inputs.size() + idx
+				var connection: Dictionary = node.connections.get(to_port, {})
 				var from_node = connection.get('from_node')
-				if from_node:
-					param_list.append(data.node_map[from_node])
+				if from_node is ProceduralTextureDesignNode:
+					var converted = _convert_type_from_to(data.node_map[from_node], from_node.get_output_type(), uniform.type)
+					param_list.append(converted)
 				else:
-					var uniform := shader.uniforms[idx]
 					var value = node.shader_params.get(uniform.name) if node.shader_params.has(uniform.name) else shader.defaults.get(uniform.name)
 					param_list.append(_format_immediate(value))
 
