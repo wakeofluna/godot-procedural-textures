@@ -89,9 +89,14 @@ vec3 hsv_to_rgb(vec3 p_hsv) {
 	return vec3(r, g, b);
 }
 
-// process function; takes the current UV followed by all uniforms in order
+// indirection functions (required)
+vec4 sample_input(vec2 uv) {
+	return texture(input, uv);
+}
+
+// process function (required); takes the current UV followed by all uniforms in order
 vec4 process(vec2 uv, float p_brightness, float p_contrast, float p_hue_shift, float p_desaturate, float p_gamma) {
-	vec4 v_color = texture(input, uv);
+	vec4 v_color = sample_input(uv);
 	v_color.rgb -= 0.5f;
 	v_color.rgb = fma(v_color.rgb, vec3(p_contrast), vec3(p_brightness + 0.5));
 	v_color.rgb = clamp(v_color.rgb, 0.0, 1.0);

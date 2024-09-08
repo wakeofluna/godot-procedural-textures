@@ -37,37 +37,15 @@ static func get_config_color_for_type(type: int) -> Color:
 
 
 func add_connection_to(to_port: int, from_node: ProceduralTextureDesignNode, from_port: int) -> void:
-	assert(not design_node.connections.has(to_port), "cannot add connection to port without removing the connection first")
-	assert(not detect_circular_reference(from_node), "attempted to create a circular reference")
-	design_node.connections[to_port] = { "from_node": from_node, "from_port": from_port }
-	design_node.emit_changed()
-
-
-func detect_circular_reference(to_node: ProceduralTextureDesignNode) -> bool:
-	return _detect_circular_reference(to_node, design_node)
-
-
-static func _detect_circular_reference(current: ProceduralTextureDesignNode, target: ProceduralTextureDesignNode) -> bool:
-	if current == target:
-		return true
-	for x in current.connections:
-		if _detect_circular_reference(current.connections[x].from_node, target):
-			return true
-	return false
+	design_node.add_connection_to(to_port, from_node, from_port)
 
 
 func get_connection_to(to_port: int) -> Dictionary:
-	var conn = design_node.connections.get(to_port, {})
-	if conn.has("from_node") and not conn["from_node"]:
-		printerr("Invalid ProceduralTextureDesign connection, likely due to a load error or circular reference")
-		design_node.connections.erase(to_port)
-		return {}
-	return conn
+	return design_node.get_connection_to(to_port)
 
 
 func remove_connection_to(to_port: int) -> void:
-	design_node.connections.erase(to_port)
-	design_node.emit_changed()
+	design_node.remove_connection_to(to_port)
 
 
 func setup_design_node(undo_redo: EditorUndoRedoManager, design_node: ProceduralTextureDesignNode) -> void:
@@ -116,11 +94,13 @@ func _on_design_changed() -> void:
 		elif value is int or value is float:
 			value_str = String.num(value, 3)
 		elif value is Vector2:
-			value_str = '({0},{1})'.format([value.x, value.y])
+			value_str = '(%.3f,%.3f)' % [value.x, value.y]
 		elif value is Vector3:
-			value_str = '({0},{1},{2})'.format([value.x, value.y, value.z])
+			value_str = '(%.3f,%.3f,%.3f)' % [value.x, value.y, value.z]
 		elif value is Vector4:
-			value_str = '({0},{1},{2},{3})'.format([value.x, value.y, value.z, value.w])
+			value_str = '(%.3f,%.3f,%.3f,%.3f)' % [value.x, value.y, value.z, value.w]
+		elif value is Color:
+			value_str = '(%d,%d,%d,%d)' % [int(value.r * 255), int(value.g * 255), int(value.b * 255), int(value.a * 255)]
 		else:
 			value_str = '{0}'.format([value])
 

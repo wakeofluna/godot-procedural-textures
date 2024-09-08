@@ -11,6 +11,8 @@ var name: String = ""
 var includes: Array = []
 var structs: Array = []
 var functions: Array = []
+var sample_functions: Array = []
+var process_function: Dictionary = {}
 
 var inputs: Array[Dictionary]
 var uniforms: Array[Dictionary]
@@ -61,8 +63,21 @@ func _on_shader_updated():
 	structs = shader_data.get("structs", [])
 	structs.make_read_only()
 
-	functions = shader_data.get("functions", [])
+	functions = []
+	sample_functions = []
+	process_function = {}
+	for f in shader_data.get("functions", []):
+		if f.name == 'vertex' or f.name == 'fragment' or f.name == 'light':
+			continue
+		elif f.name == 'process':
+			process_function = f
+		elif f.name.begins_with('sample_'):
+			sample_functions.append(f)
+		else:
+			functions.append(f)
 	functions.make_read_only()
+	sample_functions.make_read_only()
+	process_function.make_read_only()
 
 	var shader_rid = shader.get_rid()
 	inputs = []
@@ -87,99 +102,49 @@ func _on_shader_updated():
 	defaults.make_read_only()
 	uniforms.make_read_only()
 
-	if false and shader:
-		print('==========================================================')
-		print('SHADER: {0}'.format([shader.resource_path]))
-		print('shader_type canvas_item;')
-		print('// NAME:{0}'.format([name]))
-		for x in includes:
-			print('#include "{0}"'.format([x]))
-		for x in structs:
-			print('struct {0} {{1}};'.format([x.name, ShaderParser.reconstruct_string(x.definition)]))
-		for x in functions:
-			print('{0} {1}({2}) {{3}}'.format([ShaderParser.reconstruct_string(x.return_type), x.name, ShaderParser.reconstruct_string(x.parameters), ShaderParser.reconstruct_string(x.definition)]))
-
 	notify_property_list_changed()
 	changed.emit()
 
 
 func _determine_input_types() -> void:
-	# Scan all functions for texture(<input>, ...)
-	# And then see which channels we use based on the postfix, e.g. ".x"
-	for f in functions:
-		_determine_input_types_delve(f.definition)
+	var found = []
 
+	for f in sample_functions:
+		var input_name = f.name.substr(7)
+		var return_type = ShaderParser.reconstruct_string(f.return_type)
+		var func_type = map_type_to_variant_type(return_type)
 
-func _determine_input_types_delve(scope: Array) -> void:
-	for idx in range(scope.size() - 3):
-		var token1 = scope[idx]
-		if token1.type == ShaderParser.TOKEN_STRING and token1.token == 'texture':
-			var token2 = scope[idx+1]
-			if token2.type == ShaderParser.TOKEN_BRACE_OPEN and token2.token == '(':
-				var brace_contents: Array = token2.contents
-				if not brace_contents.is_empty():
-					var front: Dictionary = brace_contents.front()
-					if front.type == ShaderParser.TOKEN_STRING:
-						var input_name = front.token
-						var found_type = TYPE_VECTOR4
-						var token3 = scope[idx+2]
-						if token3.type == ShaderParser.TOKEN_OPERATOR and token3.token == '.':
-							var token4 = scope[idx+3]
-							if token4.type == ShaderParser.TOKEN_STRING:
-								var suffix = token4.token
-								if 'a' in suffix or 'w' in suffix:
-									found_type = TYPE_VECTOR4
-								elif 'b' in suffix or 'z' in suffix:
-									found_type = TYPE_VECTOR3
-								elif 'g' in suffix or 'y' in suffix:
-									found_type = TYPE_VECTOR2
-								elif 'r' in suffix or 'x' in suffix:
-									found_type = TYPE_FLOAT
-						_set_input_type_of(input_name, found_type)
+		for inp in inputs:
+			if inp.name == input_name:
+				found.append(input_name)
+				inp.type = func_type
 
-		if token1.type == ShaderParser.TOKEN_BRACE_OPEN:
-			_determine_input_types_delve(token1.contents)
+		if not input_name in found:
+			push_warning("Found sample_{0}() function in shader \"{1}\" without matching sampler input".format([input_name, name]))
 
-
-func _set_input_type_of(input_name: String, input_type: int) -> void:
-	for inp in inputs:
-		if inp.name == input_name:
-			inp.type = max(inp.type, input_type)
-			return
-	assert(inputs.has(input_name), "found texture({0}, ...) call in shader {1} but it is not a uniform".format([input_name, name]))
-
+	for input in inputs:
+		if input.name not in found:
+			push_error("No sample_{0}() function found in shader \"{1}\"!".format([input.name, name]))
 
 
 func _determine_output_type() -> void:
-	# Assumption: return value of either
-	# - function "process" if it exists
-	# - the last function that is not "fragment"
+	if process_function.is_empty():
+		push_error("no process() function found in ProceduralShader")
+		return
 
-	var return_type: Array = []
-
-	if not functions.is_empty():
-		for function in functions:
-			if function.name == 'process':
-				return_type = function.return_type
-
-		if return_type.is_empty():
-			return_type = functions.back().return_type
-
-	assert(not return_type.is_empty(), "no return type found in ProceduralShader")
-
+	var return_type = process_function.return_type
 	var type_string = ShaderParser.reconstruct_string(return_type)
-	match type_string:
-		'bool':
-			output_type = TYPE_BOOL
-		'int':
-			output_type = TYPE_INT
-		'float':
-			output_type = TYPE_FLOAT
-		'vec2':
-			output_type = TYPE_VECTOR2
-		'vec3':
-			output_type = TYPE_VECTOR3
-		'vec4':
-			output_type = TYPE_VECTOR4
+	output_type = map_type_to_variant_type(type_string)
+
+
+func map_type_to_variant_type(type_str: String) -> int:
+	match type_str:
+		'bool': return TYPE_BOOL
+		'int': return TYPE_INT
+		'float': return TYPE_FLOAT
+		'vec2': return TYPE_VECTOR2
+		'vec3': return TYPE_VECTOR3
+		'vec4': return TYPE_VECTOR4
 		_:
-			assert('unhandled output type "{0}" in ProceduralShader'.format([type_string]))
+			assert('unhandled output type "{0}" in ProceduralShader'.format([type_str]))
+			return TYPE_VECTOR4

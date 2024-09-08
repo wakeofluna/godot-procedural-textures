@@ -23,8 +23,8 @@ float process(vec2 uv, int p_count_x, int p_count_y, float p_row_shift, float p_
 	float y = vv - row;
 	float x = uu - floor(uu);
 
-	float dist_x = x - p_gap_x;
-	float dist_y = y - p_gap_y;
+	float dist_x = max(0.0, x - p_gap_x);
+	float dist_y = max(0.0, y - p_gap_y);
 
 	float min_dist_x = min(dist_x, 1.0f - x) / norm_x;
 	float min_dist_y = min(dist_y, 1.0f - y) / norm_y;

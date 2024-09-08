@@ -25,10 +25,9 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("8_aew83")
 design = ExtResource("7_bh53w")
-output = "Bricks"
+output = "Color"
 size = Vector2i(512, 512)
 generate_mipmaps = false
-shader/XBricks_1 = 4
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_8gnsm"]
 
@@ -86,8 +85,9 @@ layout_mode = 2
 texture = ExtResource("6_2cvm8")
 expand_mode = 1
 
-[node name="Control2" type="Control" parent="GridContainer"]
+[node name="Control2" type="TextureRect" parent="GridContainer"]
 layout_mode = 2
+expand_mode = 1
 
 [node name="Control3" type="Control" parent="GridContainer"]
 layout_mode = 2

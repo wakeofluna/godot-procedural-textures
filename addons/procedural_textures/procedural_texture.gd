@@ -25,7 +25,7 @@ class_name ProceduralTexture
 				if not node:
 					new_output = ''
 				else:
-					new_shader = design.get_shader_for_node(node)
+					new_shader = node.get_output_shader()
 			output = new_output
 			shader = new_shader
 

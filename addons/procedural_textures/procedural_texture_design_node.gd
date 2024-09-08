@@ -54,6 +54,52 @@ const property_name_output_name: StringName = 'output_name'
 
 var proc_shader: ProceduralShader
 var shader_params: Dictionary
+var shader_cache: WeakRef
+
+
+func add_connection_to(to_port: int, from_node: ProceduralTextureDesignNode, from_port: int) -> void:
+	assert(not connections.has(to_port), "cannot add connection to port without removing the connection first")
+	assert(not detect_circular_reference(from_node), "attempted to create a circular reference")
+	connections[to_port] = { "from_node": from_node, "from_port": from_port }
+	emit_changed()
+
+
+func detect_circular_reference(to_node: ProceduralTextureDesignNode) -> bool:
+	return _detect_circular_reference(to_node, self)
+
+
+static func _detect_circular_reference(current: ProceduralTextureDesignNode, target: ProceduralTextureDesignNode) -> bool:
+	if current == target:
+		return true
+	for x in current.connections:
+		if _detect_circular_reference(current.connections[x].from_node, target):
+			return true
+	return false
+
+
+func get_connection_to(to_port: int) -> Dictionary:
+	var conn = connections.get(to_port, {})
+	if conn.has("from_node") and not conn["from_node"]:
+		printerr("Invalid ProceduralTextureDesign connection, likely due to a load error or circular reference")
+		connections.erase(to_port)
+		return {}
+	return conn
+
+
+func remove_connection_to(to_port: int) -> void:
+	connections.erase(to_port)
+	emit_changed()
+
+
+func all_required_inputs_are_connected() -> bool:
+	match get_mode():
+		Mode.SHADER:
+			for idx in proc_shader.inputs.size():
+				if not connections.has(idx):
+					return false
+		Mode.OUTPUT:
+			return connections.has(0)
+	return true
 
 
 func get_mode() -> Mode:
@@ -84,6 +130,35 @@ func get_description() -> String:
 
 func get_output_type() -> int:
 	return proc_shader.output_type if proc_shader else typeof(output_value)
+
+
+func get_output_shader() -> Shader:
+	var mode := get_mode()
+	if mode == ProceduralTextureDesignNode.Mode.OUTPUT:
+		if connections.is_empty():
+			return null
+		else:
+			return connections[0].from_node.get_output_shader()
+
+	var shader: Shader = shader_cache.get_ref() if shader_cache else null
+	if not shader:
+		var new_code = ShaderBuilder.build_shader_code_for_node(self)
+		if not new_code.is_empty():
+			shader = Shader.new()
+			shader.code = new_code
+			shader_cache = weakref(shader)
+
+	return shader
+
+
+func refresh_output_shader() -> bool:
+	var shader: Shader = shader_cache.get_ref() if shader_cache else null
+	if shader:
+		var new_code = ShaderBuilder.build_shader_code_for_node(self)
+		if shader.code != new_code:
+			shader.code = new_code
+			return true
+	return false
 
 
 func _get_property_list() -> Array[Dictionary]:

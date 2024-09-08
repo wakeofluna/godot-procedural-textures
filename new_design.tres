@@ -1,42 +1,16 @@
-[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=11 format=3 uid="uid://bqx7li8bc0gm8"]
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=13 format=3 uid="uid://bqx7li8bc0gm8"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_ctxuh"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_a16ub"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="2_uh5td"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_ry8d2"]
-
-[sub_resource type="Resource" id="Resource_6tfvo"]
-script = ExtResource("1_ctxuh")
-graph_position = Vector2(-100, 160)
-connections = {}
-output_value = 4
-output_name = "XBricks"
-is_variable = true
-variable_name = "XBricks"
-default_value = 4
-
-[sub_resource type="Resource" id="Resource_7nmly"]
-script = ExtResource("1_ctxuh")
-graph_position = Vector2(-100, 260)
-connections = {}
-output_value = 0.23
-output_name = "Float"
-is_variable = false
-constant_value = 0.23
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss_scalar.gdshader" id="3_jw1b8"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="5_2i0rd"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_5pvmk"]
 
 [sub_resource type="Resource" id="Resource_6gkd1"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(160, 80)
-connections = {
-0: {
-"from_node": SubResource("Resource_6tfvo"),
-"from_port": 0
-},
-3: {
-"from_node": SubResource("Resource_7nmly"),
-"from_port": 0
-}
-}
+graph_position = Vector2(120, 120)
+connections = {}
 output_value = null
 output_name = ""
 is_variable = false
@@ -48,9 +22,9 @@ gap_x = 0.0
 gap_y = 0.0
 smoothing = 0.1
 
-[sub_resource type="Resource" id="Resource_ed03g"]
+[sub_resource type="Resource" id="Resource_6ugvl"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(420, 60)
+graph_position = Vector2(380, 100)
 connections = {
 0: {
 "from_node": SubResource("Resource_6gkd1"),
@@ -64,27 +38,43 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("3_ry8d2")
+shader = ExtResource("3_jw1b8")
 angle = 45
-strength = 8.0
+strength = 12.0
 
-[sub_resource type="Resource" id="Resource_22g32"]
+[sub_resource type="Resource" id="Resource_moxfq"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(640, 120)
+graph_position = Vector2(660, 160)
 connections = {
 0: {
-"from_node": SubResource("Resource_ed03g"),
+"from_node": SubResource("Resource_6ugvl"),
 "from_port": 0
 }
 }
 output_value = null
-output_name = "Embossed"
+output_name = ""
 is_variable = false
-output_name = "Embossed"
+shader = ExtResource("5_2i0rd")
+color_0 = Color(0, 0, 0, 1)
+color_1 = Color(0.770819, 0.199278, 0.16171, 1)
 
-[sub_resource type="Resource" id="Resource_dwah7"]
+[sub_resource type="Resource" id="Resource_nxvgl"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(420, 360)
+graph_position = Vector2(980, 180)
+connections = {
+0: {
+"from_node": SubResource("Resource_moxfq"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = "Color"
+is_variable = false
+output_name = "Color"
+
+[sub_resource type="Resource" id="Resource_d6tbn"]
+script = ExtResource("1_ctxuh")
+graph_position = Vector2(380, 400)
 connections = {
 0: {
 "from_node": SubResource("Resource_6gkd1"),
@@ -92,13 +82,28 @@ connections = {
 }
 }
 output_value = null
-output_name = "Bricks"
+output_name = ""
 is_variable = false
-output_name = "Bricks"
+shader = ExtResource("5_5pvmk")
+bump_strength = 8.0
+
+[sub_resource type="Resource" id="Resource_g6sfv"]
+script = ExtResource("1_ctxuh")
+graph_position = Vector2(660, 420)
+connections = {
+0: {
+"from_node": SubResource("Resource_d6tbn"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = "Normal Map"
+is_variable = false
+output_name = "Normal Map"
 
 [resource]
 script = ExtResource("2_uh5td")
-nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_ed03g"), SubResource("Resource_6gkd1"), SubResource("Resource_22g32"), SubResource("Resource_dwah7"), SubResource("Resource_6tfvo"), SubResource("Resource_7nmly")])
-editor_position = Vector2(-162.438, 74.2773)
-editor_zoom = 0.999999
+nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_6ugvl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv")])
+editor_position = Vector2(-18.0195, 78.2969)
+editor_zoom = 0.90909
 editor_minimap = false

@@ -16,4 +16,3 @@ shader/row_shift = 0.5
 shader/gap_x = 0.0
 shader/gap_y = 0.0
 shader/smoothing = 0.1
-shader/rotation = 0

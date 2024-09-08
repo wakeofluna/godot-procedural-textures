@@ -222,7 +222,7 @@ func _on_connection_request(from_node: StringName, from_port: int, to_node: Stri
 	var to := find_graphnode_by_name(to_node)
 	if not from or not to:
 		return
-	if to.detect_circular_reference(from.design_node):
+	if to.design_node.detect_circular_reference(from.design_node):
 		printerr("Attempted to create a circular reference, connection denied")
 		return
 
