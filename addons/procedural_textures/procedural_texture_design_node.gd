@@ -16,6 +16,12 @@ const property_name_default_value: StringName = 'default_value'
 const property_name_constant_value: StringName = 'constant_value'
 const property_name_output_name: StringName = 'output_name'
 
+const fallback_shader_code: String = '
+shader_type canvas_item;
+render_mode unshaded;
+void fragment() { COLOR = vec4(1.0, 0.0, 1.0, 1.0); }
+'
+
 
 @export_storage var graph_position: Vector2 = Vector2(0,0)
 @export_storage var connections: Dictionary = {}
@@ -133,13 +139,6 @@ func get_output_type() -> int:
 
 
 func get_output_shader() -> Shader:
-	var mode := get_mode()
-	if mode == ProceduralTextureDesignNode.Mode.OUTPUT:
-		if connections.is_empty():
-			return null
-		else:
-			return connections[0].from_node.get_output_shader()
-
 	var shader: Shader = shader_cache.get_ref() if shader_cache else null
 	if not shader:
 		var new_code = ShaderBuilder.build_shader_code_for_node(self)
@@ -155,6 +154,8 @@ func refresh_output_shader() -> bool:
 	var shader: Shader = shader_cache.get_ref() if shader_cache else null
 	if shader:
 		var new_code = ShaderBuilder.build_shader_code_for_node(self)
+		if new_code.is_empty():
+			new_code = fallback_shader_code
 		if shader.code != new_code:
 			shader.code = new_code
 			return true
