@@ -108,7 +108,22 @@ func _on_design_changed() -> void:
 		if control is CheckBox:
 			control.set_pressed_no_signal(value as bool)
 		elif control is Button:
-			control.text = value_str
+			if value is Color:
+				var tmp: Color = value
+				tmp.a = 1.0
+				var style := StyleBoxFlat.new()
+				style.bg_color = tmp
+				control.add_theme_stylebox_override('normal', style)
+				style = StyleBoxFlat.new()
+				style.bg_color = tmp
+				style.border_color = tmp.inverted()
+				style.border_width_top = 2
+				style.border_width_left = 2
+				style.border_width_bottom = 2
+				style.border_width_right = 2
+				control.add_theme_stylebox_override('hover', style)
+			else:
+				control.text = value_str
 		elif control is Label:
 			control.text = value_str
 
@@ -118,7 +133,11 @@ func _create_control_for_type(type: int) -> Control:
 		var control := CheckBox.new()
 		control.disabled = true
 		return control
-	return Button.new()
+	else:
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(25, 25)
+		return button
+
 
 
 func _build_slots_for_shader(shader: ProceduralShader) -> void:

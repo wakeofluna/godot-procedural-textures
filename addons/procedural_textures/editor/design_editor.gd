@@ -76,7 +76,7 @@ static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralSh
 	if _shader_resources.is_empty() or force_scan:
 		_shader_resources = []
 		_search_for_shaders(DirAccess.open("res://"), _shader_resources)
-		_shader_resources.sort_custom(func(a,b): return a.name > b.name)
+		_shader_resources.sort_custom(func(a,b): return a.name < b.name)
 		_shader_resources.make_read_only()
 	return _shader_resources
 

@@ -88,11 +88,13 @@ func _on_shader_updated():
 		if uniform.hint == PROPERTY_HINT_RESOURCE_TYPE:
 			var input = {}
 			input.name = uniform.name
-			input.type = TYPE_FLOAT
+			input.type = TYPE_VECTOR4
 			inputs.append(input)
 		else:
 			var deflt = RenderingServer.shader_get_parameter_default(shader_rid, uniform.name)
 			defaults[uniform.name] = deflt
+			if uniform.type == TYPE_VECTOR2 and uniform.hint == 0:
+				uniform.hint = PROPERTY_HINT_LINK
 			uniforms.append(uniform)
 
 	_determine_input_types()
