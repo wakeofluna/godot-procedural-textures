@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=13 format=3 uid="uid://bqx7li8bc0gm8"]
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=14 format=3 uid="uid://bqx7li8bc0gm8"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_ctxuh"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_a16ub"]
@@ -24,7 +24,7 @@ smoothing = 0.1
 
 [sub_resource type="Resource" id="Resource_6ugvl"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(380, 100)
+graph_position = Vector2(380, 300)
 connections = {
 0: {
 "from_node": SubResource("Resource_6gkd1"),
@@ -40,11 +40,11 @@ output_name = ""
 is_variable = false
 shader = ExtResource("3_jw1b8")
 angle = 45
-strength = 12.0
+strength = 4.0
 
 [sub_resource type="Resource" id="Resource_moxfq"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(660, 160)
+graph_position = Vector2(660, 360)
 connections = {
 0: {
 "from_node": SubResource("Resource_6ugvl"),
@@ -56,11 +56,11 @@ output_name = ""
 is_variable = false
 shader = ExtResource("5_2i0rd")
 color_0 = Color(0, 0, 0, 1)
-color_1 = Color(0.770819, 0.199278, 0.16171, 1)
+color_1 = Color(0.7793, 0.213345, 0.18809, 1)
 
 [sub_resource type="Resource" id="Resource_nxvgl"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(980, 180)
+graph_position = Vector2(880, 380)
 connections = {
 0: {
 "from_node": SubResource("Resource_moxfq"),
@@ -74,7 +74,7 @@ output_name = "Color"
 
 [sub_resource type="Resource" id="Resource_d6tbn"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(380, 400)
+graph_position = Vector2(380, 600)
 connections = {
 0: {
 "from_node": SubResource("Resource_6gkd1"),
@@ -89,7 +89,7 @@ bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_g6sfv"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(660, 420)
+graph_position = Vector2(660, 620)
 connections = {
 0: {
 "from_node": SubResource("Resource_d6tbn"),
@@ -101,9 +101,23 @@ output_name = "Normal Map"
 is_variable = false
 output_name = "Normal Map"
 
+[sub_resource type="Resource" id="Resource_pfdv2"]
+script = ExtResource("1_ctxuh")
+graph_position = Vector2(380, 120)
+connections = {
+0: {
+"from_node": SubResource("Resource_6gkd1"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = "Bump Map"
+is_variable = false
+output_name = "Bump Map"
+
 [resource]
 script = ExtResource("2_uh5td")
-nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_6ugvl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv")])
-editor_position = Vector2(-18.0195, 78.2969)
-editor_zoom = 0.90909
+nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_6ugvl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2")])
+editor_position = Vector2(-198.644, 48.0173)
+editor_zoom = 0.513157
 editor_minimap = false

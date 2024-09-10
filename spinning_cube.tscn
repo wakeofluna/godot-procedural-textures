@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://dt1twt275m8v0"]
+
+[ext_resource type="Material" uid="uid://dn8fbl4ljwv36" path="res://bricks_material.tres" id="1_untv5"]
+
+[sub_resource type="GDScript" id="GDScript_f33ea"]
+script/source = "extends Node3D
+
+
+@onready var cube = $CSGBox3D
+
+func _physics_process(delta: float) -> void:
+	cube.rotate_object_local(Vector3.UP, delta)
+"
+
+[node name="SpinningCube" type="Node3D"]
+script = SubResource("GDScript_f33ea")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+material = ExtResource("1_untv5")
+
+[node name="CameraFocus" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0, 0)
+visible = false
+
+[node name="CameraArm" type="Node3D" parent="CameraFocus"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8)
+
+[node name="Camera3D" type="Camera3D" parent="CameraFocus/CameraArm"]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.387111, 0.705077, 1.04073)
