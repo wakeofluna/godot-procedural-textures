@@ -17,6 +17,9 @@ class DesignPreviewControl extends VBoxContainer:
 		if all_connected and not rect.texture.shader:
 			rect.texture.shader = design_node.get_output_shader()
 
+		if rect.texture.shader:
+			for input_name in design_node.get_input_texture_names():
+				rect.texture.set_shader_parameter(input_name, design_node.get_default_input_texture_for(input_name))
 
 
 func _can_handle(object: Object) -> bool:

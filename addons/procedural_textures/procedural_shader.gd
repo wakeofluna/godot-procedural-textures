@@ -3,9 +3,6 @@ extends RefCounted
 class_name ProceduralShader
 
 
-signal changed
-
-
 var shader: Shader
 var name: String = ""
 var includes: Array = []
@@ -105,7 +102,6 @@ func _on_shader_updated():
 	uniforms.make_read_only()
 
 	notify_property_list_changed()
-	changed.emit()
 
 
 func _determine_input_types() -> void:

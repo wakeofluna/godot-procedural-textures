@@ -3,6 +3,9 @@ extends Resource
 class_name ProceduralTextureDesign
 
 
+signal input_texture_changed(String)
+
+
 @export_storage var nodes : Array[ProceduralTextureDesignNode] = []:
 	set(new_nodes):
 		for node in nodes:
@@ -50,6 +53,21 @@ func get_nodes() -> Array[ProceduralTextureDesignNode]:
 	return nodes
 
 
+func get_input_names() -> Array[String]:
+	var result: Array[String]
+	for node in nodes:
+		if node.get_mode() == ProceduralTextureDesignNode.Mode.INPUT:
+			result.append(node.output_name)
+	return result
+
+
+func get_default_input_texture_for(input_name: String) -> Texture2D:
+	for node in nodes:
+		if node.get_mode() == ProceduralTextureDesignNode.Mode.INPUT:
+			return node.input_texture
+	return null
+
+
 func get_output(name: String) -> ProceduralTextureDesignNode:
 	for node in nodes:
 		if node.get_mode() == ProceduralTextureDesignNode.Mode.OUTPUT and node.output_name == name:
@@ -75,6 +93,9 @@ func get_output_names() -> Array[String]:
 
 
 func _on_node_changed(node: ProceduralTextureDesignNode) -> void:
+	if node.get_mode() == ProceduralTextureDesignNode.Mode.INPUT:
+		input_texture_changed.emit(node.output_name)
+
 	node.refresh_output_shader()
 
 	var handled = []

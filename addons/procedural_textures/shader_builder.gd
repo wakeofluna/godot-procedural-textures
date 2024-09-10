@@ -154,40 +154,54 @@ static func _gather_shader_data_for_node(node: ProceduralTextureDesignNode, data
 			data.functions.append('\n'.join(write_func))
 			data.node_map[node] = node_func_name
 		ProceduralTextureDesignNode.Mode.CONSTANT:
-			var item_name = node.output_name + postfix
+			var item_name = _format_name(node.output_name) + postfix
 			data.variables.append('const {0} {1} = {2};'.format([shader_type_string[typeof(node.output_value)], item_name, _format_immediate(node.output_value)]))
 			data.node_map[node] = item_name
 		ProceduralTextureDesignNode.Mode.VARIABLE:
-			var item_name = node.output_name + postfix
+			var item_name = _format_name(node.output_name) + postfix
 			data.variables.append('uniform {0} {1} = {2};'.format([shader_type_string[typeof(node.output_value)], item_name, _format_immediate(node.output_value)]))
 			data.node_map[node] = item_name
+		ProceduralTextureDesignNode.Mode.INPUT:
+			var item_name = _format_name(node.output_name)
+			data.variables.append('uniform sampler2D {0};'.format([item_name]))
+			var node_func_name: String = 'texture_{0}'.format([item_name])
+			var write_func: Array[String] = []
+			write_func.append('vec4 {0}(vec2 uv) {'.format([node_func_name]))
+			write_func.append('\treturn texture({0}, uv);'.format([item_name]))
+			write_func.append('}')
+			data.functions.append('\n'.join(write_func))
+			data.node_map[node] = node_func_name
 
 	return true
 
 
 static func _convert_type_from_to_format(from: int, to: int) -> String:
+	from = from % 1000
+	to = to % 1000
+
 	if from == TYPE_INT and to == TYPE_FLOAT:
 		return 'float({0})'
 	if from == TYPE_FLOAT and to == TYPE_INT:
 		return 'int({0})'
-	if from == TYPE_FLOAT + 1000:
-		if to == TYPE_VECTOR2 + 1000:
+	if from == TYPE_FLOAT:
+		if to == TYPE_VECTOR2:
 			return 'vec2({0}, 1.0)'
-		if to == TYPE_VECTOR3 + 1000:
+		if to == TYPE_VECTOR3:
 			return 'vec3({0})'
-		if to == TYPE_VECTOR4 + 1000:
+		if to == TYPE_VECTOR4:
 			return 'vec4(vec3({0}), 1.0)'
-	if from == TYPE_VECTOR2 + 1000:
-		if to == TYPE_FLOAT + 1000:
+	if from == TYPE_VECTOR2:
+		if to == TYPE_FLOAT:
 			return '{0}.x'
-		if to == TYPE_VECTOR4 + 1000:
+		if to == TYPE_VECTOR4:
 			return '{0}.xxxy'
-	if from == TYPE_VECTOR3 + 1000:
-		if to == TYPE_VECTOR4 + 1000:
+	if from == TYPE_VECTOR3:
+		if to == TYPE_VECTOR4:
 			return 'vec4({0}, 1.0)'
-	if from == TYPE_VECTOR4 + 1000:
-		if to == TYPE_VECTOR3 + 1000:
+	if from == TYPE_VECTOR4:
+		if to == TYPE_VECTOR3:
 			return '{0}.xyz'
+
 	return '{0}'
 
 

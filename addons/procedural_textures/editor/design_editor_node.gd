@@ -78,6 +78,8 @@ func _on_design_property_list_changed() -> void:
 			_build_slot_for_value(true)
 		ProceduralTextureDesignNode.Mode.CONSTANT:
 			_build_slot_for_value(false)
+		ProceduralTextureDesignNode.Mode.INPUT:
+			_build_slot_for_input()
 		ProceduralTextureDesignNode.Mode.OUTPUT:
 			_build_slot_for_output()
 
@@ -126,6 +128,8 @@ func _on_design_changed() -> void:
 				control.text = value_str
 		elif control is Label:
 			control.text = value_str
+		elif control is TextureRect:
+			control.texture = value
 
 
 func _create_control_for_type(type: int) -> Control:
@@ -201,6 +205,23 @@ func _build_slot_for_value(is_variable: bool) -> void:
 	else:
 		label.text = design_node.output_name
 		property_controls[ProceduralTextureDesignNode.property_name_constant_value] = control
+
+
+func _build_slot_for_input() -> void:
+	var label := Label.new()
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add_child(label)
+	set_slot_enabled_right(0, true)
+	set_slot_color_right(0, get_config_color_for_type(TYPE_VECTOR4 + 1000))
+	set_slot_type_right(0, TYPE_VECTOR4 + 1000)
+	property_controls[ProceduralTextureDesignNode.property_name_output_name] = label
+
+	var rect := TextureRect.new()
+	rect.custom_minimum_size = Vector2(100, 100)
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	add_child(rect)
+	property_controls[ProceduralTextureDesignNode.property_name_input_texture] = rect
 
 
 func _build_slot_for_output() -> void:

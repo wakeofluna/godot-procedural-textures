@@ -16,6 +16,7 @@ var tmp_material : RID
 
 var shader_params: Dictionary
 var shader_defaults: Dictionary
+var sampler_defaults: Dictionary
 
 
 @export_custom(PROPERTY_HINT_LINK, "") var size : Vector2i = Vector2i(512, 512):
@@ -39,6 +40,26 @@ var shader_defaults: Dictionary
 	set(new_gmm):
 		if generate_mipmaps != new_gmm:
 			generate_mipmaps = new_gmm
+			_queue_update()
+
+
+func set_shader_parameter(parameter: String, value: Variant) -> void:
+	parameter = ShaderBuilder._format_name(parameter)
+	_set("shader/" + parameter, value)
+
+
+func set_default_sampler(parameter: String, texture: Texture2D) -> void:
+	parameter = ShaderBuilder._format_name(parameter)
+	if shader_defaults.has(parameter):
+		var old_value = sampler_defaults.get(parameter)
+		if old_value != texture:
+			if old_value:
+				old_value.changed.disconnect(_queue_update)
+			if texture:
+				sampler_defaults[parameter] = texture
+				texture.changed.connect(_queue_update)
+			else:
+				sampler_defaults.erase(parameter)
 			_queue_update()
 
 
@@ -152,7 +173,10 @@ func _property_get_revert(property: StringName) -> Variant:
 	if not property.begins_with("shader/"):
 		return null
 	property = property.substr(7)
-	return shader_defaults.get(property)
+	var value = shader_defaults.get(property)
+	if value is Texture2D:
+		return null
+	return value
 
 
 func _queue_update() -> void:
@@ -175,12 +199,16 @@ func _generate_image(img_size: Vector2i) -> Image:
 			tmp_viewport = RenderingServer.viewport_create()
 
 		RenderingServer.material_set_shader(tmp_material, shader.get_rid())
-		for uniform in shader_params.keys():
-			var value = shader_params[uniform]
-			if value is Texture:
+		for uniform in shader_defaults.keys():
+			if shader_params.has(uniform):
+				var value = shader_params[uniform]
+				if value is Texture:
+					RenderingServer.material_set_param(tmp_material, uniform, value.get_rid())
+				else:
+					RenderingServer.material_set_param(tmp_material, uniform, value)
+			elif sampler_defaults.has(uniform):
+				var value = sampler_defaults[uniform]
 				RenderingServer.material_set_param(tmp_material, uniform, value.get_rid())
-			else:
-				RenderingServer.material_set_param(tmp_material, uniform, value)
 		RenderingServer.canvas_item_set_parent(tmp_canvas_item, tmp_canvas)
 		RenderingServer.canvas_item_set_material(tmp_canvas_item, tmp_material)
 		RenderingServer.canvas_item_add_texture_rect(tmp_canvas_item, Rect2(0, 0, img_size.x, img_size.y), rid)

@@ -365,10 +365,16 @@ func create_graphnode_action_from_popup(popup_result: Variant, at_position: Vect
 			design_node.output_name = valid_types[data.type]
 			design_node.output_value = valid_defaults[data.type]
 			design_node.is_variable = false
+		ProceduralTextureDesignNode.Mode.INPUT:
+			undo_redo.create_action("Add Input Node", UndoRedo.MERGE_DISABLE, design, true)
+			design_node = ProceduralTextureDesignNode.new()
+			design_node.output_name = 'Unnamed input'
+			design_node.is_variable = true
 		ProceduralTextureDesignNode.Mode.OUTPUT:
 			undo_redo.create_action("Add Output Node", UndoRedo.MERGE_DISABLE, design, true)
 			design_node = ProceduralTextureDesignNode.new()
-			design_node.output_name = '(unnamed)'
+			design_node.output_name = 'Unnamed output'
+			design_node.is_variable = false
 
 	if design_node == null:
 		return null
@@ -479,6 +485,11 @@ func show_popup(position: Vector2, filter_input_type: int, filter_output_type: i
 				item = variables.create_child()
 				item.set_text(0, valid_types[typ])
 				item.set_metadata(0, { "mode": ProceduralTextureDesignNode.Mode.VARIABLE, "type": typ })
+
+	if (filter_input_type == -1 and filter_output_type == -1) or filter_output_type == TYPE_VECTOR4 + 1000 or is_valid_connection_type(TYPE_VECTOR4 + 1000, filter_output_type):
+		var item := root.create_child()
+		item.set_text(0, 'Texture Input')
+		item.set_metadata(0, { "mode": ProceduralTextureDesignNode.Mode.INPUT })
 
 	if (filter_input_type == -1 and filter_output_type == -1) or filter_input_type == TYPE_VECTOR4 + 1000 or is_valid_connection_type(filter_input_type, TYPE_VECTOR4 + 1000):
 		var item := root.create_child()
