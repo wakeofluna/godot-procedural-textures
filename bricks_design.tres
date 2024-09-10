@@ -60,7 +60,7 @@ color_1 = Color(0.7793, 0.213345, 0.18809, 1)
 
 [sub_resource type="Resource" id="Resource_nxvgl"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(880, 380)
+graph_position = Vector2(860, 400)
 connections = {
 0: {
 "from_node": SubResource("Resource_moxfq"),
@@ -118,6 +118,6 @@ output_name = "Bump Map"
 [resource]
 script = ExtResource("2_uh5td")
 nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_6ugvl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2")])
-editor_position = Vector2(-198.644, 47.223)
-editor_zoom = 0.513157
+editor_position = Vector2(-43.133, 139.552)
+editor_zoom = 0.909089
 editor_minimap = false

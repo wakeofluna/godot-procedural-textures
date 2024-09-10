@@ -92,21 +92,32 @@ func _init(undo_redo: EditorUndoRedoManager) -> void:
 	add_valid_connection_type(TYPE_FLOAT, TYPE_INT)
 	add_valid_connection_type(TYPE_INT, TYPE_FLOAT)
 
-	# Allow connecting float outputs to vector inputs
+	# Allow connecting conversions
+	# float = vec2.r
+	add_valid_connection_type(TYPE_VECTOR2 + 1000, TYPE_FLOAT + 1000)
+	# float = vec3.r
+	add_valid_connection_type(TYPE_VECTOR3 + 1000, TYPE_FLOAT + 1000)
+	# float = vec4.r
+	add_valid_connection_type(TYPE_VECTOR4 + 1000, TYPE_FLOAT + 1000)
 	# vec2 = (float, 1.0)
 	add_valid_connection_type(TYPE_FLOAT + 1000, TYPE_VECTOR2 + 1000)
+	# vec2 = (vec3.r, 1.0)
+	add_valid_connection_type(TYPE_VECTOR3 + 1000, TYPE_VECTOR2 + 1000)
+	# vec2 = (vec4.r, vec4.a)
+	add_valid_connection_type(TYPE_VECTOR4 + 1000, TYPE_VECTOR2 + 1000)
 	# vec3 = (float, float, float)
 	add_valid_connection_type(TYPE_FLOAT + 1000, TYPE_VECTOR3 + 1000)
+	# vec2 = (vec2.x, vec2.x, vec2.x)
+	add_valid_connection_type(TYPE_VECTOR2 + 1000, TYPE_VECTOR3 + 1000)
+	# vec3 = (vec4.x, vec4.y, vec4.z)
+	add_valid_connection_type(TYPE_VECTOR4 + 1000, TYPE_VECTOR3 + 1000)
 	# vec4 = (float, float, float, 1.0)
 	add_valid_connection_type(TYPE_FLOAT + 1000, TYPE_VECTOR4 + 1000)
-	# float = vec2.x
-	add_valid_connection_type(TYPE_VECTOR2 + 1000, TYPE_FLOAT + 1000)
 	# vec4 = (vec2.x, vec2.x, vec2.x, vec2.y)
 	add_valid_connection_type(TYPE_VECTOR2 + 1000, TYPE_VECTOR4 + 1000)
 	# vec4 = (vec3.x, vec3.y, vec3.z, 1.0)
 	add_valid_connection_type(TYPE_VECTOR3 + 1000, TYPE_VECTOR4 + 1000)
-	# vec3 = (vec4.x, vec4.y, vec4.z)
-	add_valid_connection_type(TYPE_VECTOR4 + 1000, TYPE_VECTOR3 + 1000)
+
 
 
 func _notification(what: int) -> void:

@@ -14,7 +14,7 @@ float sample_bump_map(vec2 uv) {
 }
 
 // process function (required); takes the current UV followed by all uniforms in order
-vec4 process(vec2 uv, float p_bump_strength) {
+vec3 process(vec2 uv, float p_bump_strength) {
 	const vec2 uv_offset = vec2(1.0 / 1024.0, 1.0 / 1024.0);
 
 	float f_here = sample_bump_map(uv);
@@ -26,10 +26,10 @@ vec4 process(vec2 uv, float p_bump_strength) {
 	vec3 normal = cross(across, up);
 	normal = normalize(normal);
 
-	return vec4(fma(normal, vec3(0.5), vec3(0.5)), 1.0);
+	return fma(normal, vec3(0.5), vec3(0.5));
 }
 
 // fragment function; for demo purposes
 void fragment() {
-	COLOR = process(UV, bump_strength);
+	COLOR = vec4(process(UV, bump_strength), 1.0);
 }

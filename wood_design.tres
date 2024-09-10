@@ -1,8 +1,7 @@
-[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=18 format=3 uid="uid://hqqmpg7rss3a"]
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=16 format=3 uid="uid://hqqmpg7rss3a"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_h874o"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="2_ctgmg"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_luminance.gdshader" id="2_o7bl5"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_transform_scalar.gdshader" id="3_b52f5"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_seamless_scalar.gdshader" id="4_itqm4"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_k7yyn"]
@@ -24,7 +23,7 @@ input_texture = SubResource("NoiseTexture2D_m1nvx")
 input_name = "Noise"
 input_texture = SubResource("NoiseTexture2D_m1nvx")
 
-[sub_resource type="Resource" id="Resource_if8ft"]
+[sub_resource type="Resource" id="Resource_2dlbr"]
 script = ExtResource("1_h874o")
 graph_position = Vector2(200, 120)
 connections = {
@@ -36,28 +35,14 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("2_o7bl5")
-
-[sub_resource type="Resource" id="Resource_2dlbr"]
-script = ExtResource("1_h874o")
-graph_position = Vector2(420, 160)
-connections = {
-0: {
-"from_node": SubResource("Resource_if8ft"),
-"from_port": 0
-}
-}
-output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("3_b52f5")
 scale = Vector2(1, 20)
-rotate = 0
+rotate = 33
 translate = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_k7eoo"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(740, 180)
+graph_position = Vector2(520, 160)
 connections = {
 0: {
 "from_node": SubResource("Resource_2dlbr"),
@@ -68,12 +53,11 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("4_itqm4")
-blend_skirt = 0.2
-tile = true
+blend_skirt = 0.1
 
 [sub_resource type="Resource" id="Resource_cjumb"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(980, 480)
+graph_position = Vector2(800, 440)
 connections = {
 0: {
 "from_node": SubResource("Resource_k7eoo"),
@@ -84,11 +68,11 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("5_k7yyn")
-bump_strength = 8.0
+bump_strength = 32.0
 
 [sub_resource type="Resource" id="Resource_ih8io"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(1260, 500)
+graph_position = Vector2(1100, 480)
 connections = {
 0: {
 "from_node": SubResource("Resource_cjumb"),
@@ -102,7 +86,7 @@ output_name = "Normal Map"
 
 [sub_resource type="Resource" id="Resource_n8jqi"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(980, 220)
+graph_position = Vector2(800, 180)
 connections = {
 0: {
 "from_node": SubResource("Resource_k7eoo"),
@@ -118,7 +102,7 @@ color_1 = Color(0.692744, 0.305321, 0.108668, 1)
 
 [sub_resource type="Resource" id="Resource_rbmuq"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(1260, 240)
+graph_position = Vector2(1100, 220)
 connections = {
 0: {
 "from_node": SubResource("Resource_n8jqi"),
@@ -132,7 +116,7 @@ output_name = "Albedo"
 
 [resource]
 script = ExtResource("2_ctgmg")
-nodes = Array[ExtResource("1_h874o")]([SubResource("Resource_hxgm3"), SubResource("Resource_if8ft"), SubResource("Resource_2dlbr"), SubResource("Resource_k7eoo"), SubResource("Resource_cjumb"), SubResource("Resource_ih8io"), SubResource("Resource_n8jqi"), SubResource("Resource_rbmuq")])
-editor_position = Vector2(8.96689, 61.2067)
+nodes = Array[ExtResource("1_h874o")]([SubResource("Resource_hxgm3"), SubResource("Resource_2dlbr"), SubResource("Resource_k7eoo"), SubResource("Resource_cjumb"), SubResource("Resource_ih8io"), SubResource("Resource_n8jqi"), SubResource("Resource_rbmuq")])
+editor_position = Vector2(3.79688, 0)
 editor_zoom = 0.564474
 editor_minimap = false

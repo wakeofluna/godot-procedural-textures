@@ -193,12 +193,22 @@ static func _convert_type_from_to_format(from: int, to: int) -> String:
 	if from == TYPE_VECTOR2:
 		if to == TYPE_FLOAT:
 			return '{0}.x'
+		if to == TYPE_VECTOR3:
+			return '{0}.xxx'
 		if to == TYPE_VECTOR4:
 			return '{0}.xxxy'
 	if from == TYPE_VECTOR3:
+		if to == TYPE_FLOAT:
+			return '{0}.x'
+		if to == TYPE_VECTOR2:
+			return 'vec2({0}.x, 1.0)'
 		if to == TYPE_VECTOR4:
 			return 'vec4({0}, 1.0)'
 	if from == TYPE_VECTOR4:
+		if to == TYPE_FLOAT:
+			return '{0}.x'
+		if to == TYPE_VECTOR2:
+			return '{0}.xw'
 		if to == TYPE_VECTOR3:
 			return '{0}.xyz'
 

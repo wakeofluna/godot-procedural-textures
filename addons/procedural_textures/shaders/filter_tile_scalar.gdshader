@@ -12,12 +12,12 @@ uniform bool mirror_x = false;
 uniform bool mirror_y = false;
 
 // indirection functions (required)
-vec2 sample_input(vec2 uv) {
-	return texture(input, uv).ra;
+float sample_input(vec2 uv) {
+	return texture(input, uv).r;
 }
 
 // process function; takes the current UV followed by all uniforms in order
-vec2 process(vec2 uv, int p_tile_x, int p_tile_y, bool p_mirror_x, bool p_mirror_y) {
+float process(vec2 uv, int p_tile_x, int p_tile_y, bool p_mirror_x, bool p_mirror_y) {
 	uv.x *= float(p_tile_x);
 	uv.y *= float(p_tile_y);
 
@@ -46,6 +46,6 @@ vec2 process(vec2 uv, int p_tile_x, int p_tile_y, bool p_mirror_x, bool p_mirror
 
 // fragment function; for demo purposes
 void fragment() {
-	vec2 output = process(UV, tile_x, tile_y, mirror_x, mirror_y);
-	COLOR = output.xxxy;
+	float output = process(UV, tile_x, tile_y, mirror_x, mirror_y);
+	COLOR = vec4(vec3(output), 1.0);
 }

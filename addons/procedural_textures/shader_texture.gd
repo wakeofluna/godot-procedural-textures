@@ -36,7 +36,7 @@ var sampler_defaults: Dictionary
 				shader.changed.connect(_shader_changed)
 			_shader_changed()
 
-@export var generate_mipmaps: bool = false:
+@export var generate_mipmaps: bool = true:
 	set(new_gmm):
 		if generate_mipmaps != new_gmm:
 			generate_mipmaps = new_gmm

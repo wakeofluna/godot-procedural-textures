@@ -11,12 +11,12 @@ uniform int rotate : hint_range(0, 359) = 0;
 uniform vec2 translate = vec2(0.0, 0.0);
 
 // indirection functions (required)
-vec2 sample_input(vec2 uv) {
-	return texture(input, uv).ra;
+float sample_input(vec2 uv) {
+	return texture(input, uv).r;
 }
 
 // process function; takes the current UV followed by all uniforms in order
-vec2 process(vec2 uv, vec2 p_scale, int p_rotate, vec2 p_translate) {
+float process(vec2 uv, vec2 p_scale, int p_rotate, vec2 p_translate) {
 	uv += p_translate;
 
 	if (p_rotate != 0) {
@@ -36,6 +36,6 @@ vec2 process(vec2 uv, vec2 p_scale, int p_rotate, vec2 p_translate) {
 
 // fragment function; for demo purposes
 void fragment() {
-	vec2 output = process(UV, scale, rotate, translate);
-	COLOR = output.xxxy;
+	float output = process(UV, scale, rotate, translate);
+	COLOR = vec4(vec3(output), 1.0);
 }

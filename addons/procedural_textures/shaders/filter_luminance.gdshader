@@ -7,20 +7,20 @@ render_mode unshaded;
 uniform sampler2D input;
 
 // indirection functions (required)
-vec4 sample_input(vec2 uv) {
-	return texture(input, uv);
+vec3 sample_input(vec2 uv) {
+	return texture(input, uv).rgb;
 }
 
 // process function; takes the current UV followed by all uniforms in order
-vec2 process(vec2 uv) {
+float process(vec2 uv) {
 	const vec3 luminance_factor = vec3(0.2126, 0.7152, 0.0722);
-	vec4 color = sample_input(uv);
+	vec3 color = sample_input(uv);
 	vec3 tmp = color.xyz * luminance_factor;
-	return vec2(tmp.x + tmp.y + tmp.z, color.a);
+	return tmp.x + tmp.y + tmp.z;
 }
 
 // fragment function; for demo purposes
 void fragment() {
-	vec2 luminance = process(UV);
-	COLOR = luminance.xxxy;
+	float luminance = process(UV);
+	COLOR = vec4(luminance, luminance, luminance, 1.0);
 }

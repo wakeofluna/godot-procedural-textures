@@ -6,7 +6,6 @@ render_mode unshaded;
 // samplers
 uniform sampler2D input;
 uniform float blend_skirt : hint_range(0.0, 0.5, 0.01) = 0.1;
-uniform bool tile = false;
 
 // indirection functions (required)
 vec4 sample_input(vec2 uv) {
@@ -14,7 +13,7 @@ vec4 sample_input(vec2 uv) {
 }
 
 // process function; takes the current UV followed by all uniforms in order
-vec4 process(vec2 uv, float p_blend_skirt, bool p_tile) {
+vec4 process(vec2 uv, float p_blend_skirt) {
 	uv = fract(uv);
 
 	float skirt_strength = 0.5 / p_blend_skirt;
@@ -24,11 +23,11 @@ vec4 process(vec2 uv, float p_blend_skirt, bool p_tile) {
 	bool do_x;
 	bool do_y;
 	if (uv.x < p_blend_skirt) {
-		other.x = -uv.x;
+		other.x = uv.x + 1.0;
 		strength.x = fma(uv.x, skirt_strength, 0.5);
 		do_x = true;
 	} else if (1.0 - uv.x < p_blend_skirt) {
-		other.x = 2.0 - uv.x;
+		other.x = uv.x - 1.0;
 		strength.x = fma(1.0 - uv.x, skirt_strength, 0.5);
 		do_x = true;
 	} else {
@@ -36,19 +35,15 @@ vec4 process(vec2 uv, float p_blend_skirt, bool p_tile) {
 	}
 
 	if (uv.y < p_blend_skirt) {
-		other.y = -uv.y;
+		other.y = uv.y + 1.0;
 		strength.y = fma(uv.y, skirt_strength, 0.5);
 		do_y = true;
 	} else if (1.0 - uv.y < p_blend_skirt) {
-		other.y = 2.0 - uv.y;
+		other.y = uv.y - 1.0;
 		strength.y = fma(1.0 - uv.y, skirt_strength, 0.5);
 		do_y = true;
 	} else {
 		do_y = false;
-	}
-
-	if (p_tile) {
-		other = fract(other);
 	}
 
 	vec4 here = sample_input(uv);
@@ -72,5 +67,5 @@ vec4 process(vec2 uv, float p_blend_skirt, bool p_tile) {
 
 // fragment function; for demo purposes
 void fragment() {
-	COLOR = process(UV, blend_skirt, tile);
+	COLOR = process(UV, blend_skirt);
 }

@@ -90,28 +90,28 @@ vec3 hsv_to_rgb(vec3 p_hsv) {
 }
 
 // indirection functions (required)
-vec4 sample_input(vec2 uv) {
-	return texture(input, uv);
+vec3 sample_input(vec2 uv) {
+	return texture(input, uv).rgb;
 }
 
 // process function (required); takes the current UV followed by all uniforms in order
-vec4 process(vec2 uv, float p_brightness, float p_contrast, float p_hue_shift, float p_desaturate, float p_gamma) {
-	vec4 v_color = sample_input(uv);
-	v_color.rgb -= 0.5f;
-	v_color.rgb = fma(v_color.rgb, vec3(p_contrast), vec3(p_brightness + 0.5));
-	v_color.rgb = clamp(v_color.rgb, 0.0, 1.0);
+vec3 process(vec2 uv, float p_brightness, float p_contrast, float p_hue_shift, float p_desaturate, float p_gamma) {
+	vec3 v_color = sample_input(uv);
+	v_color -= 0.5f;
+	v_color = fma(v_color, vec3(p_contrast), vec3(p_brightness + 0.5));
+	v_color = clamp(v_color, 0.0, 1.0);
 
-	vec3 hsv = rgb_to_hsv(v_color.rgb);
+	vec3 hsv = rgb_to_hsv(v_color);
 	hsv.x = fract(hsv.x + p_hue_shift / 360.0);
 	hsv.y *= 1.0 - p_desaturate;
-	v_color.rgb = hsv_to_rgb(hsv);
+	v_color = hsv_to_rgb(hsv);
 
-	v_color.rgb = pow(v_color.rgb, vec3(p_gamma));
+	v_color = pow(v_color, vec3(p_gamma));
 
 	return v_color;
 }
 
 // fragment function; for demo purposes
 void fragment() {
-	COLOR = process(UV, brightness, contrast, hue_shift, desaturate, gamma);
+	COLOR = vec4(process(UV, brightness, contrast, hue_shift, desaturate, gamma), 1.0);
 }

@@ -7,17 +7,17 @@ render_mode unshaded;
 uniform sampler2D input;
 
 // indirection functions (required)
-vec4 sample_input(vec2 uv) {
-	return texture(input, uv);
+vec3 sample_input(vec2 uv) {
+	return texture(input, uv).rgb;
 }
 
 // process function; takes the current UV followed by all uniforms in order
-vec4 process(vec2 uv) {
-	vec4 value = sample_input(uv);
-	return vec4(1.0 - value.rgb, value.a);
+vec3 process(vec2 uv) {
+	vec3 value = sample_input(uv);
+	return 1.0 - value;
 }
 
 // fragment function; for demo purposes
 void fragment() {
-	COLOR = process(UV);
+	COLOR = vec4(process(UV), 1.0);
 }
