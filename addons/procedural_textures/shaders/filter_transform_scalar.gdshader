@@ -29,7 +29,7 @@ vec2 process(vec2 uv, vec2 p_scale, int p_rotate, vec2 p_translate) {
 		uv = new_uv + 0.5;
 	}
 
-	uv *= p_scale;
+	uv /= p_scale;
 
 	return sample_input(uv);
 }

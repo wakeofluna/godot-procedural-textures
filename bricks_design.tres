@@ -68,9 +68,9 @@ connections = {
 }
 }
 output_value = null
-output_name = "Color"
+output_name = "Albedo"
 is_variable = false
-output_name = "Color"
+output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_d6tbn"]
 script = ExtResource("1_ctxuh")
@@ -118,6 +118,6 @@ output_name = "Bump Map"
 [resource]
 script = ExtResource("2_uh5td")
 nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_6ugvl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2")])
-editor_position = Vector2(-198.644, 48.0173)
+editor_position = Vector2(-198.644, 47.223)
 editor_zoom = 0.513157
 editor_minimap = false

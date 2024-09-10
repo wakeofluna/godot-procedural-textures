@@ -8,7 +8,7 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("2_enhtr")
 design = ExtResource("1_frs1i")
-output = "Color"
+output = "Albedo"
 size = Vector2i(512, 512)
 generate_mipmaps = false
 
