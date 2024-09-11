@@ -1,0 +1,40 @@
+[gd_resource type="StandardMaterial3D" load_steps=6 format=3 uid="uid://dlygcldva5fla"]
+
+[ext_resource type="Resource" uid="uid://bs0nkmck03kri" path="res://cobblestone_design.tres" id="1_63xfm"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="2_s0gbt"]
+
+[sub_resource type="Texture2D" id="Texture2D_dik0x"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_s0gbt")
+design = ExtResource("1_63xfm")
+output = "Albedo"
+size = Vector2i(512, 512)
+generate_mipmaps = true
+
+[sub_resource type="Texture2D" id="Texture2D_0amre"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_s0gbt")
+design = ExtResource("1_63xfm")
+output = "Bump Map"
+size = Vector2i(512, 512)
+generate_mipmaps = true
+
+[sub_resource type="Texture2D" id="Texture2D_5jyq3"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_s0gbt")
+design = ExtResource("1_63xfm")
+output = "Normal Map"
+size = Vector2i(512, 512)
+generate_mipmaps = true
+
+[resource]
+albedo_texture = SubResource("Texture2D_dik0x")
+normal_enabled = true
+normal_texture = SubResource("Texture2D_5jyq3")
+heightmap_enabled = true
+heightmap_scale = 10.0
+heightmap_texture = SubResource("Texture2D_0amre")
+uv1_scale = Vector3(2, 2, 2)

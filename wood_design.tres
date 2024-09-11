@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=16 format=3 uid="uid://hqqmpg7rss3a"]
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=32 format=3 uid="uid://hqqmpg7rss3a"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_h874o"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="2_ctgmg"]
@@ -6,29 +6,45 @@
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_seamless_scalar.gdshader" id="4_itqm4"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_k7yyn"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="6_p7jld"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_gradient_circle.gdshader" id="6_swwqu"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_distort_scalar.gdshader" id="7_pmliv"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_math.gdshader" id="8_2otee"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_alpha_set_scalar.gdshader" id="8_g7mue"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_stamp_scalar.gdshader" id="9_1c3fo"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_layering_scalar.gdshader" id="9_pxx4q"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_layering.gdshader" id="10_7t1fw"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_dlyln"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m1nvx"]
-noise = SubResource("FastNoiseLite_dlyln")
-
-[sub_resource type="Resource" id="Resource_hxgm3"]
+[sub_resource type="Resource" id="Resource_nfaoi"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(-20, 120)
+graph_position = Vector2(-600, 100)
 connections = {}
 output_value = null
-output_name = "Noise"
-is_variable = true
-input_texture = SubResource("NoiseTexture2D_m1nvx")
-input_name = "Noise"
-input_texture = SubResource("NoiseTexture2D_m1nvx")
+output_name = ""
+is_variable = false
+shader = ExtResource("6_swwqu")
 
-[sub_resource type="Resource" id="Resource_2dlbr"]
+[sub_resource type="Resource" id="Resource_pgied"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(200, 120)
+graph_position = Vector2(-380, 80)
 connections = {
 0: {
-"from_node": SubResource("Resource_hxgm3"),
+"from_node": SubResource("Resource_nfaoi"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("7_pmliv")
+zebra_scale = 0.14
+zebra_amp = 6.452
+
+[sub_resource type="Resource" id="Resource_p44y6"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(-100, 100)
+connections = {
+0: {
+"from_node": SubResource("Resource_pgied"),
 "from_port": 0
 }
 }
@@ -36,16 +52,16 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_b52f5")
-scale = Vector2(1, 20)
-rotate = 33
-translate = Vector2(0, 0)
+scale = Vector2(1.5, 20)
+rotate = 0
+translate = Vector2(-0.05, 9)
 
 [sub_resource type="Resource" id="Resource_k7eoo"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(520, 160)
+graph_position = Vector2(220, 120)
 connections = {
 0: {
-"from_node": SubResource("Resource_2dlbr"),
+"from_node": SubResource("Resource_p44y6"),
 "from_port": 0
 }
 }
@@ -53,14 +69,128 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("4_itqm4")
-blend_skirt = 0.1
+blend_skirt = 0.2
+input_is_tiled = true
 
-[sub_resource type="Resource" id="Resource_cjumb"]
+[sub_resource type="Resource" id="Resource_vwcs3"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(800, 440)
+graph_position = Vector2(-300, 420)
+connections = {}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("6_swwqu")
+
+[sub_resource type="Resource" id="Resource_1i343"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(-60, 420)
+connections = {
+0: {
+"from_node": SubResource("Resource_vwcs3"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("7_pmliv")
+zebra_scale = 0.833
+zebra_amp = 3.0
+
+[sub_resource type="Resource" id="Resource_3ghjc"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(260, 460)
+connections = {
+0: {
+"from_node": SubResource("Resource_1i343"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("4_itqm4")
+blend_skirt = 0.2
+input_is_tiled = false
+
+[sub_resource type="Resource" id="Resource_bo8j2"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(520, 460)
+connections = {
+0: {
+"from_node": SubResource("Resource_3ghjc"),
+"from_port": 0
+},
+1: {
+"from_node": SubResource("Resource_3ghjc"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("8_g7mue")
+
+[sub_resource type="Resource" id="Resource_xeqkk"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(760, 520)
+connections = {
+0: {
+"from_node": SubResource("Resource_bo8j2"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("9_1c3fo")
+nr_of_stamps = 9
+stamp_size = 0.85
+jitter_seed = 0
+jitter_strength = 0.95
+
+[sub_resource type="Resource" id="Resource_csgpd"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(1180, 560)
+connections = {
+0: {
+"from_node": SubResource("Resource_xeqkk"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("8_2otee")
+multiply = 1.0
+add = 0.0
+power = 2.0
+smooth_step = true
+
+[sub_resource type="Resource" id="Resource_bn2uo"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(1580, 420)
 connections = {
 0: {
 "from_node": SubResource("Resource_k7eoo"),
+"from_port": 0
+},
+1: {
+"from_node": SubResource("Resource_csgpd"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("9_pxx4q")
+
+[sub_resource type="Resource" id="Resource_cjumb"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(1840, 640)
+connections = {
+0: {
+"from_node": SubResource("Resource_bn2uo"),
 "from_port": 0
 }
 }
@@ -68,11 +198,11 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("5_k7yyn")
-bump_strength = 32.0
+bump_strength = 12.0
 
 [sub_resource type="Resource" id="Resource_ih8io"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(1100, 480)
+graph_position = Vector2(2120, 660)
 connections = {
 0: {
 "from_node": SubResource("Resource_cjumb"),
@@ -86,7 +216,7 @@ output_name = "Normal Map"
 
 [sub_resource type="Resource" id="Resource_n8jqi"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(800, 180)
+graph_position = Vector2(520, 240)
 connections = {
 0: {
 "from_node": SubResource("Resource_k7eoo"),
@@ -100,12 +230,46 @@ shader = ExtResource("6_p7jld")
 color_0 = Color(0, 0, 0, 1)
 color_1 = Color(0.692744, 0.305321, 0.108668, 1)
 
-[sub_resource type="Resource" id="Resource_rbmuq"]
+[sub_resource type="Resource" id="Resource_vpnvr"]
 script = ExtResource("1_h874o")
-graph_position = Vector2(1100, 220)
+graph_position = Vector2(1060, 880)
+connections = {
+0: {
+"from_node": SubResource("Resource_xeqkk"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("6_p7jld")
+color_0 = Color(0, 0, 0, 1)
+color_1 = Color(0.364706, 0.0941176, 0.00784314, 0.478431)
+
+[sub_resource type="Resource" id="Resource_mxtjy"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(1320, 880)
 connections = {
 0: {
 "from_node": SubResource("Resource_n8jqi"),
+"from_port": 0
+},
+1: {
+"from_node": SubResource("Resource_vpnvr"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("10_7t1fw")
+
+[sub_resource type="Resource" id="Resource_rbmuq"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(1580, 940)
+connections = {
+0: {
+"from_node": SubResource("Resource_mxtjy"),
 "from_port": 0
 }
 }
@@ -114,9 +278,23 @@ output_name = "Albedo"
 is_variable = false
 output_name = "Albedo"
 
+[sub_resource type="Resource" id="Resource_j418b"]
+script = ExtResource("1_h874o")
+graph_position = Vector2(2000, 360)
+connections = {
+0: {
+"from_node": SubResource("Resource_bn2uo"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = "Bump Map"
+is_variable = false
+output_name = "Bump Map"
+
 [resource]
 script = ExtResource("2_ctgmg")
-nodes = Array[ExtResource("1_h874o")]([SubResource("Resource_hxgm3"), SubResource("Resource_2dlbr"), SubResource("Resource_k7eoo"), SubResource("Resource_cjumb"), SubResource("Resource_ih8io"), SubResource("Resource_n8jqi"), SubResource("Resource_rbmuq")])
-editor_position = Vector2(3.79688, 0)
-editor_zoom = 0.564474
+nodes = Array[ExtResource("1_h874o")]([SubResource("Resource_k7eoo"), SubResource("Resource_cjumb"), SubResource("Resource_ih8io"), SubResource("Resource_n8jqi"), SubResource("Resource_rbmuq"), SubResource("Resource_vwcs3"), SubResource("Resource_1i343"), SubResource("Resource_3ghjc"), SubResource("Resource_bo8j2"), SubResource("Resource_xeqkk"), SubResource("Resource_vpnvr"), SubResource("Resource_mxtjy"), SubResource("Resource_bn2uo"), SubResource("Resource_csgpd"), SubResource("Resource_nfaoi"), SubResource("Resource_pgied"), SubResource("Resource_p44y6"), SubResource("Resource_j418b")])
+editor_position = Vector2(452.059, 224.5)
+editor_zoom = 0.620921
 editor_minimap = false

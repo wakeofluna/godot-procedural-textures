@@ -30,6 +30,7 @@ static func build_shader_code_for_node(node: ProceduralTextureDesignNode) -> Str
 	data.variables = []
 	data.structs = []
 	data.functions = []
+	data.function_names = []
 	data.procedural_shader_map = {}
 	data.node_map = {}
 
@@ -40,6 +41,11 @@ static func build_shader_code_for_node(node: ProceduralTextureDesignNode) -> Str
 
 	arr.append('shader_type canvas_item;')
 	arr.append('render_mode unshaded;')
+
+	if not data.includes.is_empty():
+		arr.append('')
+		for x in data.includes:
+			arr.append('#include "{0}"'.format([x]))
 
 	if not data.variables.is_empty():
 		arr.append('')
@@ -114,11 +120,13 @@ static func _gather_shader_data_for_node(node: ProceduralTextureDesignNode, data
 					do_functions = shader.functions
 
 				for x in do_functions:
+					if x.name in data.function_names:
+						continue
 					var return_type = ShaderParser.reconstruct_string(x.return_type)
-					var func_name = x.name
 					var func_params = ShaderParser.reconstruct_string(x.parameters)
 					var func_def = ShaderParser.reconstruct_string(x.definition)
-					data.functions.append('{0} {1}({2}) {{3}}'.format([return_type, func_name, func_params, func_def]))
+					data.functions.append('{0} {1}({2}) {{3}}'.format([return_type, x.name, func_params, func_def]))
+					data.function_names.append(x.name)
 
 				data.procedural_shader_map[shader] = do_proc_func.get('name', '')
 

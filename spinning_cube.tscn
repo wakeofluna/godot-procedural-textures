@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dt1twt275m8v0"]
 
-[ext_resource type="Material" uid="uid://c3amxj6pgth7q" path="res://wood_material.tres" id="1_rau4p"]
+[ext_resource type="Material" uid="uid://dlygcldva5fla" path="res://cobblestone_material.tres" id="1_xyoba"]
 
 [sub_resource type="GDScript" id="GDScript_f33ea"]
 script/source = "extends Node3D
@@ -16,7 +16,7 @@ func _physics_process(delta: float) -> void:
 script = SubResource("GDScript_f33ea")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-material = ExtResource("1_rau4p")
+material = ExtResource("1_xyoba")
 
 [node name="CameraFocus" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0, 0)

@@ -118,6 +118,6 @@ output_name = "Bump Map"
 [resource]
 script = ExtResource("2_uh5td")
 nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_6ugvl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2")])
-editor_position = Vector2(-43.133, 139.552)
-editor_zoom = 0.909089
+editor_position = Vector2(-143.062, -29.5273)
+editor_zoom = 0.424098
 editor_minimap = false
