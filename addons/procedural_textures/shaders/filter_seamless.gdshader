@@ -6,6 +6,7 @@ render_mode unshaded;
 // samplers
 uniform sampler2D input;
 uniform float blend_skirt : hint_range(0.0, 0.5, 0.01) = 0.1;
+uniform bool input_is_tiled = false;
 
 // indirection functions (required)
 vec4 sample_input(vec2 uv) {
@@ -13,9 +14,9 @@ vec4 sample_input(vec2 uv) {
 }
 
 // process function; takes the current UV followed by all uniforms in order
-vec4 process(vec2 uv, float p_blend_skirt) {
+vec4 process(vec2 uv, float p_blend_skirt, bool p_input_is_tiled) {
 	uv = fract(uv);
-
+	p_blend_skirt = max(p_blend_skirt, 0.00001);
 	float skirt_strength = 0.5 / p_blend_skirt;
 
 	vec2 other;
@@ -46,6 +47,12 @@ vec4 process(vec2 uv, float p_blend_skirt) {
 		do_y = false;
 	}
 
+	if (p_input_is_tiled) {
+		float stretch = 1.0 / fma(p_blend_skirt, 2.0, 1.0);
+		uv = fma(uv - 0.5, vec2(stretch), vec2(0.5));
+		other = fma(other - 0.5, vec2(stretch), vec2(0.5));
+	}
+
 	vec4 here = sample_input(uv);
 	if (do_x && do_y) {
 		vec4 x2 = sample_input(vec2(other.x, uv.y));
@@ -67,5 +74,5 @@ vec4 process(vec2 uv, float p_blend_skirt) {
 
 // fragment function; for demo purposes
 void fragment() {
-	COLOR = process(UV, blend_skirt);
+	COLOR = process(UV, blend_skirt, input_is_tiled);
 }

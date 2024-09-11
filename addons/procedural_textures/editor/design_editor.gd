@@ -390,7 +390,7 @@ func create_graphnode_action_from_popup(popup_result: Variant, at_position: Vect
 	if design_node == null:
 		return null
 
-	design_node.graph_position = snap_grid_coordinate(at_position + scroll_offset)
+	design_node.graph_position = snap_grid_coordinate((at_position + scroll_offset) / zoom)
 
 	var graph_node = create_graphnode_from_data(design_node)
 	undo_redo.add_do_reference(graph_node)
