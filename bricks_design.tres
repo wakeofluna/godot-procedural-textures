@@ -1,9 +1,8 @@
-[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=14 format=3 uid="uid://bqx7li8bc0gm8"]
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=12 format=3 uid="uid://bqx7li8bc0gm8"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_ctxuh"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_a16ub"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="2_uh5td"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss_scalar.gdshader" id="3_jw1b8"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="5_2i0rd"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_5pvmk"]
 
@@ -22,32 +21,12 @@ gap_x = 0.0
 gap_y = 0.0
 smoothing = 0.1
 
-[sub_resource type="Resource" id="Resource_6ugvl"]
-script = ExtResource("1_ctxuh")
-graph_position = Vector2(380, 300)
-connections = {
-0: {
-"from_node": SubResource("Resource_6gkd1"),
-"from_port": 0
-},
-1: {
-"from_node": SubResource("Resource_6gkd1"),
-"from_port": 0
-}
-}
-output_value = null
-output_name = ""
-is_variable = false
-shader = ExtResource("3_jw1b8")
-angle = 45
-strength = 4.0
-
 [sub_resource type="Resource" id="Resource_moxfq"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(660, 360)
+graph_position = Vector2(380, 120)
 connections = {
 0: {
-"from_node": SubResource("Resource_6ugvl"),
+"from_node": SubResource("Resource_6gkd1"),
 "from_port": 0
 }
 }
@@ -60,7 +39,7 @@ color_1 = Color(0.7793, 0.213345, 0.18809, 1)
 
 [sub_resource type="Resource" id="Resource_nxvgl"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(860, 400)
+graph_position = Vector2(660, 160)
 connections = {
 0: {
 "from_node": SubResource("Resource_moxfq"),
@@ -74,7 +53,7 @@ output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_d6tbn"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(380, 600)
+graph_position = Vector2(380, 560)
 connections = {
 0: {
 "from_node": SubResource("Resource_6gkd1"),
@@ -89,7 +68,7 @@ bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_g6sfv"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(660, 620)
+graph_position = Vector2(660, 580)
 connections = {
 0: {
 "from_node": SubResource("Resource_d6tbn"),
@@ -103,7 +82,7 @@ output_name = "Normal Map"
 
 [sub_resource type="Resource" id="Resource_pfdv2"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(380, 120)
+graph_position = Vector2(380, 380)
 connections = {
 0: {
 "from_node": SubResource("Resource_6gkd1"),
@@ -117,7 +96,7 @@ output_name = "Bump Map"
 
 [resource]
 script = ExtResource("2_uh5td")
-nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_6ugvl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2")])
-editor_position = Vector2(-143.062, -29.5273)
-editor_zoom = 0.424098
+nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2")])
+editor_position = Vector2(-51.4814, 61.3514)
+editor_zoom = 0.826447
 editor_minimap = false

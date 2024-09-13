@@ -4,6 +4,8 @@ render_mode unshaded;
 // NAME:Cellular
 // CREDITS:https://godotshaders.com/shader/cracked-glass/
 
+#include "noise.gdshaderinc"
+
 // uniforms
 uniform int density : hint_range(1, 20) = 4;
 uniform float profile : hint_range(0.1, 2.0, 0.1) = 1.0;
@@ -11,11 +13,6 @@ uniform float slope : hint_range(0.0, 20.0) = 10.0;
 uniform float thickness : hint_range(-0.2, 0.2, 0.01) = 0.0;
 uniform float jitter_strength : hint_range(0.0, 1.2, 0.01) = 1.0;
 uniform int jitter_seed : hint_range(0, 64) = 0;
-
-vec2 hash(vec2 p) {
-	p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
-	return fract(sin(p) * 43758.5453123);
-}
 
 float voronoi(vec2 u, int p_wrap, float p_jitter_strength, int p_seed) {
 	vec2 rand_offset = vec2(float(p_seed * p_wrap));
