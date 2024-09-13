@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=6 format=3 uid="uid://dn8fbl4ljwv36"]
+[gd_resource type="StandardMaterial3D" load_steps=7 format=3 uid="uid://dn8fbl4ljwv36"]
 
 [ext_resource type="Resource" uid="uid://bqx7li8bc0gm8" path="res://bricks_design.tres" id="1_frs1i"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="2_enhtr"]
@@ -8,9 +8,18 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("2_enhtr")
 design = ExtResource("1_frs1i")
-output = "Albedo"
+output = "Albedo Embossed"
 size = Vector2i(512, 512)
 generate_mipmaps = false
+
+[sub_resource type="Texture2D" id="Texture2D_xf0ap"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_enhtr")
+design = ExtResource("1_frs1i")
+output = "Bump Map"
+size = Vector2i(512, 512)
+generate_mipmaps = true
 
 [sub_resource type="Texture2D" id="Texture2D_we5kr"]
 resource_local_to_scene = false
@@ -36,8 +45,9 @@ normal_enabled = true
 normal_texture = SubResource("Texture2D_wf7wi")
 rim = 0.2
 rim_tint = 0.3
+ao_enabled = true
+ao_light_affect = 0.5
+ao_texture = SubResource("Texture2D_xf0ap")
 heightmap_enabled = true
-heightmap_deep_parallax = true
-heightmap_min_layers = 4
-heightmap_max_layers = 6
+heightmap_scale = 2.5
 heightmap_texture = SubResource("Texture2D_we5kr")

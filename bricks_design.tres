@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=12 format=3 uid="uid://bqx7li8bc0gm8"]
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=15 format=3 uid="uid://bqx7li8bc0gm8"]
 
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_ctxuh"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_a16ub"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="2_uh5td"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="5_02cg8"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="5_2i0rd"]
 [ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_5pvmk"]
 
@@ -39,7 +40,7 @@ color_1 = Color(0.7793, 0.213345, 0.18809, 1)
 
 [sub_resource type="Resource" id="Resource_nxvgl"]
 script = ExtResource("1_ctxuh")
-graph_position = Vector2(660, 160)
+graph_position = Vector2(760, 100)
 connections = {
 0: {
 "from_node": SubResource("Resource_moxfq"),
@@ -94,9 +95,43 @@ output_name = "Bump Map"
 is_variable = false
 output_name = "Bump Map"
 
+[sub_resource type="Resource" id="Resource_lnguk"]
+script = ExtResource("1_ctxuh")
+graph_position = Vector2(620, 260)
+connections = {
+0: {
+"from_node": SubResource("Resource_moxfq"),
+"from_port": 0
+},
+1: {
+"from_node": SubResource("Resource_6gkd1"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("5_02cg8")
+angle = 45
+strength = 4.0
+
+[sub_resource type="Resource" id="Resource_sxksx"]
+script = ExtResource("1_ctxuh")
+graph_position = Vector2(840, 260)
+connections = {
+0: {
+"from_node": SubResource("Resource_lnguk"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = "Albedo Embossed"
+is_variable = false
+output_name = "Albedo Embossed"
+
 [resource]
 script = ExtResource("2_uh5td")
-nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2")])
-editor_position = Vector2(-51.4814, 61.3514)
+nodes = Array[ExtResource("1_ctxuh")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2"), SubResource("Resource_lnguk"), SubResource("Resource_sxksx")])
+editor_position = Vector2(0, 0)
 editor_zoom = 0.826447
 editor_minimap = false
