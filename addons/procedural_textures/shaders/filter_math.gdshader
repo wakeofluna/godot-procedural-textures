@@ -6,7 +6,7 @@ render_mode unshaded;
 // samplers
 uniform sampler2D input;
 // uniforms
-uniform float multiply : hint_range(-2.0, 2.0, 0.01) = 1.0;
+uniform float multiply : hint_range(-4.0, 4.0, 0.01) = 1.0;
 uniform float add : hint_range(-1.0, 1.0) = 0.0;
 uniform float power : hint_range(0.01, 10.0, 0.01) = 1.0;
 uniform bool smooth_step = false;

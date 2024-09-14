@@ -238,6 +238,6 @@ output_name = "Ambient Occlusion"
 [resource]
 script = ExtResource("2_1hlg2")
 nodes = Array[ExtResource("1_oyufo")]([SubResource("Resource_dtbf4"), SubResource("Resource_1tcus"), SubResource("Resource_mkods"), SubResource("Resource_48i1m"), SubResource("Resource_ltqrq"), SubResource("Resource_my4h8"), SubResource("Resource_7dacj"), SubResource("Resource_s6ng6"), SubResource("Resource_wjo5c"), SubResource("Resource_rrsec"), SubResource("Resource_bn4k8"), SubResource("Resource_t40bi"), SubResource("Resource_lr5vi"), SubResource("Resource_kr0r3"), SubResource("Resource_0v8x5")])
-editor_position = Vector2(97.9979, -0.211182)
+editor_position = Vector2(0, 0)
 editor_zoom = 0.564474
 editor_minimap = false

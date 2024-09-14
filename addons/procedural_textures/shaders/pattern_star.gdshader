@@ -16,13 +16,13 @@ float process(vec2 uv, int p_sections, float p_outer_size, float p_inner_size, f
 	float angle = acos(dot(uv / uv_len, vec2(0.0, 1.0)));
 	float interval = 2.0 * PI / float(p_sections);
 	float angle_dist = abs(angle - interval * round(angle / interval)) / interval * 2.0;
-	
+
 	float star_size = mix(p_inner_size, p_outer_size, pow(angle_dist, p_inner_edge));
 	float value = uv_len / max(0.0001, star_size);
-	
+
 	value = smoothstep(0.0, 1.0, value);
 	value = pow(value, p_slope);
-	
+
 	return 1.0 - value;
 }
 

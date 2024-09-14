@@ -13,7 +13,7 @@ float process(vec2 uv, int p_rays, float p_slope) {
 	float angle = acos(dot(uv / uv_len, vec2(0.0, 1.0)));
 	float interval = 2.0 * PI / float(p_rays);
 	float angle_dist = abs(angle - interval * round(angle / interval)) / interval * 2.0;
-	
+
 	angle_dist = pow(angle_dist, p_slope);
 
 	return angle_dist;

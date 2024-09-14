@@ -206,6 +206,6 @@ output_name = "Albedo"
 [resource]
 script = ExtResource("2_m3bpx")
 nodes = Array[ExtResource("1_n7076")]([SubResource("Resource_xdw68"), SubResource("Resource_wbcw1"), SubResource("Resource_shv5s"), SubResource("Resource_nrx0w"), SubResource("Resource_ppama"), SubResource("Resource_3s6oy"), SubResource("Resource_a1kkx"), SubResource("Resource_jexgk"), SubResource("Resource_pha13"), SubResource("Resource_4p4p7"), SubResource("Resource_lykqq"), SubResource("Resource_224ml")])
-editor_position = Vector2(56.0078, 37.5859)
+editor_position = Vector2(0, 0)
 editor_zoom = 0.564474
 editor_minimap = false

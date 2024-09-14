@@ -115,6 +115,6 @@ output_name = "Normap Map"
 [resource]
 script = ExtResource("2_ylr1b")
 nodes = Array[ExtResource("1_m6h83")]([SubResource("Resource_c2a7t"), SubResource("Resource_dgcr4"), SubResource("Resource_5r5l0"), SubResource("Resource_edqg5"), SubResource("Resource_qdkvk"), SubResource("Resource_1exwy"), SubResource("Resource_ic2q2")])
-editor_position = Vector2(143.494, 148.648)
+editor_position = Vector2(0, 0)
 editor_zoom = 0.683013
 editor_minimap = false

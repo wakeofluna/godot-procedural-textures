@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=6 format=3 uid="uid://c3amxj6pgth7q"]
+[gd_resource type="StandardMaterial3D" load_steps=9 format=3 uid="uid://c3amxj6pgth7q"]
 
 [ext_resource type="Resource" uid="uid://hqqmpg7rss3a" path="res://wood_design.tres" id="1_tbhxj"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="2_sl6ib"]
@@ -8,16 +8,43 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("2_sl6ib")
 design = ExtResource("1_tbhxj")
-output = "Albedo"
+output = "Base Albedo"
 size = Vector2i(512, 512)
 generate_mipmaps = false
+
+[sub_resource type="Texture2D" id="Texture2D_txvx6"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_sl6ib")
+design = ExtResource("1_tbhxj")
+output = "Detail Albedo"
+size = Vector2i(512, 512)
+generate_mipmaps = true
+
+[sub_resource type="Texture2D" id="Texture2D_kuawm"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_sl6ib")
+design = ExtResource("1_tbhxj")
+output = "Detail Mask"
+size = Vector2i(512, 512)
+generate_mipmaps = true
+
+[sub_resource type="Texture2D" id="Texture2D_j8f7p"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_sl6ib")
+design = ExtResource("1_tbhxj")
+output = "Detail Normal Map"
+size = Vector2i(512, 512)
+generate_mipmaps = true
 
 [sub_resource type="Texture2D" id="Texture2D_f6a1k"]
 resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("2_sl6ib")
 design = ExtResource("1_tbhxj")
-output = "Normal Map"
+output = "Base Normal Map"
 size = Vector2i(512, 512)
 generate_mipmaps = false
 
@@ -35,4 +62,8 @@ albedo_texture = SubResource("Texture2D_gl8kr")
 normal_enabled = true
 normal_texture = SubResource("Texture2D_f6a1k")
 subsurf_scatter_texture = SubResource("Texture2D_pvqmg")
+detail_enabled = true
+detail_mask = SubResource("Texture2D_kuawm")
+detail_albedo = SubResource("Texture2D_txvx6")
+detail_normal = SubResource("Texture2D_j8f7p")
 uv1_scale = Vector3(2, 2, 2)
