@@ -16,6 +16,8 @@ var uniforms: Array[Dictionary]
 var defaults: Dictionary
 var output_type: int
 
+var warnings: Array[String] = []
+
 var resource_path: String:
 	get():
 		return shader.resource_path if shader else ''
@@ -36,6 +38,10 @@ static func from_shader(shader: Shader) -> ProceduralShader:
 	return proc_shader
 
 
+func is_valid() -> bool:
+	return warnings.is_empty()
+
+
 func _init(shader: Shader) -> void:
 	assert(shader, "invalid shader for ProceduralShader")
 	assert(not shader.has_meta(meta_key), "use ProceduralShader.from_shader() instead of .new()")
@@ -47,8 +53,11 @@ func _init(shader: Shader) -> void:
 
 func _on_shader_updated():
 	var shader_data = ShaderParser.parse_shader(shader)
+	warnings = []
 
 	name = shader_data.get("name", "")
+	if name == '':
+		warnings.append('No NAME comment found in Shader')
 
 	includes = []
 	for x: String in shader_data.get("includes", []):
@@ -101,6 +110,8 @@ func _on_shader_updated():
 	defaults.make_read_only()
 	uniforms.make_read_only()
 
+	warnings.make_read_only()
+
 	notify_property_list_changed()
 
 
@@ -118,16 +129,16 @@ func _determine_input_types() -> void:
 				inp.type = func_type
 
 		if not input_name in found:
-			push_warning("Found sample_{0}() function in shader \"{1}\" without matching sampler input".format([input_name, name]))
+			warnings.append("Found sample_{0}() function in shader \"{1}\" without matching sampler input".format([input_name, name]))
 
 	for input in inputs:
 		if input.name not in found:
-			push_error("No sample_{0}() function found in shader \"{1}\"!".format([input.name, name]))
+			warnings.append("No sample_{0}() indirection function found for sampler2D input".format([input.name]))
 
 
 func _determine_output_type() -> void:
 	if process_function.is_empty():
-		push_error("no process() function found in ProceduralShader")
+		warnings.append("No process() function found")
 		return
 
 	var return_type = process_function.return_type

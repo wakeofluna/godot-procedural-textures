@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=7 format=3 uid="uid://dlygcldva5fla"]
 
-[ext_resource type="Resource" uid="uid://bs0nkmck03kri" path="res://cobblestone_design.tres" id="1_63xfm"]
+[ext_resource type="Resource" uid="uid://bs0nkmck03kri" path="res://examples/cobblestone_design.tres" id="1_63xfm"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="2_s0gbt"]
 
 [sub_resource type="Texture2D" id="Texture2D_dik0x"]

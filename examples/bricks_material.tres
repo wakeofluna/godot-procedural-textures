@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=7 format=3 uid="uid://dn8fbl4ljwv36"]
 
-[ext_resource type="Resource" uid="uid://bqx7li8bc0gm8" path="res://bricks_design.tres" id="1_frs1i"]
+[ext_resource type="Resource" uid="uid://bqx7li8bc0gm8" path="res://examples/bricks_design.tres" id="1_frs1i"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="2_enhtr"]
 
 [sub_resource type="Texture2D" id="Texture2D_3smib"]

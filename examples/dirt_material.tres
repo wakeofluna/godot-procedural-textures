@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=6 format=3 uid="uid://cno51ckautnrd"]
 
-[ext_resource type="Resource" uid="uid://bfnvhq7c0oy3y" path="res://dirt_design.tres" id="1_quva5"]
+[ext_resource type="Resource" uid="uid://bfnvhq7c0oy3y" path="res://examples/dirt_design.tres" id="1_quva5"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="2_uk2aj"]
 
 [sub_resource type="Texture2D" id="Texture2D_1dqg1"]

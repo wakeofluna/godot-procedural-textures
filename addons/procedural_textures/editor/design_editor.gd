@@ -69,7 +69,13 @@ static func _search_for_shaders(dir: DirAccess, results: Array[ProceduralShader]
 			elif ResourceLoader.exists(fullname, "Shader"):
 				var item = ResourceLoader.load(fullname, "Shader", ResourceLoader.CACHE_MODE_REUSE)
 				if item is Shader:
-					results.append(ProceduralShader.from_shader(item as Shader))
+					var proc_shader = ProceduralShader.from_shader(item as Shader)
+					if proc_shader.is_valid():
+						results.append(proc_shader)
+					elif not proc_shader.name.is_empty():
+						push_warning("Shader \"{0}\" not a valid ProceduralShader because:".format([proc_shader.name]))
+						for w in proc_shader.warnings:
+							push_warning("  {0}".format([w]))
 
 
 static func get_shader_resources(force_scan: bool = false) -> Array[ProceduralShader]:

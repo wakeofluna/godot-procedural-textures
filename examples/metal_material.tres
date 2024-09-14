@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://fsmcsx2cnwpp"]
 
-[ext_resource type="Resource" uid="uid://cf624fvkpkfvm" path="res://metal_design.tres" id="1_7iktc"]
+[ext_resource type="Resource" uid="uid://cf624fvkpkfvm" path="res://examples/metal_design.tres" id="1_7iktc"]
 [ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture.gd" id="2_kc2f5"]
 
 [sub_resource type="Texture2D" id="Texture2D_2o658"]
