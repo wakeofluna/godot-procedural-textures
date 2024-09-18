@@ -15,6 +15,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("2_n0q4r")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 count_x = 4
 count_y = 10
 row_shift = 0.5
@@ -35,6 +38,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_n3qrb")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 color_0 = Color(0.336608, 0.336608, 0.336608, 1)
 color_1 = Color(0.7793, 0.213345, 0.18809, 1)
 
@@ -50,6 +56,9 @@ connections = {
 output_value = null
 output_name = "Albedo"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_d6tbn"]
@@ -65,6 +74,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("4_5gb77")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_g6sfv"]
@@ -79,6 +91,9 @@ connections = {
 output_value = null
 output_name = "Normal Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Normal Map"
 
 [sub_resource type="Resource" id="Resource_pfdv2"]
@@ -93,6 +108,9 @@ connections = {
 output_value = null
 output_name = "Bump Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Bump Map"
 
 [sub_resource type="Resource" id="Resource_lnguk"]
@@ -112,6 +130,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("5_nh08w")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 angle = 45
 strength = 4.0
 
@@ -127,11 +148,14 @@ connections = {
 output_value = null
 output_name = "Albedo Embossed"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Albedo Embossed"
 
 [resource]
 script = ExtResource("6_rlg0w")
 nodes = Array[ExtResource("1_hfg8e")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2"), SubResource("Resource_lnguk"), SubResource("Resource_sxksx")])
-editor_position = Vector2(-10.8199, -100.902)
+editor_position = Vector2(0, 0)
 editor_zoom = 0.826447
 editor_minimap = false

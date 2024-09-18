@@ -68,6 +68,20 @@ void fragment() { COLOR = vec4(1.0, 0.0, 1.0, 1.0); }
 			shader = new_shader
 			emit_changed()
 
+@export_storage var export_image_size_index: int = 1
+
+@export_storage var export_image_path: String:
+	set(value):
+		if value == get_default_image_export_path():
+			value = ''
+		export_image_path = value
+
+@export_storage var export_shader_path: String:
+	set(value):
+		if value == get_default_shader_export_path():
+			value = ''
+		export_shader_path = value
+
 
 var proc_shader: ProceduralShader
 var shader_params: Dictionary
@@ -117,6 +131,23 @@ func all_required_inputs_are_connected() -> bool:
 		Mode.OUTPUT:
 			return connections.has(0)
 	return true
+
+
+func get_default_image_export_path() -> String:
+	var fname := resource_path.get_basename()
+	if not output_name.is_empty():
+		fname += '_' + output_name.to_snake_case()
+	fname += '.png'
+	return fname
+
+
+func get_default_shader_export_path() -> String:
+	var fname := resource_path.get_basename()
+	if not output_name.is_empty():
+		fname += '_' + output_name.to_snake_case()
+	fname += '.gdshader'
+	return fname
+
 
 
 func get_mode() -> Mode:

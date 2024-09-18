@@ -21,6 +21,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("2_y1ske")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 density = 8.0
 octaves = 7
 translate = Vector2(0, 0)
@@ -38,6 +41,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_xkxml")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 scale = Vector2(0.5, 20)
 rotate = 0
 translate = Vector2(1.4, 3.6)
@@ -55,6 +61,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("4_u7e7t")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 blend_skirt = 0.4
 input_is_tiled = false
 
@@ -71,6 +80,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("5_mcsts")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 bump_strength = 24.0
 
 [sub_resource type="Resource" id="Resource_ih8io"]
@@ -85,6 +97,9 @@ connections = {
 output_value = null
 output_name = "Base Normal Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Base Normal Map"
 
 [sub_resource type="Resource" id="Resource_n8jqi"]
@@ -100,6 +115,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("6_o7ci4")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 color_0 = Color(0, 0, 0, 1)
 color_1 = Color(0.68, 0.36584, 0.2312, 1)
 
@@ -115,6 +133,9 @@ connections = {
 output_value = null
 output_name = "Base Albedo"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Base Albedo"
 
 [sub_resource type="Resource" id="Resource_vwcs3"]
@@ -125,6 +146,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("7_fdvww")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 
 [sub_resource type="Resource" id="Resource_j418b"]
 script = ExtResource("1_7looy")
@@ -138,6 +162,9 @@ connections = {
 output_value = null
 output_name = "Bump Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Bump Map"
 
 [sub_resource type="Resource" id="Resource_7v4da"]
@@ -153,6 +180,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_xkxml")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 scale = Vector2(10, 1)
 rotate = 0
 translate = Vector2(0.559, 0.559)
@@ -170,6 +200,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("8_df2sk")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 multiply = 2.0
 add = 0.0
 power = 2.0
@@ -188,6 +221,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_xkxml")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 scale = Vector2(1, 0.75)
 rotate = 0
 translate = Vector2(0, -0.125)
@@ -205,6 +241,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("8_df2sk")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 multiply = 1.0
 add = -0.273
 power = 0.4
@@ -227,6 +266,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("9_ed4yt")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 
 [sub_resource type="Resource" id="Resource_kbidg"]
 script = ExtResource("1_7looy")
@@ -241,6 +283,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("10_kuwan")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 nr_of_stamps = 4
 stamp_size = 1.35
 rotate_stamps = 0.01
@@ -260,6 +305,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("8_df2sk")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 multiply = 1.0
 add = 0.0
 power = 3.95
@@ -278,6 +326,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("6_o7ci4")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 color_0 = Color(0, 0, 0, 1)
 color_1 = Color(0.157507, 0.0632287, 0.0127365, 1)
 
@@ -293,6 +344,9 @@ connections = {
 output_value = null
 output_name = "Detail Albedo"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Detail Albedo"
 
 [sub_resource type="Resource" id="Resource_8wyor"]
@@ -308,6 +362,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("11_b3x4c")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 
 [sub_resource type="Resource" id="Resource_qd71y"]
 script = ExtResource("1_7looy")
@@ -322,6 +379,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("5_mcsts")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 bump_strength = 24.0
 
 [sub_resource type="Resource" id="Resource_b7f4b"]
@@ -336,6 +396,9 @@ connections = {
 output_value = null
 output_name = "Detail Normal Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Detail Normal Map"
 
 [sub_resource type="Resource" id="Resource_mrnrs"]
@@ -350,6 +413,9 @@ connections = {
 output_value = null
 output_name = "Detail Mask"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Detail Mask"
 
 [resource]

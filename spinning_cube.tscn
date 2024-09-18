@@ -18,7 +18,7 @@ script/source = "extends Node3D
 func _physics_process(delta: float) -> void:
 	for child in get_children():
 		if child is CSGBox3D:
-			#child.rotate_object_local(Vector3.UP, delta)
+			child.rotate_object_local(Vector3.UP, delta)
 			pass
 
 	if Input.is_action_pressed(\"move_left\"):

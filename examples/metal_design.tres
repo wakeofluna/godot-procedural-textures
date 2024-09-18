@@ -15,6 +15,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("2_dflnh")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 count_x = 6
 count_y = 20
 row_shift = 0.5
@@ -39,6 +42,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_1ivnt")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 angle = 45
 strength = 12.0
 
@@ -55,6 +61,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("4_pfgix")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 color_0 = Color(0.482353, 0.65098, 0.996078, 1)
 color_1 = Color(0.351597, 0.555171, 0.993022, 1)
 
@@ -70,6 +79,9 @@ connections = {
 output_value = null
 output_name = "Albedo"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_shfce"]
@@ -85,6 +97,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("5_h4r27")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_otl11"]
@@ -99,6 +114,9 @@ connections = {
 output_value = null
 output_name = "Normal Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Normal Map"
 
 [resource]

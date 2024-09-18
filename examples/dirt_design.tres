@@ -15,6 +15,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("2_0vd3a")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 density = 24.0
 octaves = 7
 translate = Vector2(0, 0)
@@ -36,6 +39,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_m7s66")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 angle = 45
 strength = 18.0
 
@@ -52,6 +58,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("4_v1etg")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 color_0 = Color(0.196282, 0.0914796, 0.0100534, 1)
 color_1 = Color(0.481976, 0.23145, 0.049396, 1)
 
@@ -67,6 +76,9 @@ connections = {
 output_value = null
 output_name = "Albedo"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_qdkvk"]
@@ -81,6 +93,9 @@ connections = {
 output_value = null
 output_name = "Bump Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Bump Map"
 
 [sub_resource type="Resource" id="Resource_1exwy"]
@@ -96,6 +111,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("5_en8wo")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_ic2q2"]
@@ -110,6 +128,9 @@ connections = {
 output_value = null
 output_name = "Normap Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Normap Map"
 
 [resource]

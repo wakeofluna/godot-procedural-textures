@@ -18,6 +18,9 @@ connections = {}
 output_value = 14
 output_name = "Int"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 constant_value = 14
 
 [sub_resource type="Resource" id="Resource_dtbf4"]
@@ -33,6 +36,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("2_h2f2j")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 density = 4
 profile = 0.3
 slope = 1.8
@@ -53,6 +59,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_cp6fu")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 
 [sub_resource type="Resource" id="Resource_1tcus"]
 script = ExtResource("1_b3urn")
@@ -67,6 +76,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("4_6wvyg")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 bump_strength = 24.0
 
 [sub_resource type="Resource" id="Resource_mkods"]
@@ -81,6 +93,9 @@ connections = {
 output_value = null
 output_name = "Normal Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Normal Map"
 
 [sub_resource type="Resource" id="Resource_48i1m"]
@@ -95,6 +110,9 @@ connections = {
 output_value = null
 output_name = "Bump Map"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Bump Map"
 
 [sub_resource type="Resource" id="Resource_ltqrq"]
@@ -110,6 +128,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("5_acuer")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 color_0 = Color(0.286603, 0.152861, 0.0332646, 1)
 color_1 = Color(0.404511, 0.404511, 0.404511, 1)
 
@@ -121,6 +142,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("6_0uhtq")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 color = Color(0, 0, 0, 1)
 
 [sub_resource type="Resource" id="Resource_kr0r3"]
@@ -131,6 +155,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("7_08j4x")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 density = 4.0
 octaves = 3
 translate = Vector2(-5.52, 17.598)
@@ -148,6 +175,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("8_oxbbw")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 blend_skirt = 0.5
 input_is_tiled = false
 
@@ -172,6 +202,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("9_k1the")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 
 [sub_resource type="Resource" id="Resource_my4h8"]
 script = ExtResource("1_b3urn")
@@ -185,6 +218,9 @@ connections = {
 output_value = null
 output_name = "Albedo"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_s6ng6"]
@@ -200,6 +236,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("2_h2f2j")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 density = 4
 profile = 1.0
 slope = 3.0
@@ -220,6 +259,9 @@ output_value = null
 output_name = ""
 is_variable = false
 shader = ExtResource("3_cp6fu")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 
 [sub_resource type="Resource" id="Resource_rrsec"]
 script = ExtResource("1_b3urn")
@@ -233,11 +275,14 @@ connections = {
 output_value = null
 output_name = "Ambient Occlusion"
 is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
 output_name = "Ambient Occlusion"
 
 [resource]
 script = ExtResource("10_nqh77")
 nodes = Array[ExtResource("1_b3urn")]([SubResource("Resource_dtbf4"), SubResource("Resource_1tcus"), SubResource("Resource_mkods"), SubResource("Resource_48i1m"), SubResource("Resource_ltqrq"), SubResource("Resource_my4h8"), SubResource("Resource_7dacj"), SubResource("Resource_s6ng6"), SubResource("Resource_wjo5c"), SubResource("Resource_rrsec"), SubResource("Resource_bn4k8"), SubResource("Resource_t40bi"), SubResource("Resource_lr5vi"), SubResource("Resource_kr0r3"), SubResource("Resource_0v8x5")])
-editor_position = Vector2(-179.808, -186.83)
+editor_position = Vector2(0, 0)
 editor_zoom = 0.385543
 editor_minimap = false
