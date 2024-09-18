@@ -1,20 +1,20 @@
 [gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=14 format=3 uid="uid://bfnvhq7c0oy3y"]
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_s7x0i"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_noise.gdshader" id="2_0vd3a"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_m7s66"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="4_v1etg"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_en8wo"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_reb5g"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_vqiuo"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_noise.gdshader" id="2_xpq41"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_ovq3m"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="4_1nb5u"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_vlibk"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_a5ub6"]
 
 [sub_resource type="Resource" id="Resource_dgcr4"]
-script = ExtResource("1_s7x0i")
+script = ExtResource("1_vqiuo")
 graph_position = Vector2(320, 340)
 connections = {}
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("2_0vd3a")
+shader = ExtResource("2_xpq41")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -23,7 +23,7 @@ octaves = 7
 translate = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_5r5l0"]
-script = ExtResource("1_s7x0i")
+script = ExtResource("1_vqiuo")
 graph_position = Vector2(640, 320)
 connections = {
 0: {
@@ -38,7 +38,7 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("3_m7s66")
+shader = ExtResource("3_ovq3m")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -46,7 +46,7 @@ angle = 45
 strength = 18.0
 
 [sub_resource type="Resource" id="Resource_edqg5"]
-script = ExtResource("1_s7x0i")
+script = ExtResource("1_vqiuo")
 graph_position = Vector2(920, 380)
 connections = {
 0: {
@@ -57,7 +57,7 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("4_v1etg")
+shader = ExtResource("4_1nb5u")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -65,7 +65,7 @@ color_0 = Color(0.196282, 0.0914796, 0.0100534, 1)
 color_1 = Color(0.481976, 0.23145, 0.049396, 1)
 
 [sub_resource type="Resource" id="Resource_c2a7t"]
-script = ExtResource("1_s7x0i")
+script = ExtResource("1_vqiuo")
 graph_position = Vector2(1180, 400)
 connections = {
 0: {
@@ -82,7 +82,7 @@ export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_qdkvk"]
-script = ExtResource("1_s7x0i")
+script = ExtResource("1_vqiuo")
 graph_position = Vector2(640, 860)
 connections = {
 0: {
@@ -99,7 +99,7 @@ export_shader_path = ""
 output_name = "Bump Map"
 
 [sub_resource type="Resource" id="Resource_1exwy"]
-script = ExtResource("1_s7x0i")
+script = ExtResource("1_vqiuo")
 graph_position = Vector2(640, 620)
 connections = {
 0: {
@@ -110,14 +110,14 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("5_en8wo")
+shader = ExtResource("5_vlibk")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_ic2q2"]
-script = ExtResource("1_s7x0i")
+script = ExtResource("1_vqiuo")
 graph_position = Vector2(920, 640)
 connections = {
 0: {
@@ -134,8 +134,8 @@ export_shader_path = ""
 output_name = "Normap Map"
 
 [resource]
-script = ExtResource("6_reb5g")
-nodes = Array[ExtResource("1_s7x0i")]([SubResource("Resource_c2a7t"), SubResource("Resource_dgcr4"), SubResource("Resource_5r5l0"), SubResource("Resource_edqg5"), SubResource("Resource_qdkvk"), SubResource("Resource_1exwy"), SubResource("Resource_ic2q2")])
+script = ExtResource("6_a5ub6")
+nodes = Array[ExtResource("1_vqiuo")]([SubResource("Resource_c2a7t"), SubResource("Resource_dgcr4"), SubResource("Resource_5r5l0"), SubResource("Resource_edqg5"), SubResource("Resource_qdkvk"), SubResource("Resource_1exwy"), SubResource("Resource_ic2q2")])
 editor_position = Vector2(0, 0)
 editor_zoom = 0.683013
 editor_minimap = false

@@ -1,20 +1,20 @@
 [gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=15 format=3 uid="uid://bqx7li8bc0gm8"]
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_hfg8e"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_n0q4r"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="3_n3qrb"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="4_5gb77"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="5_nh08w"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_rlg0w"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_3j24c"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_71dkc"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="3_gucmw"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="4_u628m"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="5_p5r5x"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_y8tmi"]
 
 [sub_resource type="Resource" id="Resource_6gkd1"]
-script = ExtResource("1_hfg8e")
+script = ExtResource("1_3j24c")
 graph_position = Vector2(120, 120)
 connections = {}
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("2_n0q4r")
+shader = ExtResource("2_71dkc")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -26,7 +26,7 @@ gap_y = 0.0
 smoothing = 0.1
 
 [sub_resource type="Resource" id="Resource_moxfq"]
-script = ExtResource("1_hfg8e")
+script = ExtResource("1_3j24c")
 graph_position = Vector2(420, 100)
 connections = {
 0: {
@@ -37,7 +37,7 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("3_n3qrb")
+shader = ExtResource("3_gucmw")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -45,7 +45,7 @@ color_0 = Color(0.336608, 0.336608, 0.336608, 1)
 color_1 = Color(0.7793, 0.213345, 0.18809, 1)
 
 [sub_resource type="Resource" id="Resource_nxvgl"]
-script = ExtResource("1_hfg8e")
+script = ExtResource("1_3j24c")
 graph_position = Vector2(760, 100)
 connections = {
 0: {
@@ -62,7 +62,7 @@ export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_d6tbn"]
-script = ExtResource("1_hfg8e")
+script = ExtResource("1_3j24c")
 graph_position = Vector2(380, 560)
 connections = {
 0: {
@@ -73,14 +73,14 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("4_5gb77")
+shader = ExtResource("4_u628m")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_g6sfv"]
-script = ExtResource("1_hfg8e")
+script = ExtResource("1_3j24c")
 graph_position = Vector2(660, 580)
 connections = {
 0: {
@@ -97,7 +97,7 @@ export_shader_path = ""
 output_name = "Normal Map"
 
 [sub_resource type="Resource" id="Resource_pfdv2"]
-script = ExtResource("1_hfg8e")
+script = ExtResource("1_3j24c")
 graph_position = Vector2(380, 380)
 connections = {
 0: {
@@ -114,7 +114,7 @@ export_shader_path = ""
 output_name = "Bump Map"
 
 [sub_resource type="Resource" id="Resource_lnguk"]
-script = ExtResource("1_hfg8e")
+script = ExtResource("1_3j24c")
 graph_position = Vector2(620, 260)
 connections = {
 0: {
@@ -129,7 +129,7 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("5_nh08w")
+shader = ExtResource("5_p5r5x")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -137,7 +137,7 @@ angle = 45
 strength = 4.0
 
 [sub_resource type="Resource" id="Resource_sxksx"]
-script = ExtResource("1_hfg8e")
+script = ExtResource("1_3j24c")
 graph_position = Vector2(840, 260)
 connections = {
 0: {
@@ -154,8 +154,8 @@ export_shader_path = ""
 output_name = "Albedo Embossed"
 
 [resource]
-script = ExtResource("6_rlg0w")
-nodes = Array[ExtResource("1_hfg8e")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2"), SubResource("Resource_lnguk"), SubResource("Resource_sxksx")])
+script = ExtResource("6_y8tmi")
+nodes = Array[ExtResource("1_3j24c")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2"), SubResource("Resource_lnguk"), SubResource("Resource_sxksx")])
 editor_position = Vector2(0, 0)
 editor_zoom = 0.826447
 editor_minimap = false

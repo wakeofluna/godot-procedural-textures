@@ -1,20 +1,20 @@
 [gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=13 format=3 uid="uid://cf624fvkpkfvm"]
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_tdv5f"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_dflnh"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_1ivnt"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="4_pfgix"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_h4r27"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_0k52p"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_ay55a"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_2yo8o"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_feiub"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="4_6ksa1"]
+[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_i8hnf"]
+[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_esfb4"]
 
 [sub_resource type="Resource" id="Resource_nlnsc"]
-script = ExtResource("1_tdv5f")
+script = ExtResource("1_ay55a")
 graph_position = Vector2(140, 120)
 connections = {}
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("2_dflnh")
+shader = ExtResource("2_2yo8o")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -26,7 +26,7 @@ gap_y = 0.5
 smoothing = 0.1
 
 [sub_resource type="Resource" id="Resource_yeep8"]
-script = ExtResource("1_tdv5f")
+script = ExtResource("1_ay55a")
 graph_position = Vector2(440, 300)
 connections = {
 0: {
@@ -41,7 +41,7 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("3_1ivnt")
+shader = ExtResource("3_feiub")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -49,7 +49,7 @@ angle = 45
 strength = 12.0
 
 [sub_resource type="Resource" id="Resource_24ef5"]
-script = ExtResource("1_tdv5f")
+script = ExtResource("1_ay55a")
 graph_position = Vector2(660, 300)
 connections = {
 0: {
@@ -60,7 +60,7 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("4_pfgix")
+shader = ExtResource("4_6ksa1")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
@@ -68,7 +68,7 @@ color_0 = Color(0.482353, 0.65098, 0.996078, 1)
 color_1 = Color(0.351597, 0.555171, 0.993022, 1)
 
 [sub_resource type="Resource" id="Resource_1vy8f"]
-script = ExtResource("1_tdv5f")
+script = ExtResource("1_ay55a")
 graph_position = Vector2(860, 320)
 connections = {
 0: {
@@ -85,7 +85,7 @@ export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_shfce"]
-script = ExtResource("1_tdv5f")
+script = ExtResource("1_ay55a")
 graph_position = Vector2(420, 120)
 connections = {
 0: {
@@ -96,14 +96,14 @@ connections = {
 output_value = null
 output_name = ""
 is_variable = false
-shader = ExtResource("5_h4r27")
+shader = ExtResource("5_i8hnf")
 export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_otl11"]
-script = ExtResource("1_tdv5f")
+script = ExtResource("1_ay55a")
 graph_position = Vector2(700, 160)
 connections = {
 0: {
@@ -120,8 +120,8 @@ export_shader_path = ""
 output_name = "Normal Map"
 
 [resource]
-script = ExtResource("6_0k52p")
-nodes = Array[ExtResource("1_tdv5f")]([SubResource("Resource_nlnsc"), SubResource("Resource_1vy8f"), SubResource("Resource_shfce"), SubResource("Resource_otl11"), SubResource("Resource_24ef5"), SubResource("Resource_yeep8")])
+script = ExtResource("6_esfb4")
+nodes = Array[ExtResource("1_ay55a")]([SubResource("Resource_nlnsc"), SubResource("Resource_1vy8f"), SubResource("Resource_shfce"), SubResource("Resource_otl11"), SubResource("Resource_24ef5"), SubResource("Resource_yeep8")])
 editor_position = Vector2(0, 0)
 editor_zoom = 1.0
 editor_minimap = false

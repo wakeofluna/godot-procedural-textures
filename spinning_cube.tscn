@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://dt1twt275m8v0"]
 
-[ext_resource type="Material" uid="uid://dn8fbl4ljwv36" path="res://examples/bricks_material.tres" id="1_2lcae"]
-[ext_resource type="Material" uid="uid://c3amxj6pgth7q" path="res://examples/wood_material.tres" id="2_jfj7w"]
-[ext_resource type="Material" uid="uid://cno51ckautnrd" path="res://examples/dirt_material.tres" id="3_igima"]
-[ext_resource type="Material" uid="uid://fsmcsx2cnwpp" path="res://examples/metal_material.tres" id="4_qmo7w"]
-[ext_resource type="Material" uid="uid://d2d6xwhs5pe3q" path="res://examples/grass_material.tres" id="5_cr2lb"]
-[ext_resource type="Material" uid="uid://dlygcldva5fla" path="res://examples/cobblestone_material.tres" id="6_bsuhj"]
+[ext_resource type="Material" uid="uid://dn8fbl4ljwv36" path="res://addons/procedural_textures/examples/bricks_material.tres" id="1_2lcae"]
+[ext_resource type="Material" uid="uid://c3amxj6pgth7q" path="res://addons/procedural_textures/examples/wood_material.tres" id="2_jfj7w"]
+[ext_resource type="Material" uid="uid://cno51ckautnrd" path="res://addons/procedural_textures/examples/dirt_material.tres" id="3_igima"]
+[ext_resource type="Material" uid="uid://fsmcsx2cnwpp" path="res://addons/procedural_textures/examples/metal_material.tres" id="4_qmo7w"]
+[ext_resource type="Material" uid="uid://d2d6xwhs5pe3q" path="res://addons/procedural_textures/examples/grass_material.tres" id="5_cr2lb"]
+[ext_resource type="Material" uid="uid://dlygcldva5fla" path="res://addons/procedural_textures/examples/cobblestone_material.tres" id="6_bsuhj"]
 
 [sub_resource type="GDScript" id="GDScript_f33ea"]
 script/source = "extends Node3D
