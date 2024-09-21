@@ -214,6 +214,8 @@ func _generate_image(img_size: Vector2i) -> Image:
 		RenderingServer.canvas_item_add_texture_rect(tmp_canvas_item, Rect2(0, 0, img_size.x, img_size.y), rid)
 		RenderingServer.viewport_set_size(tmp_viewport, img_size.x, img_size.y)
 		RenderingServer.viewport_attach_canvas(tmp_viewport, tmp_canvas)
+		RenderingServer.viewport_set_transparent_background(tmp_viewport, true)
+		RenderingServer.viewport_set_clear_mode(tmp_viewport, RenderingServer.VIEWPORT_CLEAR_ONLY_NEXT_FRAME)
 		RenderingServer.viewport_set_update_mode(tmp_viewport, RenderingServer.VIEWPORT_UPDATE_ONCE)
 		RenderingServer.viewport_set_active(tmp_viewport, true)
 		await RenderingServer.frame_post_draw
