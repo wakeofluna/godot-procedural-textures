@@ -244,7 +244,7 @@ static func _format_immediate(value: Variant) -> String:
 	elif value is bool:
 		return 'true' if value else 'false'
 	elif value is int:
-		return String.num(value)
+		return String.num(value, 0)
 	elif value is float:
 		return _format_float(value)
 	elif value is Vector2:
