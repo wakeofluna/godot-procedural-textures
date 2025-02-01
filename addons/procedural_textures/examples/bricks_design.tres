@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=15 format=3 uid="uid://bqx7li8bc0gm8"]
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_3j24c"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_71dkc"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="3_gucmw"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="4_u628m"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="5_p5r5x"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_y8tmi"]
+[ext_resource type="Script" uid="uid://cjuyj10lsbuch" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_3j24c"]
+[ext_resource type="Shader" uid="uid://dekmlqdrjygu8" path="res://addons/procedural_textures/shaders/pattern_bricks.gdshader" id="2_71dkc"]
+[ext_resource type="Shader" uid="uid://bywcb484ety5j" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="3_gucmw"]
+[ext_resource type="Shader" uid="uid://cgyecqscnq4k" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="4_u628m"]
+[ext_resource type="Shader" uid="uid://bn20pj58ompeg" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="5_p5r5x"]
+[ext_resource type="Script" uid="uid://hr5tfw1lq1at" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_y8tmi"]
 
 [sub_resource type="Resource" id="Resource_6gkd1"]
 script = ExtResource("1_3j24c")
-graph_position = Vector2(120, 120)
+graph_position = Vector2(120, 160)
 connections = {}
 output_value = null
 output_name = ""
@@ -156,6 +156,6 @@ output_name = "Albedo Embossed"
 [resource]
 script = ExtResource("6_y8tmi")
 nodes = Array[ExtResource("1_3j24c")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2"), SubResource("Resource_lnguk"), SubResource("Resource_sxksx")])
-editor_position = Vector2(0, 0)
+editor_position = Vector2(-265.523, 178.676)
 editor_zoom = 0.826447
 editor_minimap = false

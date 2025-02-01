@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=26 format=3 uid="uid://bs0nkmck03kri"]
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_q1031"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_cellular.gdshader" id="2_uv6ob"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_invert.gdshader" id="3_c34qu"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="4_lonb5"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="5_1bjg4"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_constant_color.gdshader" id="6_ve16u"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_noise.gdshader" id="7_3xleu"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_seamless.gdshader" id="8_agrds"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_blend_mask.gdshader" id="9_ssvbl"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="10_5up5k"]
+[ext_resource type="Script" uid="uid://cjuyj10lsbuch" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_q1031"]
+[ext_resource type="Shader" uid="uid://dva53bcywodgq" path="res://addons/procedural_textures/shaders/pattern_cellular.gdshader" id="2_uv6ob"]
+[ext_resource type="Shader" uid="uid://by20ics0k17mf" path="res://addons/procedural_textures/shaders/filter_invert.gdshader" id="3_c34qu"]
+[ext_resource type="Shader" uid="uid://cgyecqscnq4k" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="4_lonb5"]
+[ext_resource type="Shader" uid="uid://bywcb484ety5j" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="5_1bjg4"]
+[ext_resource type="Shader" uid="uid://bcyrctlk20gh7" path="res://addons/procedural_textures/shaders/pattern_constant_color.gdshader" id="6_ve16u"]
+[ext_resource type="Shader" uid="uid://1nfuyrrao6hv" path="res://addons/procedural_textures/shaders/pattern_noise.gdshader" id="7_3xleu"]
+[ext_resource type="Shader" uid="uid://dhupm47sqxy0k" path="res://addons/procedural_textures/shaders/filter_seamless.gdshader" id="8_agrds"]
+[ext_resource type="Shader" uid="uid://6etmvax7o5mh" path="res://addons/procedural_textures/shaders/filter_blend_mask.gdshader" id="9_ssvbl"]
+[ext_resource type="Script" uid="uid://hr5tfw1lq1at" path="res://addons/procedural_textures/procedural_texture_design.gd" id="10_5up5k"]
 
 [sub_resource type="Resource" id="Resource_bn4k8"]
 script = ExtResource("1_q1031")
@@ -40,8 +40,8 @@ export_image_size_index = 1
 export_image_path = ""
 export_shader_path = ""
 density = 4
-profile = 0.3
-slope = 1.8
+profile = 1.0
+slope = 10.0
 thickness = 0.0
 jitter_strength = 1.0
 jitter_seed = 0
@@ -241,8 +241,8 @@ export_image_path = ""
 export_shader_path = ""
 density = 4
 profile = 1.0
-slope = 3.0
-thickness = -7.45063e-09
+slope = 10.0
+thickness = 0.0
 jitter_strength = 1.0
 jitter_seed = 0
 

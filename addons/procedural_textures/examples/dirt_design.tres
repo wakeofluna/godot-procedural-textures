@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=16 format=3 uid="uid://bfnvhq7c0oy3y"]
 
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_vqiuo"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/pattern_noise.gdshader" id="2_xpq41"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_seamless.gdshader" id="3_hvsx7"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_ovq3m"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="4_1nb5u"]
-[ext_resource type="Shader" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_vlibk"]
-[ext_resource type="Script" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_a5ub6"]
+[ext_resource type="Script" uid="uid://cjuyj10lsbuch" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="1_vqiuo"]
+[ext_resource type="Shader" uid="uid://1nfuyrrao6hv" path="res://addons/procedural_textures/shaders/pattern_noise.gdshader" id="2_xpq41"]
+[ext_resource type="Shader" uid="uid://dhupm47sqxy0k" path="res://addons/procedural_textures/shaders/filter_seamless.gdshader" id="3_hvsx7"]
+[ext_resource type="Shader" uid="uid://bn20pj58ompeg" path="res://addons/procedural_textures/shaders/filter_emboss.gdshader" id="3_ovq3m"]
+[ext_resource type="Shader" uid="uid://bywcb484ety5j" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="4_1nb5u"]
+[ext_resource type="Shader" uid="uid://cgyecqscnq4k" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="5_vlibk"]
+[ext_resource type="Script" uid="uid://hr5tfw1lq1at" path="res://addons/procedural_textures/procedural_texture_design.gd" id="6_a5ub6"]
 
 [sub_resource type="Resource" id="Resource_dgcr4"]
 script = ExtResource("1_vqiuo")
