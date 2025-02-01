@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=8 format=3 uid="uid://xh14extlpw1"]
+
+[ext_resource type="Script" uid="uid://hr5tfw1lq1at" path="res://addons/procedural_textures/procedural_texture_design.gd" id="1_orbwb"]
+[ext_resource type="Script" uid="uid://cjuyj10lsbuch" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="2_ywrsb"]
+[ext_resource type="Shader" uid="uid://b7s64mep6oi70" path="res://addons/procedural_textures/shaders/pattern_weave.gdshader" id="3_ywrsb"]
+[ext_resource type="Shader" uid="uid://t8lwj1g3ojd4" path="res://addons/procedural_textures/shaders/filter_tile.gdshader" id="4_crppp"]
+
+[sub_resource type="Resource" id="Resource_crppp"]
+script = ExtResource("2_ywrsb")
+graph_position = Vector2(200, 120)
+connections = {}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("3_ywrsb")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+color_x = Color(1, 0, 0, 1)
+color_y = Color(0, 0, 1, 1)
+width_x = 0.85
+width_y = 0.85
+stitch_x = 2
+stitch_y = 2
+depth = 0.2
+
+[sub_resource type="Resource" id="Resource_0c4u5"]
+script = ExtResource("2_ywrsb")
+graph_position = Vector2(460, 100)
+connections = {
+0: {
+"from_node": SubResource("Resource_crppp"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("4_crppp")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+tile_x = 2
+tile_y = 2
+mirror_x = false
+mirror_y = false
+
+[sub_resource type="Resource" id="Resource_8mwmj"]
+script = ExtResource("2_ywrsb")
+graph_position = Vector2(700, 120)
+connections = {
+0: {
+"from_node": SubResource("Resource_0c4u5"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = "Albedo"
+is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+output_name = "Albedo"
+
+[resource]
+script = ExtResource("1_orbwb")
+nodes = Array[ExtResource("2_ywrsb")]([SubResource("Resource_crppp"), SubResource("Resource_8mwmj"), SubResource("Resource_0c4u5")])
+editor_position = Vector2(129.094, -28.0586)
+editor_zoom = 1.0
+editor_minimap = false
+metadata/_custom_type_script = ExtResource("1_orbwb")
