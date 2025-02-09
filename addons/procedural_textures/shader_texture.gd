@@ -251,7 +251,7 @@ func _update_texture() -> void:
 	var img: Image = await _generate_image(size)
 
 	if !img or img.is_empty():
-		img = Image.create_empty(size.x, size.y, false, Image.FORMAT_RGB8)
+		img = Image.create_empty(size.x, size.y, false, Image.FORMAT_RGBA8)
 		img.fill(pink)
 
 	if generate_mipmaps:
