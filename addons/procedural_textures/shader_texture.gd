@@ -40,6 +40,7 @@ var sampler_defaults: Dictionary
 	set(new_gmm):
 		if generate_mipmaps != new_gmm:
 			generate_mipmaps = new_gmm
+			size_changed = true
 			_queue_update()
 
 
