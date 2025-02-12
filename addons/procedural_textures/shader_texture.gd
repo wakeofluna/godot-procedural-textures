@@ -183,7 +183,10 @@ func _property_get_revert(property: StringName) -> Variant:
 func _queue_update() -> void:
 	if !update_queued:
 		update_queued = true
-		_update_texture.call_deferred()
+		if RenderingServer.is_on_render_thread():
+			_update_texture.call_deferred()
+		else:
+			RenderingServer.call_on_render_thread(_update_texture)
 
 
 func _generate_image(img_size: Vector2i) -> Image:
@@ -261,7 +264,6 @@ func _update_texture() -> void:
 	if local_size_changed:
 		var new_tex = RenderingServer.texture_2d_create(img)
 		RenderingServer.texture_replace(rid, new_tex)
-		RenderingServer.free_rid(new_tex)
 	else:
 		RenderingServer.texture_2d_update(rid, img, 0)
 
