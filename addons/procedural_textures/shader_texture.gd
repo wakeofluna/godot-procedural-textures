@@ -5,28 +5,28 @@ class_name ShaderTexture
 const pink = Color(1.0, 0.0, 1.0)
 const black = Color(0.0, 0.0, 0.0)
 
-var rid : RID
-var update_queued : bool = false
-var size_changed : bool = true
+var rid: RID
+var update_queued: bool = false
+var size_changed: bool = true
 
-var tmp_viewport : RID
-var tmp_canvas : RID
-var tmp_canvas_item : RID
-var tmp_material : RID
+var tmp_viewport: RID
+var tmp_canvas: RID
+var tmp_canvas_item: RID
+var tmp_material: RID
 
 var shader_params: Dictionary
 var shader_defaults: Dictionary
 var sampler_defaults: Dictionary
 
 
-@export_custom(PROPERTY_HINT_LINK, "") var size : Vector2i = Vector2i(512, 512):
+@export_custom(PROPERTY_HINT_LINK, "") var size: Vector2i = Vector2i(512, 512):
 	set(new_size):
 		if size != new_size:
 			size = new_size
 			size_changed = true
 			_queue_update()
 
-@export var shader : Shader:
+@export var shader: Shader:
 	set(new_shader):
 		if shader != new_shader:
 			if shader:
@@ -68,7 +68,7 @@ func _init() -> void:
 	rid = RenderingServer.texture_2d_placeholder_create()
 
 
-func _notification(what : int) -> void:
+func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		update_queued = false
 		for x in [tmp_viewport, tmp_canvas, tmp_canvas_item, tmp_material, rid]:
