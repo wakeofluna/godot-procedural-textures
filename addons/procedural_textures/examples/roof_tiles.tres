@@ -1,0 +1,185 @@
+[gd_resource type="Resource" script_class="ProceduralTextureDesign" load_steps=18 format=3 uid="uid://u86avw0w763v"]
+
+[ext_resource type="Script" uid="uid://hr5tfw1lq1at" path="res://addons/procedural_textures/procedural_texture_design.gd" id="1_014c4"]
+[ext_resource type="Script" uid="uid://cjuyj10lsbuch" path="res://addons/procedural_textures/procedural_texture_design_node.gd" id="2_lecsq"]
+[ext_resource type="Shader" uid="uid://coux00bl1b6oo" path="res://addons/procedural_textures/shaders/pattern_lines.gdshader" id="3_lecsq"]
+[ext_resource type="Shader" uid="uid://d3oow30g458ou" path="res://addons/procedural_textures/shaders/filter_transform.gdshader" id="4_0thft"]
+[ext_resource type="Shader" uid="uid://6etmvax7o5mh" path="res://addons/procedural_textures/shaders/filter_blend_mask.gdshader" id="5_05vdj"]
+[ext_resource type="Shader" uid="uid://bywcb484ety5j" path="res://addons/procedural_textures/shaders/filter_colorize.gdshader" id="6_qnxhr"]
+[ext_resource type="Shader" uid="uid://by20ics0k17mf" path="res://addons/procedural_textures/shaders/filter_invert.gdshader" id="7_qnxhr"]
+[ext_resource type="Shader" uid="uid://cgyecqscnq4k" path="res://addons/procedural_textures/shaders/filter_normal_map.gdshader" id="8_472ax"]
+
+[sub_resource type="Resource" id="Resource_hi215"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(220, 100)
+connections = {}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("3_lecsq")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+nr_of_lines = 4
+skew = 0
+periods = 8
+amplitude = 0.02
+thickness = 0.1
+
+[sub_resource type="Resource" id="Resource_472ax"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(100, -280)
+connections = {}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("3_lecsq")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+nr_of_lines = 5
+skew = 1
+periods = 4
+amplitude = 0.0
+thickness = 0.03
+
+[sub_resource type="Resource" id="Resource_kkbtv"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(360, -240)
+connections = {
+0: {
+"from_node": SubResource("Resource_472ax"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("4_0thft")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+scale = Vector2(1, 1)
+rotate = 90
+translate = Vector2(0, 0)
+
+[sub_resource type="Resource" id="Resource_6u3dd"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(720, -100)
+connections = {
+0: {
+"from_node": SubResource("Resource_kkbtv"),
+"from_port": 0
+},
+1: {
+"from_node": SubResource("Resource_hi215"),
+"from_port": 0
+},
+2: {
+"from_node": SubResource("Resource_hi215"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("5_05vdj")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+
+[sub_resource type="Resource" id="Resource_d36es"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(980, -80)
+connections = {
+0: {
+"from_node": SubResource("Resource_6u3dd"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("6_qnxhr")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+color_0 = Color(0.576471, 0.180392, 0.266667, 1)
+color_1 = Color(0.0639205, 0.0639205, 0.0639205, 1)
+
+[sub_resource type="Resource" id="Resource_mkx5m"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(1220, -20)
+connections = {
+0: {
+"from_node": SubResource("Resource_d36es"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = "Albedo"
+is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+output_name = "Albedo"
+
+[sub_resource type="Resource" id="Resource_su8yv"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(960, 260)
+connections = {
+0: {
+"from_node": SubResource("Resource_6u3dd"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("7_qnxhr")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+
+[sub_resource type="Resource" id="Resource_2dfdp"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(1159, 228)
+connections = {
+0: {
+"from_node": SubResource("Resource_su8yv"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = ""
+is_variable = false
+shader = ExtResource("8_472ax")
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+bump_strength = 8.0
+
+[sub_resource type="Resource" id="Resource_h6vf7"]
+script = ExtResource("2_lecsq")
+graph_position = Vector2(1500, 240)
+connections = {
+0: {
+"from_node": SubResource("Resource_2dfdp"),
+"from_port": 0
+}
+}
+output_value = null
+output_name = "Normal"
+is_variable = false
+export_image_size_index = 1
+export_image_path = ""
+export_shader_path = ""
+output_name = "Normal"
+
+[resource]
+script = ExtResource("1_014c4")
+nodes = Array[ExtResource("2_lecsq")]([SubResource("Resource_hi215"), SubResource("Resource_472ax"), SubResource("Resource_kkbtv"), SubResource("Resource_6u3dd"), SubResource("Resource_d36es"), SubResource("Resource_mkx5m"), SubResource("Resource_su8yv"), SubResource("Resource_2dfdp"), SubResource("Resource_h6vf7")])
+editor_position = Vector2(-64.1332, -136.445)
+editor_zoom = 0.620921
+editor_minimap = true
+metadata/_custom_type_script = ExtResource("1_014c4")

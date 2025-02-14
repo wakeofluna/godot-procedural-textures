@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://dt1twt275m8v0"]
+[gd_scene load_steps=12 format=3 uid="uid://dt1twt275m8v0"]
 
+[ext_resource type="Material" uid="uid://b8j6dlk2s44h7" path="res://addons/procedural_textures/examples/fence_material.tres" id="1_0ev4m"]
 [ext_resource type="Material" uid="uid://dn8fbl4ljwv36" path="res://addons/procedural_textures/examples/bricks_material.tres" id="1_2lcae"]
 [ext_resource type="Material" uid="uid://c3amxj6pgth7q" path="res://addons/procedural_textures/examples/wood_material.tres" id="2_jfj7w"]
 [ext_resource type="Material" uid="uid://cno51ckautnrd" path="res://addons/procedural_textures/examples/dirt_material.tres" id="3_igima"]
@@ -7,6 +8,7 @@
 [ext_resource type="Material" uid="uid://d2d6xwhs5pe3q" path="res://addons/procedural_textures/examples/grass_material.tres" id="5_cr2lb"]
 [ext_resource type="Material" uid="uid://dlygcldva5fla" path="res://addons/procedural_textures/examples/cobblestone_material.tres" id="6_bsuhj"]
 [ext_resource type="Material" uid="uid://jx3ko2a7e4hy" path="res://addons/procedural_textures/examples/weave_material.tres" id="7_xvyl1"]
+[ext_resource type="Material" uid="uid://5hyai2114vio" path="res://addons/procedural_textures/examples/roof_tiles_material.tres" id="8_cgpij"]
 
 [sub_resource type="GDScript" id="GDScript_f33ea"]
 script/source = "extends Node3D
@@ -38,6 +40,9 @@ func _physics_process(delta: float) -> void:
 		arm.translate(Vector3.BACK * delta * 8.0)
 "
 
+[sub_resource type="QuadMesh" id="QuadMesh_cgpij"]
+size = Vector2(20, 4)
+
 [node name="SpinningCube" type="Node3D"]
 script = SubResource("GDScript_f33ea")
 
@@ -53,6 +58,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8)
 visible = false
 
 [node name="Camera3D" type="Camera3D" parent="CameraFocus/CameraArm"]
+
+[node name="Fence" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+mesh = SubResource("QuadMesh_cgpij")
+surface_material_override/0 = ExtResource("1_0ev4m")
 
 [node name="Bricks" type="CSGBox3D" parent="."]
 material = ExtResource("1_2lcae")
@@ -80,3 +90,7 @@ material = ExtResource("6_bsuhj")
 [node name="Weave" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 0)
 material = ExtResource("7_xvyl1")
+
+[node name="Roof" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
+material = ExtResource("8_cgpij")

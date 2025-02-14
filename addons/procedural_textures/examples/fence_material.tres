@@ -1,0 +1,33 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://b8j6dlk2s44h7"]
+
+[ext_resource type="Resource" uid="uid://cl883eqa0e1h6" path="res://addons/procedural_textures/examples/fence_design.tres" id="1_i4cmn"]
+[ext_resource type="Script" uid="uid://wiewpg8hg1op" path="res://addons/procedural_textures/procedural_texture.gd" id="2_666tv"]
+
+[sub_resource type="Texture2D" id="Texture2D_uwrrb"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_666tv")
+design = ExtResource("1_i4cmn")
+output = "Albedo"
+size = Vector2i(512, 512)
+generate_mipmaps = true
+metadata/_custom_type_script = ExtResource("2_666tv")
+
+[sub_resource type="Texture2D" id="Texture2D_i4cmn"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("2_666tv")
+design = ExtResource("1_i4cmn")
+output = "Normal"
+size = Vector2i(512, 512)
+generate_mipmaps = true
+metadata/_custom_type_script = ExtResource("2_666tv")
+
+[resource]
+transparency = 1
+albedo_texture = SubResource("Texture2D_uwrrb")
+metallic = 0.8
+roughness = 0.4
+normal_enabled = true
+normal_texture = SubResource("Texture2D_i4cmn")
+uv1_scale = Vector3(20, 4, 1)
