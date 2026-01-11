@@ -23,9 +23,11 @@ class DesignPreviewControl extends VBoxContainer:
 	var design_node: ProceduralTextureDesignNode
 	var label: Label
 	var rect: TextureRect
-	var export_as_shader: Button
+	var export_as_2d_shader: Button
+	var export_as_3d_shader: Button
 	var export_as_image: Button
-	var dialog_shader: FileDialog = null
+	var dialog_2d_shader: FileDialog = null
+	var dialog_3d_shader: FileDialog = null
 	var dialog_image: FileDialog = null
 
 	func init_for(node: ProceduralTextureDesignNode) -> void:
@@ -46,10 +48,15 @@ class DesignPreviewControl extends VBoxContainer:
 		rect.texture = ShaderTexture.new()
 		rect.visible = false
 
-		export_as_shader = Button.new()
-		export_as_shader.text = 'Export as Shader'
-		export_as_shader.disabled = true
-		export_as_shader.pressed.connect(_handle_export_as_shader)
+		export_as_2d_shader = Button.new()
+		export_as_2d_shader.text = 'Export as 2D Shader'
+		export_as_2d_shader.disabled = true
+		export_as_2d_shader.pressed.connect(_handle_export_as_2d_shader)
+
+		export_as_3d_shader = Button.new()
+		export_as_3d_shader.text = 'Export as 3D Shader'
+		export_as_3d_shader.disabled = true
+		export_as_3d_shader.pressed.connect(_handle_export_as_3d_shader)
 
 		export_as_image = Button.new()
 		export_as_image.text = 'Export as Image'
@@ -59,7 +66,8 @@ class DesignPreviewControl extends VBoxContainer:
 		design_node = node
 		add_child(label)
 		add_child(rect)
-		add_child(export_as_shader)
+		add_child(export_as_2d_shader)
+		add_child(export_as_3d_shader)
 		add_child(export_as_image)
 
 		node.changed.connect(_handle_changed)
@@ -70,7 +78,8 @@ class DesignPreviewControl extends VBoxContainer:
 		label.visible = not all_connected
 		rect.visible = all_connected
 		export_as_image.disabled = not all_connected
-		export_as_shader.disabled = not all_connected
+		export_as_2d_shader.disabled = not all_connected
+		export_as_3d_shader.disabled = not all_connected
 
 		if all_connected and not rect.texture.shader:
 			rect.texture.shader = design_node.get_output_shader()
@@ -79,23 +88,40 @@ class DesignPreviewControl extends VBoxContainer:
 			for input_name in design_node.get_input_texture_names():
 				rect.texture.set_shader_parameter(input_name, design_node.get_default_input_texture_for(input_name))
 
-	func _handle_export_as_shader() -> void:
-		if not dialog_shader:
-			dialog_shader = FileDialog.new()
-			dialog_shader.exclusive = true
-			dialog_shader.access = FileDialog.ACCESS_RESOURCES
-			dialog_shader.add_filter('*.gdshader', 'Shaders')
-			dialog_shader.confirmed.connect(_handle_save_as_shader)
-			add_child(dialog_shader)
+	func _handle_export_as_2d_shader() -> void:
+		if not dialog_2d_shader:
+			dialog_2d_shader = FileDialog.new()
+			dialog_2d_shader.title = 'Save as 2D (canvas) shader'
+			dialog_2d_shader.exclusive = true
+			dialog_2d_shader.access = FileDialog.ACCESS_RESOURCES
+			dialog_2d_shader.add_filter('*.gdshader', 'Shaders')
+			dialog_2d_shader.confirmed.connect(_handle_save_as_2d_shader)
+			add_child(dialog_2d_shader)
 
 		var path = design_node.export_shader_path
 		if path.is_empty():
 			path = design_node.get_default_shader_export_path()
-		dialog_shader.current_path = path
-		dialog_shader.popup_centered(Vector2i(600, 600))
+		dialog_2d_shader.current_path = path
+		dialog_2d_shader.popup_centered(Vector2i(600, 600))
 
-	func _handle_save_as_shader() -> void:
-		var path: String = dialog_shader.current_path
+	func _handle_export_as_3d_shader() -> void:
+		if not dialog_3d_shader:
+			dialog_3d_shader = FileDialog.new()
+			dialog_3d_shader.title = 'Save as 3D (spatial) shader'
+			dialog_3d_shader.exclusive = true
+			dialog_3d_shader.access = FileDialog.ACCESS_RESOURCES
+			dialog_3d_shader.add_filter('*.gdshader', 'Shaders')
+			dialog_3d_shader.confirmed.connect(_handle_save_as_3d_shader)
+			add_child(dialog_3d_shader)
+
+		var path = design_node.export_shader_path
+		if path.is_empty():
+			path = design_node.get_default_shader_export_path()
+		dialog_3d_shader.current_path = path
+		dialog_3d_shader.popup_centered(Vector2i(600, 600))
+
+	func _handle_save_as_2d_shader() -> void:
+		var path: String = dialog_2d_shader.current_path
 		design_node.export_shader_path = path
 		var shader: Shader = rect.texture.shader
 		if shader:
@@ -104,7 +130,19 @@ class DesignPreviewControl extends VBoxContainer:
 				push_error("Error saving Shader with code: ", error_string(err))
 		else:
 			push_warning("Failed to generate Shader")
-		dialog_shader.hide()
+		dialog_2d_shader.hide()
+
+	func _handle_save_as_3d_shader() -> void:
+		var path: String = dialog_3d_shader.current_path
+		design_node.export_shader_path = path
+		var shader: Shader = design_node.get_spatial_shader()
+		if shader:
+			var err := ResourceSaver.save(shader, path, ResourceSaver.FLAG_NONE)
+			if err != OK:
+				push_error("Error saving Shader with code: ", error_string(err))
+		else:
+			push_warning("Failed to generate Shader")
+		dialog_3d_shader.hide()
 
 	func _handle_export_as_image() -> void:
 		if not dialog_image:
@@ -145,7 +183,7 @@ func _can_handle(object: Object) -> bool:
 
 
 func _parse_begin(object: Object) -> void:
-	var min_size := Vector2(192, 192) * EditorInterface.get_editor_scale()
+	var min_size := Vector2(256, 256) * EditorInterface.get_editor_scale()
 
 	if object is ShaderTexture:
 		var rect: TextureRect = TextureRect.new()

@@ -42,6 +42,22 @@ Instantiate a texture from a design
 * In the properties of the `ProceduralTexture`, load the desired design.
 * Once the design has been selected, select the desired Output from the design.
 
+
+Export a design as an image or shader
+-------------------------------------
+The designer is just a frontend that ultimately builds a Godot shader. If you want, you can directly export any node from the designer directly as a shader.
+This way you can inspect the shaders, or store them, or modify them, or distribute them without the design, whatever you wish.
+You can also export the node as an Image for your manual editing pleasure.
+
+* Select any node in the Designer. Output nodes are probably the most useful choice, but any node will work.
+* In the inspector window, notice the node preview and various buttons.
+* "Export as 2D Shader" allows you to save the shader as a canvas shader. This is what is used internally to generate the textures at runtime.
+* "Export as 3D Shader" allows you to save the shader as a spatial shader. In this form, you can attach the shaders directly to a default ShaderTexture.
+  Advantage of this method is that Variable-fields in the Design are available as Instance Uniforms, so you can modify the appearance for every instance if you so wish.
+  Be aware however that the shader code is not particularly efficient (it is designed to run-only-once-and-generate-a-texture) and that when used as a Spatial, it will render the shader every frame for every object.
+* "Export as Image" does what it says it does. This allows you to save the design as a PNG so you can edit or distribute it as you see fit.
+
+
 Add your own Pattern/Filter
 ---------------------------
 In order to correctly interoperate with the Shader Building framework, the Shader needs to meet the following demands:

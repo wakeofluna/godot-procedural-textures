@@ -13,13 +13,21 @@ const shader_type_string = {
 }
 
 
-static func build_shader_code_for_node(node: ProceduralTextureDesignNode) -> String:
+static func build_canvas_shader_code_for_node(node: ProceduralTextureDesignNode) -> String:
+	return build_shader_code_for_node(node, false)
+
+
+static func build_spatial_shader_code_for_node(node: ProceduralTextureDesignNode) -> String:
+	return build_shader_code_for_node(node, true)
+
+
+static func build_shader_code_for_node(node: ProceduralTextureDesignNode, as_spatial: bool) -> String:
 	var mode := node.get_mode()
 	if mode == ProceduralTextureDesignNode.Mode.OUTPUT:
 		if node.connections.is_empty():
 			return ''
 		else:
-			return build_shader_code_for_node(node.connections[0].from_node)
+			return build_shader_code_for_node(node.connections[0].from_node, as_spatial)
 
 	if mode != ProceduralTextureDesignNode.Mode.SHADER:
 		return ''
@@ -34,13 +42,16 @@ static func build_shader_code_for_node(node: ProceduralTextureDesignNode) -> Str
 	data.procedural_shader_map = {}
 	data.node_map = {}
 
-	if not _gather_shader_data_for_node(node, data):
+	if not _gather_shader_data_for_node(node, as_spatial, data):
 		return ''
 
 	var arr: Array[String] = []
 
-	arr.append('shader_type canvas_item;')
-	arr.append('render_mode unshaded;')
+	if as_spatial:
+		arr.append('shader_type spatial;')
+	else:
+		arr.append('shader_type canvas_item;')
+		arr.append('render_mode unshaded;')
 
 	if not data.includes.is_empty():
 		arr.append('')
@@ -63,7 +74,12 @@ static func build_shader_code_for_node(node: ProceduralTextureDesignNode) -> Str
 	var fragment_call = data.node_map[node] + '(UV)'
 	arr.append('')
 	arr.append('void fragment() {')
-	arr.append('\tCOLOR = {0};'.format([_convert_type_from_to(fragment_call, node.proc_shader.output_type + 1000, TYPE_VECTOR4 + 1000)]))
+	if as_spatial:
+		arr.append('\tvec4 result = {0};'.format([_convert_type_from_to(fragment_call, node.proc_shader.output_type + 1000, TYPE_VECTOR4 + 1000)]))
+		arr.append('\tALBEDO = result.rgb;')
+		arr.append('\t// ALPHA = result.a;')
+	else:
+		arr.append('\tCOLOR = {0};'.format([_convert_type_from_to(fragment_call, node.proc_shader.output_type + 1000, TYPE_VECTOR4 + 1000)]))
 	arr.append('}')
 
 	var shader_code: String = '\n'.join(arr)
@@ -71,7 +87,7 @@ static func build_shader_code_for_node(node: ProceduralTextureDesignNode) -> Str
 	return shader_code
 
 
-static func _gather_shader_data_for_node(node: ProceduralTextureDesignNode, data: Dictionary) -> bool:
+static func _gather_shader_data_for_node(node: ProceduralTextureDesignNode, as_spatial: bool, data: Dictionary) -> bool:
 	if node in data.node_map:
 		return true
 
@@ -80,7 +96,7 @@ static func _gather_shader_data_for_node(node: ProceduralTextureDesignNode, data
 
 	for incoming in node.connections:
 		var inc_node = node.connections[incoming].from_node
-		if not _gather_shader_data_for_node(inc_node, data):
+		if not _gather_shader_data_for_node(inc_node, as_spatial, data):
 			return false
 
 	data.counter += 1
@@ -167,7 +183,10 @@ static func _gather_shader_data_for_node(node: ProceduralTextureDesignNode, data
 			data.node_map[node] = item_name
 		ProceduralTextureDesignNode.Mode.VARIABLE:
 			var item_name = _format_name(node.output_name) + postfix
-			data.variables.append('uniform {0} {1} = {2};'.format([shader_type_string[typeof(node.output_value)], item_name, _format_immediate(node.output_value)]))
+			var var_decl = 'uniform {0} {1} = {2};'.format([shader_type_string[typeof(node.output_value)], item_name, _format_immediate(node.output_value)])
+			if as_spatial:
+				var_decl = 'instance ' + var_decl
+			data.variables.append(var_decl)
 			data.node_map[node] = item_name
 		ProceduralTextureDesignNode.Mode.INPUT:
 			var item_name = _format_name(node.output_name)

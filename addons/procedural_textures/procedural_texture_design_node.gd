@@ -218,7 +218,7 @@ func get_output_type() -> int:
 func get_output_shader() -> Shader:
 	var shader: Shader = shader_cache.get_ref() if shader_cache else null
 	if not shader:
-		var new_code = ShaderBuilder.build_shader_code_for_node(self)
+		var new_code = ShaderBuilder.build_canvas_shader_code_for_node(self)
 		if not new_code.is_empty():
 			shader = Shader.new()
 			shader.code = new_code
@@ -226,10 +226,19 @@ func get_output_shader() -> Shader:
 	return shader
 
 
+func get_spatial_shader() -> Shader:
+	# Spatial shaders are not cached since they are only used when exporting
+	var shader: Shader = Shader.new()
+	var new_code = ShaderBuilder.build_spatial_shader_code_for_node(self)
+	if not new_code.is_empty():
+		shader.code = new_code
+	return shader
+
+
 func refresh_output_shader() -> bool:
 	var shader: Shader = shader_cache.get_ref() if shader_cache else null
 	if shader:
-		var new_code = ShaderBuilder.build_shader_code_for_node(self)
+		var new_code = ShaderBuilder.build_canvas_shader_code_for_node(self)
 		if new_code.is_empty():
 			new_code = fallback_shader_code
 		if shader.code != new_code:
