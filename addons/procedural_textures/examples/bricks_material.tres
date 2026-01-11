@@ -9,7 +9,6 @@ resource_name = ""
 script = ExtResource("2_enhtr")
 design = ExtResource("1_frs1i")
 output = "Albedo Embossed"
-size = Vector2i(512, 512)
 generate_mipmaps = false
 
 [sub_resource type="Texture2D" id="Texture2D_xf0ap"]
@@ -18,8 +17,6 @@ resource_name = ""
 script = ExtResource("2_enhtr")
 design = ExtResource("1_frs1i")
 output = "Bump Map"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 
 [sub_resource type="Texture2D" id="Texture2D_we5kr"]
 resource_local_to_scene = false
@@ -27,7 +24,6 @@ resource_name = ""
 script = ExtResource("2_enhtr")
 design = ExtResource("1_frs1i")
 output = "Bump Map"
-size = Vector2i(512, 512)
 generate_mipmaps = false
 
 [sub_resource type="Texture2D" id="Texture2D_wf7wi"]
@@ -36,7 +32,6 @@ resource_name = ""
 script = ExtResource("2_enhtr")
 design = ExtResource("1_frs1i")
 output = "Normal Map"
-size = Vector2i(512, 512)
 generate_mipmaps = false
 
 [resource]

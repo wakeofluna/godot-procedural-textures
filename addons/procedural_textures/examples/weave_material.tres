@@ -9,8 +9,6 @@ resource_name = ""
 script = ExtResource("2_4o7sh")
 design = ExtResource("1_3t43c")
 output = "Albedo"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 metadata/_custom_type_script = ExtResource("2_4o7sh")
 
 [resource]

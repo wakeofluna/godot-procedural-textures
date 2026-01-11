@@ -9,14 +9,8 @@
 [sub_resource type="Resource" id="Resource_w31g2"]
 script = ExtResource("2_pfllx")
 graph_position = Vector2(180, 140)
-connections = {}
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("3_4ifme")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 nr_of_lines = 4
 skew = 4
 periods = 4
@@ -33,12 +27,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("5_77ccy")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 color_0 = Color(0, 0, 0, 0)
 color_1 = Color(0.580392, 0.741176, 0.909804, 1)
 
@@ -53,10 +42,6 @@ connections = {
 }
 output_value = null
 output_name = "Albedo"
-is_variable = false
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_qu3yn"]
@@ -69,12 +54,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("5_4ifme")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_77ccy"]
@@ -88,16 +68,10 @@ connections = {
 }
 output_value = null
 output_name = "Normal"
-is_variable = false
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 output_name = "Normal"
 
 [resource]
 script = ExtResource("1_egud3")
 nodes = Array[ExtResource("2_pfllx")]([SubResource("Resource_w31g2"), SubResource("Resource_h8y0m"), SubResource("Resource_amf3w"), SubResource("Resource_qu3yn"), SubResource("Resource_77ccy")])
 editor_position = Vector2(217.766, 163.117)
-editor_zoom = 1.0
-editor_minimap = false
 metadata/_custom_type_script = ExtResource("1_egud3")

@@ -9,8 +9,6 @@ resource_name = ""
 script = ExtResource("2_gmxyv")
 design = ExtResource("1_t8h6c")
 output = "Albedo"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 
 [resource]
 albedo_texture = SubResource("Texture2D_8mnfy")

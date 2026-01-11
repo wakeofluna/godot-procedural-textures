@@ -9,7 +9,6 @@ resource_name = ""
 script = ExtResource("2_sl6ib")
 design = ExtResource("1_tbhxj")
 output = "Base Albedo"
-size = Vector2i(512, 512)
 generate_mipmaps = false
 
 [sub_resource type="Texture2D" id="Texture2D_txvx6"]
@@ -18,8 +17,6 @@ resource_name = ""
 script = ExtResource("2_sl6ib")
 design = ExtResource("1_tbhxj")
 output = "Detail Albedo"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 
 [sub_resource type="Texture2D" id="Texture2D_kuawm"]
 resource_local_to_scene = false
@@ -27,8 +24,6 @@ resource_name = ""
 script = ExtResource("2_sl6ib")
 design = ExtResource("1_tbhxj")
 output = "Detail Mask"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 
 [sub_resource type="Texture2D" id="Texture2D_j8f7p"]
 resource_local_to_scene = false
@@ -36,8 +31,6 @@ resource_name = ""
 script = ExtResource("2_sl6ib")
 design = ExtResource("1_tbhxj")
 output = "Detail Normal Map"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 
 [sub_resource type="Texture2D" id="Texture2D_f6a1k"]
 resource_local_to_scene = false
@@ -45,7 +38,6 @@ resource_name = ""
 script = ExtResource("2_sl6ib")
 design = ExtResource("1_tbhxj")
 output = "Base Normal Map"
-size = Vector2i(512, 512)
 generate_mipmaps = false
 
 [sub_resource type="Texture2D" id="Texture2D_pvqmg"]
@@ -53,8 +45,6 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("2_sl6ib")
 design = ExtResource("1_tbhxj")
-output = ""
-size = Vector2i(512, 512)
 generate_mipmaps = false
 
 [resource]

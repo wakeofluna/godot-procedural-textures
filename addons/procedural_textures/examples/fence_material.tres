@@ -9,8 +9,6 @@ resource_name = ""
 script = ExtResource("2_666tv")
 design = ExtResource("1_i4cmn")
 output = "Albedo"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 metadata/_custom_type_script = ExtResource("2_666tv")
 
 [sub_resource type="Texture2D" id="Texture2D_i4cmn"]
@@ -19,8 +17,6 @@ resource_name = ""
 script = ExtResource("2_666tv")
 design = ExtResource("1_i4cmn")
 output = "Normal"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 metadata/_custom_type_script = ExtResource("2_666tv")
 
 [resource]

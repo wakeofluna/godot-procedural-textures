@@ -12,14 +12,8 @@
 [sub_resource type="Resource" id="Resource_hi215"]
 script = ExtResource("2_lecsq")
 graph_position = Vector2(220, 100)
-connections = {}
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("3_lecsq")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 nr_of_lines = 4
 skew = 0
 periods = 8
@@ -29,14 +23,8 @@ thickness = 0.1
 [sub_resource type="Resource" id="Resource_472ax"]
 script = ExtResource("2_lecsq")
 graph_position = Vector2(100, -280)
-connections = {}
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("3_lecsq")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 nr_of_lines = 5
 skew = 1
 periods = 4
@@ -53,12 +41,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("4_0thft")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 scale = Vector2(1, 1)
 rotate = 90
 translate = Vector2(0, 0)
@@ -81,12 +64,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("5_05vdj")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 
 [sub_resource type="Resource" id="Resource_d36es"]
 script = ExtResource("2_lecsq")
@@ -98,12 +76,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("6_qnxhr")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 color_0 = Color(0.576471, 0.180392, 0.266667, 1)
 color_1 = Color(0.0639205, 0.0639205, 0.0639205, 1)
 
@@ -118,10 +91,6 @@ connections = {
 }
 output_value = null
 output_name = "Albedo"
-is_variable = false
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_su8yv"]
@@ -134,12 +103,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("7_qnxhr")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 
 [sub_resource type="Resource" id="Resource_2dfdp"]
 script = ExtResource("2_lecsq")
@@ -151,12 +115,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("8_472ax")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_h6vf7"]
@@ -170,10 +129,6 @@ connections = {
 }
 output_value = null
 output_name = "Normal"
-is_variable = false
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 output_name = "Normal"
 
 [resource]

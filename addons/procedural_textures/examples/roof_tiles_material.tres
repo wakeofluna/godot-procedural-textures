@@ -9,8 +9,6 @@ resource_name = ""
 script = ExtResource("2_ag1cv")
 design = ExtResource("1_70l3s")
 output = "Albedo"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 metadata/_custom_type_script = ExtResource("2_ag1cv")
 
 [sub_resource type="Texture2D" id="Texture2D_70l3s"]
@@ -19,8 +17,6 @@ resource_name = ""
 script = ExtResource("2_ag1cv")
 design = ExtResource("1_70l3s")
 output = "Normal"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 metadata/_custom_type_script = ExtResource("2_ag1cv")
 
 [resource]

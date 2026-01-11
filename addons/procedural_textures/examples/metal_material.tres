@@ -9,8 +9,6 @@ resource_name = ""
 script = ExtResource("2_kc2f5")
 design = ExtResource("1_7iktc")
 output = "Albedo"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 
 [sub_resource type="Texture2D" id="Texture2D_ndgk1"]
 resource_local_to_scene = false
@@ -18,8 +16,6 @@ resource_name = ""
 script = ExtResource("2_kc2f5")
 design = ExtResource("1_7iktc")
 output = "Normal Map"
-size = Vector2i(512, 512)
-generate_mipmaps = true
 
 [resource]
 albedo_texture = SubResource("Texture2D_2o658")

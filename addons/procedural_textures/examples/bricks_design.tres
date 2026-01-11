@@ -10,14 +10,8 @@
 [sub_resource type="Resource" id="Resource_6gkd1"]
 script = ExtResource("1_3j24c")
 graph_position = Vector2(120, 160)
-connections = {}
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("2_71dkc")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 count_x = 4
 count_y = 10
 row_shift = 0.5
@@ -35,12 +29,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("3_gucmw")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 color_0 = Color(0.336608, 0.336608, 0.336608, 1)
 color_1 = Color(0.7793, 0.213345, 0.18809, 1)
 
@@ -55,10 +44,6 @@ connections = {
 }
 output_value = null
 output_name = "Albedo"
-is_variable = false
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 output_name = "Albedo"
 
 [sub_resource type="Resource" id="Resource_d6tbn"]
@@ -71,12 +56,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("4_u628m")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 bump_strength = 8.0
 
 [sub_resource type="Resource" id="Resource_g6sfv"]
@@ -90,10 +70,6 @@ connections = {
 }
 output_value = null
 output_name = "Normal Map"
-is_variable = false
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 output_name = "Normal Map"
 
 [sub_resource type="Resource" id="Resource_pfdv2"]
@@ -107,10 +83,6 @@ connections = {
 }
 output_value = null
 output_name = "Bump Map"
-is_variable = false
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 output_name = "Bump Map"
 
 [sub_resource type="Resource" id="Resource_lnguk"]
@@ -127,12 +99,7 @@ connections = {
 }
 }
 output_value = null
-output_name = ""
-is_variable = false
 shader = ExtResource("5_p5r5x")
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 angle = 45
 strength = 4.0
 
@@ -147,10 +114,6 @@ connections = {
 }
 output_value = null
 output_name = "Albedo Embossed"
-is_variable = false
-export_image_size_index = 1
-export_image_path = ""
-export_shader_path = ""
 output_name = "Albedo Embossed"
 
 [resource]
@@ -158,4 +121,3 @@ script = ExtResource("6_y8tmi")
 nodes = Array[ExtResource("1_3j24c")]([SubResource("Resource_6gkd1"), SubResource("Resource_moxfq"), SubResource("Resource_nxvgl"), SubResource("Resource_d6tbn"), SubResource("Resource_g6sfv"), SubResource("Resource_pfdv2"), SubResource("Resource_lnguk"), SubResource("Resource_sxksx")])
 editor_position = Vector2(-265.523, 178.676)
 editor_zoom = 0.826447
-editor_minimap = false
